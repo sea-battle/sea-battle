@@ -1,6 +1,13 @@
 extends inc/head.jade
 
 block title
-	title Let's shoot
+    title Let's shoot
 
 block content
+    canvas#canvas-wrapper
+
+    script(src='/socket.io/socket.io.js')
+    script(src='/javascripts/prototype.js')
+    script(src='/javascripts/grid.js')
+    script(src='/javascripts/boat.js')
+    script(src='/javascripts/battleship.js')

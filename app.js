@@ -4,10 +4,15 @@ var app = require('express')(),
     io = require('socket.io').listen(server);
 
 var game = require('./game');
+
+var routeAuthentication = require('./routes/authentication');
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
+
+app.use('/', routeAuthentication);
+
 app.get('/', function (req, res) {
-    game.roomToJoin = '/tamere';
+    //game.roomToJoin = '/tamere';
     res.render(__dirname + '/views/index');
 });
 app.get('/rooms', function (req, res) {
@@ -46,7 +51,7 @@ io.of(game.roomToJoin).on('connection', function (socket) {
         var i = game.players.indexOf(socket);
         game.players.splice(i, 1);
     });
-    
+
     console.log(game.roomToJoin + ' => ' + 'game.players.length:', game.players.length);
 });
 
