@@ -9,21 +9,18 @@ var User = new Schema({
     username: {
         type: String,
         required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true,
     },
     email: {
         type: String,
         required: true,
-        unique: true
     },
-    // skins: Skin,
-    validated : Boolean,
-    // ip: String,
-    // games: [Game],
+    skins: Skin,
+    validated:  {
+        type: Boolean,
+        required: true
+    },
+    ip: String,
+    games: [Game]
 });
 
 User.plugin(passportLocalMongoose);

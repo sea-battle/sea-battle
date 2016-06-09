@@ -1,9 +1,11 @@
 Element.prototype.remove = function () {
     this.parentNode.removeChild(this);
 };
+
 Element.prototype.hasClass = function (className) {
     return this.className && new RegExp("(\\s|^)" + className + "(\\s|$)").test(this.className);
 };
+
 Element.prototype.getElementsNodes = function () {
     var elements = [];
     for (var i = 0; i < this.children.length; i++) {
@@ -15,6 +17,7 @@ Element.prototype.getElementsNodes = function () {
     }
     return elements;
 };
+
 Element.prototype.getNextBoatElement = function () {
     var elements = this.getElementsNodes();
     if (elements.length > 0) {
@@ -22,6 +25,7 @@ Element.prototype.getNextBoatElement = function () {
     }
     return false;
 };
+
 Element.prototype.removeChildren = function () {
     while (this.firstChild) {
         this.removeChild(this.firstChild);

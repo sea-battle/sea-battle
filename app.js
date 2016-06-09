@@ -14,7 +14,9 @@ var config = require('./config');
 var routeAuthentication = require('./routes/authentication');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 // In a Connect or Express-based application, passport.initialize() middleware is required to initialize Passport.
 app.use(passport.initialize());
@@ -39,6 +41,12 @@ app.get('/wait', function (req, res) {
 });
 app.get('/game', function (req, res) {
     res.render(__dirname + '/views/game');
+});
+app.get('/signup', function (req, res) {
+    res.render(__dirname + '/views/signup');
+});
+app.get('/manage-account', function (req, res) {
+    res.render(__dirname + '/views/manage-account');
 });
 app.get('*', function (req, res) {
     res.render(__dirname + '/views/404');
