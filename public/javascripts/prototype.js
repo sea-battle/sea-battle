@@ -22,6 +22,11 @@ Element.prototype.getNextBoatElement = function () {
     }
     return false;
 };
+Element.prototype.removeChildren = function () {
+    while (this.firstChild) {
+        this.removeChild(this.firstChild);
+    }
+};
 
 String.prototype.toBool = function () {
     return (/^true$/i).test(this);
