@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var passportLocalMongoose = require('passport-local-mongoose');
 var Skin = require('./skin').Schema;
+var Game = require('./game').Schema;
 
 var User = new Schema({
     username: String,
@@ -10,7 +11,8 @@ var User = new Schema({
     email: String,
     skins: Skin,
     validated : Boolean,
-    ip: String
+    ip: String,
+    games: [Game],
 });
 
 User.plugin(passportLocalMongoose);
