@@ -48,12 +48,18 @@ io.sockets.on('connection', function (socket) {
         game.rooms.push(name);
         socket.room = name;
         socket.join(name);
-        socket.emit('updateRooms', game.rooms, 'room1');
+        io.sockets.emit('updateRooms', game.rooms);
+        socket.join(name);
+        socket.emit('joinRoom');
     });
     
     socket.on('getRooms', function (){
         socket.emit('updateRooms', game.rooms);
-    })
+    });
+    
+    socket.on('fromWait', function (){
+        console.log(socket.room);
+    });
     /*
     console.log(io);
     //socket.on('init', function (data) {});
