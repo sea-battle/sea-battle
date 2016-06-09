@@ -1,15 +1,25 @@
 var app = require('express')(),
     express = require('express'),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
+    io = require('socket.io').listen(server),
+    bodyParser = require('body-parser'),
+    mongoose = require('mongoose'),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
 
 var game = require('./game');
+var config = require('./config');
 
 var routeAuthentication = require('./routes/authentication');
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 
 app.use('/', routeAuthentication);
+
+app.get('/database', function (req, res) {
+
+});
+
 
 app.get('/', function (req, res) {
     //game.roomToJoin = '/tamere';
@@ -27,6 +37,14 @@ app.get('/game', function (req, res) {
 app.get('*', function (req, res) {
     res.render(__dirname + '/views/404');
 });
+
+// passport config
+var User = require('./models/user');
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+mongoose.connect(config.database.location, config.database.options);
 
 io.of(game.roomToJoin).on('connection', function (socket) {
     //socket.on('init', function (data) {});
