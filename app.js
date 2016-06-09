@@ -13,15 +13,19 @@ var config = require('./config');
 
 var routeAuthentication = require('./routes/authentication');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// In a Connect or Express-based application, passport.initialize() middleware is required to initialize Passport.
+app.use(passport.initialize());
+
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 
 app.use('/', routeAuthentication);
 
 app.get('/database', function (req, res) {
-
 });
-
 
 app.get('/', function (req, res) {
     //game.roomToJoin = '/tamere';
@@ -40,7 +44,7 @@ app.get('*', function (req, res) {
     res.render(__dirname + '/views/404');
 });
 
-// passport config
+// Passport configuration
 var User = require('./models/user');
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -49,7 +53,7 @@ passport.deserializeUser(User.deserializeUser());
 mongoose.connect(config.database.location, config.database.options);
 
 io.of(game.roomToJoin).on('connection', function (socket) {
-    //socket.on('init', function (data) {});
+    // socket.on('init', function (data) {});
     if (game.players.length < game.ROOM_MAX_PLAYER) {
         socket.player = {
             ready: false

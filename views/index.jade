@@ -1,4 +1,19 @@
 extends inc/head.jade
 
 block content
-	include inc/header.jade
+    include inc/header.jade
+
+    section
+        form#signin(method="post", action="/signin")
+            input#signin-email(type='text', placeholder='Email')
+            input#signin-password(type='password', placeholder='Mot de passe')
+            input#signin-submit(type='submit')
+
+        form#signup(method="post", action="/signup")
+            input#signup-email(type='email', name='email' value='john.doe@mail.com', placeholder='E-mail')
+            input#signup-username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
+            input#signup-password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
+            input#signup-password-confirmation(type='password', name='password_confirmation' value="johndoe", placeholder='Confirmez le mot de passe')
+            input#signup-submit(type='submit')
+
+    script(src='/javascripts/pages/index.js')
