@@ -4,8 +4,8 @@ var app = require('express')(),
     io = require('socket.io').listen(server);
 
 var game = require('./game');
-
 var routeAuthentication = require('./routes/authentication');
+
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 
