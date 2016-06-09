@@ -16,11 +16,6 @@ app.set('view engine', 'jade');
 
 app.use('/', routeAuthentication);
 
-app.get('/database', function (req, res) {
-
-});
-
-
 app.get('/', function (req, res) {
     //game.roomToJoin = '/tamere';
     res.render(__dirname + '/views/index');

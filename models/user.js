@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var passportLocalMongoose = require('passport-local-mongoose');
-var Skin = require('./skin').Schema;
-var Game = require('./game').Schema;
+var Skin = require('./skin').schema;
+var Game = require('./game').schema;
 
 var User = new Schema({
     username: String,

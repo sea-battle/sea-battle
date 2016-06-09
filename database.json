@@ -1,0 +1,29 @@
+User: {
+    username: String,
+    password: String,
+    email: String,
+    skins: {
+        tp: [String],
+        sm: [String],
+        dt: [String],
+        cr: [String],
+        ca: [String]
+    },
+    validated: Boolean,
+    ip: String,
+    games: [{
+        score: Number,
+        date: Date
+    }],
+}
+
+
+ValidationKeys: {
+    keys: [{
+        dateCreation: Date,
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    }]
+}
