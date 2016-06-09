@@ -42,8 +42,18 @@ passport.deserializeUser(User.deserializeUser());
 
 mongoose.connect(config.database.location, config.database.options);
 
-io.of(game.roomToJoin).on('connection', function (socket) {
+//io.of(game.roomToJoin).on('connection', function (socket) {
+io.sockets.on('connection', function (socket) {
+    socket.on('createRoom', function (name){
+        game.rooms.push(name);
+        socket.room = name;
+        socket.join(name);
+        socket.emit('updateRooms', game.rooms, 'room1');
+    });
     
+    socket.on('getRooms', function (){
+        socket.emit('updateRooms', game.rooms);
+    })
     /*
     console.log(io);
     //socket.on('init', function (data) {});

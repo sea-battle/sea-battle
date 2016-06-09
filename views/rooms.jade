@@ -4,6 +4,10 @@ block title
     title Choose your battlefield
     
 block content
+    input#room-name(type='text', placeholder='Nom de la partie') 
     button#create-room Créer une partie
     
+    
+    div#rooms
+    script(src='/socket.io/socket.io.js')
     script(src='/javascripts/pages/rooms.js')
