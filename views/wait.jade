@@ -1,7 +1,10 @@
 extends inc/head.jade
 
 block title
-	title Prepare to fight
+    title Prepare to fight
 
 block content
-	button#create-room Créer une partie
+    button#set-ready set ready
+    i#ready-status
+    script(src='/socket.io/socket.io.js')
+    script(src='/javascripts/pages/wait.js')
