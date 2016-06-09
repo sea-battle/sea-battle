@@ -1,0 +1,22 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.boat-selector {
+    display: block;
+}
+
+.boat-selected {
+    background-color: #666;
+}
+
+#canvas-wrapper{
+    width: 60%;
+    height: 80%;
+    padding: 50px 50px;
+}
+
+.placed{
+    
+}
