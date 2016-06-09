@@ -1,0 +1,23 @@
+extends inc/head.jade
+
+block content
+	include inc/header.jade
+
+	section.content.manage-account
+		h1 Gérez votre compte
+		
+		h2 Modifiez votre pseudonyme
+		form#username-modification
+			input#username(type='text', name="username", placeholder='Pseudonyme')
+			input#username-submit(type='submit', value="Modifier")
+
+		h2 Modifiez votre mot de passe
+		form#password-modification
+			input#current-password(type='password', name="current_password", placeholder='Mot de passe actuel')
+			input#new-password(type='password', name="new_password", placeholder='Nouveau mot de passe')
+			input#password-submit(type='submit', value="Modifier")
+
+		h2 Supprimez votre compte
+		button#delete-account
+
+	include inc/footer.jade

@@ -2,3 +2,16 @@ extends inc/head.jade
 
 block content
 	include inc/header.jade
+
+	section.content.home
+		h1 Sea Battle
+		
+		h2 Jouer
+		form#signin
+			input#signin-email(type='text', placeholder='Email')
+			input#signin-password(type='password', placeholder='Mot de passe')
+			input#signin-submit(type='submit', value="Connexion")
+
+		button#expand-signup Pas de compte ?
+
+	include inc/footer.jade
