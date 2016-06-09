@@ -11,6 +11,7 @@ var game = require('./game');
 var config = require('./config');
 
 var routeAuthentication = require('./routes/authentication');
+
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 
@@ -43,7 +44,8 @@ mongoose.connect(config.database.location, config.database.options);
 
 io.of(game.roomToJoin).on('connection', function (socket) {
     //socket.on('init', function (data) {});
-    if (game.players.length < game.ROOM_MAX_PLAYER) {
+    if (game.players.length < game.ROOM_MAX_PLAYER &&
+        game.roomToJoin != '/') {
         socket.player = {
             ready: false
         };
