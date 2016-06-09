@@ -43,6 +43,9 @@ passport.deserializeUser(User.deserializeUser());
 mongoose.connect(config.database.location, config.database.options);
 
 io.of(game.roomToJoin).on('connection', function (socket) {
+    
+    /*
+    console.log(io);
     //socket.on('init', function (data) {});
     if (game.players.length < game.ROOM_MAX_PLAYER &&
         game.roomToJoin != '/') {
@@ -68,6 +71,7 @@ io.of(game.roomToJoin).on('connection', function (socket) {
     });
 
     console.log(game.roomToJoin + ' => ' + 'game.players.length:', game.players.length);
+    */
 });
 
 server.listen(3000);
