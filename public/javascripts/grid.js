@@ -278,5 +278,8 @@ Grid.prototype = {
     },
     getRandom: function (min, max, round) {
         return round ? Math.round(Math.random() * (max - min) + min) : Math.floor(Math.random() * (max - min) + min);
-    }
+    },
+	allBoatsArePlaced: function (){
+		return this.cellsContainingBoats.length == 17;
+	}
 };
