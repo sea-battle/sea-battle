@@ -186,11 +186,9 @@ boatsSprite.onload = function () {
 
 	readyButton.addEventListener('click', function (e) {
 		if (grid.allBoatsArePlaced()) {
-			socket.emit('game-ready', grid.cells);	
+			socket.emit('game-ready', grid.cells);
 		}
 	});
-
-
 
 
 

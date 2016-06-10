@@ -44,11 +44,43 @@ mongoose.connect(config.database.location, config.database.options);
 
 //io.of(game.roomToJoin).on('connection', function (socket) {
 io.sockets.on('connection', function (socket) {
+	//console.log(socket.id);
+	socket.emit('game-init', socket.id);
+
+
 	socket.on('game-ready', function (cells) {
-		console.log(socket.id);
+		//console.log('||||||||||||||||||||||||||||||||||||||||||||||||||\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n||||||||||||||||||||||||||||||||||||||||||||||||||');
+
+		socket.room = 'test';
 		socket.ready = true;
 		socket.cells = cells;
+		socket.join(socket.room);
+		var roomClients = io.sockets.adapter.rooms[socket.room];
+
+		var allReady = true;
+		//TODO optimize
+		if (roomClients.length > 1) {
+			for (socketId in roomClients.sockets) {
+				if (!io.sockets.sockets[socketId].ready) {
+					allReady = false;
+					break;
+				}
+			}
+		} else {
+			// SEE WHAT TO DO IF HE'S ALONE
+		}
+
+		if (allReady) {
+			//start count down;
+		}
+
+
+		/*
+		console.log(clients_in_the_room.sockets);
+		console.log(io.sockets.sockets);
+		*/
 	});
+
 
 
 	/* ROOMS
