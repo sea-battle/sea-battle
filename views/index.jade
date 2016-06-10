@@ -5,13 +5,21 @@ block content
 
 	section.content.home
 		h1 Sea Battle
+
+		section.promotion
+			div
+				img(src="images/test1.jpg")
+				p Blablabla
+			div
+				img(src="images/test2.jpg")
+				p Blablabla
 		
 		h2 Jouer
 		form#signin
 			input#signin-email(type='text', placeholder='Email')
 			input#signin-password(type='password', placeholder='Mot de passe')
-			input#signin-submit(type='submit', value="Connexion")
+			button#signin-submit.button-effect(type='submit') Connexion
 
-		button#expand-signup Pas de compte ?
+		a.link-effect(href="/signup", title="Vers la page de création de compte") Pas de compte ?
 
 	include inc/footer.jade
