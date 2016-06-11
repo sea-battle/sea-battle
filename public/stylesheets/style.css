@@ -1,10 +1,10 @@
 /*
 	CHARTE
-	#513b56 : violet
-	#525174 : violet-bleu
-	#348aa7 : bleu
-	#5dd39e : vert
-	#bce784 : vert-jaune
+	#513b56
+	#525174
+	#348aa7
+	#5dd39e
+	#bce784
  */
 
 /* All
@@ -20,6 +20,11 @@ html {
 	box-sizing: inherit;
 }
 
+html,
+body {
+	height: 100%;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -33,9 +38,6 @@ h3 {
 	font-family: 'ralewayregular';
 	text-transform: uppercase;
 	letter-spacing: 3px;
-}
-
-h1 {
 	margin-top: 0;
 }
 
@@ -43,45 +45,146 @@ p {
 	margin: 0;
 }
 
-input[type="submit"],
 button {
 	background-color: #fff;
 	border: 2px solid;
-	padding: 1em 1.3em;
+	padding: .7em 1.3em;
+}
+
+/* Forms */
+
+form input {
+	display: block;
+	margin: auto;
+	margin-bottom: 1.5em;
+	border: 1px solid #e1e1e1;
+	width: 35em;
+	height: 3em;
+	transition: border-color 1s;
+}
+
+form input:hover {
+	border-color: #525174;
+	transition: border-color .5s;
+}
+
+form input:focus {
+	border-color: #525174;
+}
+
+form button {
+	margin: auto;
+	margin-bottom: 1em;
+}
+
+/* Links effect */
+
+a {
+	text-decoration: none;
+	color: #525174;
+}
+
+.link-effect {
+	display: inline-block;
+	position: relative;
+	font-weight: 700;
+}
+
+.link-effect::before,
+.link-effect::after {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: #525174;
+	content: '';
+	-webkit-transition: -webkit-transform 0.3s;
+	-moz-transition: -moz-transform 0.3s;
+	transition: transform 0.3s;
+	-webkit-transform: scale(0.85);
+	-moz-transform: scale(0.85);
+	transform: scale(0.85);
+}
+
+.link-effect::after {
+	opacity: 0;
+	-webkit-transition: top 0.3s, opacity 0.3s, -webkit-transform 0.3s;
+	-moz-transition: top 0.3s, opacity 0.3s, -moz-transform 0.3s;
+	transition: top 0.3s, opacity 0.3s, transform 0.3s;
+}
+
+.link-effect:hover::before,
+.link-effect:hover::after,
+.link-effect:focus::before,
+.link-effect:focus::after {
+	-webkit-transform: scale(1);
+	-moz-transform: scale(1);
+	transform: scale(1);
+}
+
+.link-effect:hover::after,
+.link-effect:focus::after {
+	top: 0%;
+	opacity: 1;
+}
+
+/* Button effect */
+
+.button-effect {
+	display: block;
+	position: relative;
+	z-index: 1;
+	-webkit-transition: border-color 0.4s, color 0.4s;
+	transition: border-color 0.4s, color 0.4s;
+	border-color: #525174;
+	color: #525174;
+	font-weight: 700;
+}
+
+.button-effect::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #348aa7;
+	z-index: -1;
+	opacity: 0;
+	-webkit-transform: scale3d(0.7, 1, 1);
+	transform: scale3d(0.7, 1, 1);
+	-webkit-transition: -webkit-transform 0.4s, opacity 0.4s;
+	transition: transform 0.4s, opacity 0.4s;
+	-webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+	transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.button-effect,
+.button-effect::before {
+	-webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+	transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.button-effect:hover {
+	color: #fff;
+	border-color: #37474f;
+}
+
+.button-effect:hover::before {
+	opacity: 1;
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
 }
 
 /* Fonts
 ========================================================================== */
 
 @font-face {
-    font-family: 'latobold';
-    src: url('../fonts/lato-bold-webfont.woff2') format('woff2'),
-         url('../fonts/lato-bold-webfont.woff') format('woff'),
-         url('../fonts/lato-bold-webfont.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'latolight';
-    src: url('../fonts/lato-light-webfont.woff2') format('woff2'),
-         url('../fonts/lato-light-webfont.woff') format('woff'),
-         url('../fonts/lato-light-webfont.ttf') format('truetype');
-}
-@font-face {
     font-family: 'latoregular';
     src: url('../fonts/lato-regular-webfont.woff2') format('woff2'),
          url('../fonts/lato-regular-webfont.woff') format('woff'),
          url('../fonts/lato-regular-webfont.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'ralewaybold';
-    src: url('../fonts/raleway-bold-webfont.woff2') format('woff2'),
-         url('../fonts/raleway-bold-webfont.woff') format('woff'),
-         url('../fonts/raleway-bold-webfont.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'ralewaylight';
-    src: url('../fonts/raleway-light-webfont.woff2') format('woff2'),
-         url('../fonts/raleway-light-webfont.woff') format('woff'),
-         url('../fonts/raleway-light-webfont.ttf') format('truetype');
 }
 @font-face {
     font-family: 'ralewayregular';
@@ -93,10 +196,22 @@ button {
 /* Content
 ========================================================================== */
 
-.content {
-	padding: 1.5em;
-	position: relative;
+.wrapper {
+	min-height: 100%;
+	margin: 0 auto -2em;
 }
+
+	.content {
+		padding: 1.5em;
+		position: relative;
+		max-width: 75em; /* 1200px */
+		margin: auto;
+		text-align: center;
+	}
+
+		.push {
+			height: 2em;
+		}
 
 /* Overlay
 ========================================================================== */
@@ -120,27 +235,44 @@ header {
 }
 
 	header img {
-		padding: 1.5em;
+		padding: 2em;
+		max-width: 275px;
 	}
 
 /* Home
 ========================================================================== */
 
-.home {
+.promotion {
+	display: table;
+	width: 100%;
 	text-align: center;
 }
 
-form input {
-	display: block;
-	margin: auto;
-	margin-bottom: 1.5em;
-	border: 1px solid #e1e1e1;
+	.promotion div {
+		display: table-cell;
+	}
+
+	.promotion img {
+		max-width: 200px;
+	}
+
+/* Signup
+========================================================================== */
+
+.signup ul {
+	display: inline-block;
+	text-align: left;
+	list-style-type: none;
+	padding: 0;
 }
 
-form input:not([type="submit"]) {
-	width: 35em;
-	height: 3em;
+/* Signup
+========================================================================== */
+
+.delete-account {
+	margin: auto;
 }
+
 
 /* Game
 ========================================================================== */
@@ -160,12 +292,158 @@ form input:not([type="submit"]) {
 }
 
 .placed {
-    
+
 }
 
 /* Footer
 ========================================================================== */
 
 footer {
-	background-color: #e1e1e1;	
+	background-color: #e1e1e1;
+	text-align: center;
+	line-height: 2em;
+}
+
+footer p {
+	display: inline-block;
+	margin: 0 1em;
+}
+
+/* TESTS
+========================================================================== */
+
+.sidebar,
+.content.game {
+	display: inline-block;
+	height: 100vh;
+	vertical-align: top;
+}
+
+.sidebar {
+	width: 25%;
+	background-color: blue;
+	max-width: 350px;
+}
+
+.sidebar section {
+	padding-bottom: 1.5em;
+}
+
+.content.game {
+	width: 75%;
+	background-color: red;
+	padding: 0;
+}
+
+.player-info {
+	background-color: green;
+	min-height: 15vh;
+}
+
+.game-ranking {
+	background-color: yellow;
+	min-height: 50vh;
+}
+
+.chat {
+	background-color: purple;
+	min-height: 35vh;
+}
+
+.players-grids,
+.grids-wrapper {
+	display: inline-block;
+	vertical-align: top;
+	height: inherit;
+}
+
+.players-grids {
+	width: 25%;
+	background-color: orange;
+	max-width: 200px;
+}
+
+.grids-wrapper {
+	width: 75%;
+	background-color: pink;
+}
+
+.visual-grid {
+	height: 60vh;
+	background-color: brown;
+}
+
+.shots-grid {
+	height: 40vh;
+	background-color: lightblue;
+}
+
+.expand-sidebar {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+}
+
+.expand-grids {
+	display: none;
+	position: absolute;
+	top: 50px;
+	left: 0;
+	z-index: 10;
+}
+
+@media screen and (min-width: 66.875em) { /* 1070px */
+	.grids-wrapper {
+		width: 100%;
+		position: absolute;
+	}
+}
+
+@media screen and (max-width: 60em) { /* 960px */
+	.sidebar {
+		display: none;
+	}
+
+	.expand-sidebar {
+		display: block;
+	}
+
+	.content.game {
+		width: 100%;
+	}
+
+	.players-grids {
+		width: 20%;
+	}
+
+	.grids-wrapper {
+		width: 80%;
+	}
+}
+
+@media screen and (max-width: 40.625em) { /* 650px */
+	.players-grids {
+		display: none;
+	}
+
+	.expand-grids {
+		display: block;
+	}
+
+	.grids-wrapper {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 32.5em) { /* 520px */
+	.promotion div {
+		display: block;
+		margin-bottom: 1.5em;
+	}
+
+	form input {
+		width: 100%;
+	}
 }

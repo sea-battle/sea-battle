@@ -44,3 +44,7 @@ Array.prototype.remove = function (value) {
         }
     }
 };
+
+Element.prototype.insertAfter = function (newNode) {
+    this.parentNode.insertBefore(newNode, this.nextSibling);
+}
