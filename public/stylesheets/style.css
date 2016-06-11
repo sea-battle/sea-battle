@@ -1,10 +1,10 @@
 /*
 	CHARTE
-	#513b56 : violet
-	#525174 : violet-bleu
-	#348aa7 : bleu
-	#5dd39e : vert
-	#bce784 : vert-jaune
+	#513b56
+	#525174
+	#348aa7
+	#5dd39e
+	#bce784
  */
 
 /* All
@@ -18,6 +18,11 @@ html {
 *:before,
 *:after {
 	box-sizing: inherit;
+}
+
+html,
+body {
+	height: 100%;
 }
 
 body {
@@ -176,34 +181,10 @@ a {
 ========================================================================== */
 
 @font-face {
-    font-family: 'latobold';
-    src: url('../fonts/lato-bold-webfont.woff2') format('woff2'),
-         url('../fonts/lato-bold-webfont.woff') format('woff'),
-         url('../fonts/lato-bold-webfont.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'latolight';
-    src: url('../fonts/lato-light-webfont.woff2') format('woff2'),
-         url('../fonts/lato-light-webfont.woff') format('woff'),
-         url('../fonts/lato-light-webfont.ttf') format('truetype');
-}
-@font-face {
     font-family: 'latoregular';
     src: url('../fonts/lato-regular-webfont.woff2') format('woff2'),
          url('../fonts/lato-regular-webfont.woff') format('woff'),
          url('../fonts/lato-regular-webfont.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'ralewaybold';
-    src: url('../fonts/raleway-bold-webfont.woff2') format('woff2'),
-         url('../fonts/raleway-bold-webfont.woff') format('woff'),
-         url('../fonts/raleway-bold-webfont.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'ralewaylight';
-    src: url('../fonts/raleway-light-webfont.woff2') format('woff2'),
-         url('../fonts/raleway-light-webfont.woff') format('woff'),
-         url('../fonts/raleway-light-webfont.ttf') format('truetype');
 }
 @font-face {
     font-family: 'ralewayregular';
@@ -215,10 +196,21 @@ a {
 /* Content
 ========================================================================== */
 
-.content {
-	padding: 1.5em;
-	position: relative;
+.wrapper {
+	min-height: 100%;
+	margin: 0 auto -2em;
 }
+
+	.content {
+		padding: 1.5em;
+		position: relative;
+		max-width: 75em; /* 1200px */
+		margin: auto;
+	}
+
+		.push {
+			height: 2em;
+		}
 
 /* Overlay
 ========================================================================== */
@@ -294,6 +286,8 @@ header {
 footer {
 	background-color: #e1e1e1;
 	text-align: center;
+	height: 2em;
+	line-height: 2em;
 }
 
 /* TESTS

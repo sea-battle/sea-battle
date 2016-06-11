@@ -1,25 +1,28 @@
 extends inc/head.jade
 
 block content
-	include inc/header.jade
+	div.wrapper
+		include inc/header.jade
 
-	section.content.home
-		h1 Sea Battle
+		section.content.home
+			h1 Sea Battle
 
-		section.promotion
-			div
-				img(src="images/test1.jpg")
-				p Blablabla
-			div
-				img(src="images/test2.jpg")
-				p Blablabla
-		
-		h2 Jouer
-		form#signin
-			input#signin-email(type='text', placeholder='Email')
-			input#signin-password(type='password', placeholder='Mot de passe')
-			button#signin-submit.button-effect(type='submit') Connexion
+			section.promotion
+				div
+					img(src="images/test1.jpg")
+					p Blablabla
+				div
+					img(src="images/test2.jpg")
+					p Blablabla
+			
+			h2 Jouer
+			form#signin
+				input#signin-email(type='text', placeholder='Email')
+				input#signin-password(type='password', placeholder='Mot de passe')
+				button#signin-submit.button-effect(type='submit') Connexion
 
-		a.link-effect(href="/signup", title="Vers la page de création de compte") Pas de compte ?
+			a.link-effect(href="/signup", title="Vers la page de création de compte") Pas de compte ?
+
+			div.push
 
 	include inc/footer.jade
