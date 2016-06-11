@@ -1,8 +1,20 @@
 var socket = io();
+var playerIsReady = false;
+var setReadyButton = document.getElementById('set-ready');
+var readyStatus = document.getElementById('ready-status');
 
-document.getElementById('set-ready').addEventListener('click', function (e) {
-    socket.emit('setReady');
-    document.getElementById('ready-status').innerHTML = "Ready";
+setReadyButton.addEventListener('click', function (e) {
+	playerIsReady = !playerIsReady;
+	if (playerIsReady){
+		readyStatus.innerHTML = 'Ready';
+		socket.emit('wait-set-ready');
+	}else{
+		readyStatus.innerHTML = '';
+		socket.emit('wait-set-unready');	
+	}
 });
 
-socket.emit('fromWait');
+socket.on('wait-start-game', function () {
+	document.getElementById('wait-stage').style.display = 'none';
+	document.getElementById('game-stage').style.display = 'block';
+});
