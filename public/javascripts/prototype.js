@@ -48,3 +48,7 @@ Array.prototype.remove = function (value) {
 Element.prototype.insertAfter = function (newNode) {
     this.parentNode.insertBefore(newNode, this.nextSibling);
 }
+
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}

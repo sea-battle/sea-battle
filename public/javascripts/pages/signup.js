@@ -1,33 +1,42 @@
 function checkEmailAddress() {
     'use strict';
 
+    var signupEmailMessage = document.getElementById(event.target.id + '-message');
+
     var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
     if (!regexEmail.test(event.target.value)) {
-        // Action if e-mail address is valid
-        return true;
+        event.target.classList.add('error');
+        signupEmailMessage.innerHTML = 'Entrez une adresse e-mail valide';
     } else {
-        // Action if e-mail address is not valid
-        return false
+        event.target.classList.remove('error');
+        signupEmailMessage.innerHTML = '';
     }
 }
 
 function checkUsername() {
     'use strict';
 
-    var usernameAvailabilityMessage = document.getElementById('username-availability-message');
+    var signupUsernameMessage = document.getElementById('signup-username-message');
 
     if (event.target.value === '') {
-        usernameAvailabilityMessage.innerHTML = '';
+        signupUsernameMessage.innerHTML = '';
         return;
     } else {
         var xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && this.status === 200) {
-                var checkUsernameAvailabilityResponse = JSON.parse(xhr.responseText);
+                var signupUsername = document.getElementById('signup-username'),
+                    checkUsernameAvailabilityResponse = JSON.parse(xhr.responseText);
 
-                usernameAvailabilityMessage.innerHTML = checkUsernameAvailabilityResponse['usernameAvailabilityMessage'];
+                if (!checkUsernameAvailabilityResponse['usernameAvailability']) {
+                    signupUsername.classList.add('error');
+                } else {
+                    signupUsername.classList.remove('error');
+                }
+
+                signupUsernameMessage.innerHTML = checkUsernameAvailabilityResponse['usernameAvailabilityMessage'];
             }
         };
 
@@ -40,12 +49,16 @@ function checkUsername() {
 function checkPassword() {
     'use strict';
 
-    var passwordField = document.getElementById('signup-password');
+    var signupPassword = document.getElementById('signup-password'),
+        signupPasswordConfirmation = document.getElementById('signup-password-confirmation'),
+        signupPasswordMessage = document.getElementById('signup-password-message');
 
-    if (passwordField.value === event.target.value) {
-        return true;
+    if (signupPassword.value === signupPasswordConfirmation.value) {
+        event.target.classList.remove('error');
+        signupPasswordMessage.innerHTML = '';
     } else {
-        return false;
+        event.target.classList.add('error');
+        signupPasswordMessage.innerHTML = 'Les mots de passe ne correspondent pas';
     }
 }
 
@@ -84,13 +97,15 @@ function proceedSignup() {
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    var buttonSignupSubmit = document.getElementById('signup-submit'),
-        emailField = document.getElementById('signup-email'),
-        usernameField = document.getElementById('signup-username'),
-        passwordConfirmationField = document.getElementById('signup-password-confirmation');
+    var signupSubmit = document.getElementById('signup-submit'),
+        signupEmail = document.getElementById('signup-email'),
+        signupUsername = document.getElementById('signup-username'),
+        signupPassword = document.getElementById('signup-password'),
+        signupPasswordConfirmation = document.getElementById('signup-password-confirmation');
 
-    buttonSignupSubmit.addEventListener('click', proceedSignup, false);
-    emailField.addEventListener('blur', checkEmailAddress, false);
-    usernameField.addEventListener('keyup', checkUsername, false);
-    passwordConfirmationField.addEventListener('blur', checkPassword, false);
+    signupSubmit.addEventListener('click', proceedSignup, false);
+    signupEmail.addEventListener('blur', checkEmailAddress, false);
+    signupUsername.addEventListener('keyup', checkUsername, false);
+    signupPassword.addEventListener('keyup', checkPassword, false);
+    signupPasswordConfirmation.addEventListener('keyup', checkPassword, false);
 });
