@@ -17,9 +17,13 @@ block content
             
             form#signup(method="post", action="/signup")
                 input#signup-email(type='email', name='email' value='john.doe@mail.com', placeholder='E-mail')
+                p#signup-email-message
                 input#signup-username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
+                p#signup-username-message
                 input#signup-password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
+                p#signup-password-message
                 input#signup-password-confirmation(type='password', name='password_confirmation' value="johndoe", placeholder='Confirmez le mot de passe')
+                p#signup-password-confirmation-message
                 button#signup-submit.button-effect(type='submit') Créer
 
             div.push

@@ -13,12 +13,15 @@ block content
 			h2 Modifiez votre pseudonyme
 			form#username-modification
 				input#username(type='text', name="username", placeholder='Pseudonyme')
+				p#username-message
 				button#username-submit.button-effect(type='submit') Modifier
 
 			h2 Modifiez votre mot de passe
 			form#password-modification
 				input#current-password(type='password', name="current_password", placeholder='Mot de passe actuel')
+				p#current-password-message
 				input#new-password(type='password', name="new_password", placeholder='Nouveau mot de passe')
+				p#new-password-message
 				button#password-submit.button-effect(type='submit') Modifier
 
 			h2 Supprimez votre compte
