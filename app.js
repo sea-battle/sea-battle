@@ -48,22 +48,34 @@ io.sockets.on('connection', function (socket) {
 	socket.ready = false;
 	socket.room = 'test';
 	socket.join(socket.room);
-	
+
 	// WAIT STAGE
 	socket.on('wait-set-ready', function () {
 		socket.ready = true;
 		if (game.allPlayersAreReady(io.sockets, socket) &&
 			game.getPlayers.length > 1) {
 			io.sockets.emit('wait-start-game');
+			game.timerId = setInterval(function () {
+				if (game.timer == 0) {
+					game.timer = 30;
+					// Check if player grid is ready
+					io.sockets.emit('game-check-grid');
+					//io.sockets.emit('game-start-battle');
+					clearInterval(timerId);
+				} else {
+					io.sockets.emit('game-timer-update', game.timer);
+					game.timer--;
+				}
+			}, 1000);
 		}
 	});
 	socket.on('wait-set-unready', function () {
 		socket.ready = false;
 	});
-	
-	
+
+
 	// GAME STAGE
-	socket.on('game-ready', function (cells) {
+	socket.on('game-set-ready', function (cells) {
 		//console.log('||||||||||||||||||||||||||||||||||||||||||||||||||\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n||||||||||||||||||||||||||||||||||||||||||||||||||');
 
 
@@ -87,16 +99,7 @@ io.sockets.on('connection', function (socket) {
 		if (allReady) {
 
 		} else {
-			var timerId = setInterval(function () {
-				if (game.timer == 0) {
-					game.timer = 30;
-					io.sockets.emit('game-start-battle');
-					clearInterval(timerId);
-				} else {
-					io.sockets.emit('game-timer-update', game.timer);
-					game.timer--;
-				}
-			}, 1000);
+
 		}
 
 

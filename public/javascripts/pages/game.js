@@ -187,7 +187,7 @@ boatsSprite.onload = function () {
 
 	readyButton.addEventListener('click', function (e) {
 		if (grid.allBoatsArePlaced()) {
-			socket.emit('game-ready', grid.cells);
+			socket.emit('game-set-ready', grid.cells);
 		}
 	});
 
@@ -207,6 +207,17 @@ window.addEventListener('resize', function (e) {
 	var newWidth = parseInt(getComputedStyle(canvasContainer).width);
 	grid.rescaleCanvas(newWidth, boatsSprite);
 });
+
+
+
+socket.on('game-check-grid', function (){
+	//grid.randomBoatsPosition();
+	if (!grid.allBoatsArePlaced){
+		handlers.placementStage.random();
+	}
+	socket.emit();
+});
+
 
 /*
 (function animloop() {

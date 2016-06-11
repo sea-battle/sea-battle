@@ -12,7 +12,8 @@ module.exports = {
 		}
 		return count;
 	},
-	timer: 30,
+	timer: 3,
+	timerId: null,
 	// return players from player room
 	getPlayers: function (ioSockets, socket) {
 		return ioSockets.adapter.rooms[socket.room];
