@@ -66,6 +66,7 @@ var canvasContainer = document.getElementById('canvas-wrapper');
 var randomGenerator = document.getElementById('random');
 var boatSelecters = document.getElementsByClassName('boat-selector');
 var readyButton = document.getElementById('ready');
+var timer = document.getElementById('timer');
 
 var previousMouseCoords = undefined;
 // images 
@@ -191,13 +192,20 @@ boatsSprite.onload = function () {
 	});
 
 
-
+	socket.on('game-timer-update', function (timeRemaining){
+		timer.innerHTML = timeRemaining;
+	});
+	
+	socket.on('game-start-battle', function (){
+		timer.remove();
+		console.log('Battle ! ');
+	});
 
 }
 
 window.addEventListener('resize', function (e) {
 	var newWidth = parseInt(getComputedStyle(canvasContainer).width);
-	grid.rescaleCanvas(newWidth);
+	grid.rescaleCanvas(newWidth, boatsSprite);
 });
 
 /*

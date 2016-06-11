@@ -12,5 +12,5 @@ module.exports = {
 		}
 		return count;
 	},
-	countDown: 30
+	timer: 30
 };
