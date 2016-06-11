@@ -191,13 +191,15 @@ boatsSprite.onload = function () {
 	});
 
 
-
+	socket.on('game-timer', function (test){
+		//console.log(test);
+	});
 
 }
 
 window.addEventListener('resize', function (e) {
 	var newWidth = parseInt(getComputedStyle(canvasContainer).width);
-	grid.rescaleCanvas(newWidth);
+	grid.rescaleCanvas(newWidth, boatsSprite);
 });
 
 /*

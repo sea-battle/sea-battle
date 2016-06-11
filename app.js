@@ -71,7 +71,9 @@ io.sockets.on('connection', function (socket) {
 		}
 
 		if (allReady) {
-			//start count down;
+			setInterval(function (){
+				io.sockets.emit('game-timer', 'blabla');
+			}, 1000);
 		}
 
 
