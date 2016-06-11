@@ -44,17 +44,16 @@ mongoose.connect(config.database.location, config.database.options);
 
 //io.of(game.roomToJoin).on('connection', function (socket) {
 io.sockets.on('connection', function (socket) {
-	//console.log(socket.id);
-	socket.emit('game-init', socket.id);
-
-
+	socket.ready = false;
+	socket.room = 'test';
+	socket.join(socket.room);
+	console.log(io.sockets.adapter.rooms[socket.room]);
 	socket.on('game-ready', function (cells) {
 		//console.log('||||||||||||||||||||||||||||||||||||||||||||||||||\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n||||||||||||||||||||||||||||||||||||||||||||||||||');
 
-		socket.room = 'test';
+		
 		socket.ready = true;
 		socket.cells = cells;
-		socket.join(socket.room);
 		var roomClients = io.sockets.adapter.rooms[socket.room];
 
 		var allReady = true;
@@ -69,8 +68,10 @@ io.sockets.on('connection', function (socket) {
 		} else {
 			// SEE WHAT TO DO IF HE'S ALONE
 		}
-
+		console.log('allReady:', allReady);
 		if (allReady) {
+
+		} else {
 			var timerId = setInterval(function () {
 				if (game.timer == 0) {
 					game.timer = 30;
