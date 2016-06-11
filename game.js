@@ -1,8 +1,6 @@
 module.exports = {
-	roomToJoin: '/', // default
 	rooms: [],
 	ROOM_MAX_PLAYER: 6,
-	players: [],
 	getPlayerReadyCount: function () {
 		var count = 0;
 		for (var i = 0; i < this.players.length; i++) {
@@ -12,14 +10,14 @@ module.exports = {
 		}
 		return count;
 	},
-	timer: 3,
+	timer: 1,
 	timerId: null,
 	// return players from player room
-	getPlayers: function (ioSockets, socket) {
-		return ioSockets.adapter.rooms[socket.room];
+	getPlayers: function (ioSockets, roomName) {
+		return ioSockets.adapter.rooms[roomName];
 	},
-	allPlayersAreReady: function (ioSockets, socket) {
-		var roomPlayers = this.getPlayers(ioSockets, socket);
+	allPlayersAreReady: function (ioSockets, roomName) {
+		var roomPlayers = this.getPlayers(ioSockets, roomName);
 		var allReady = true;
 		for (socketId in roomPlayers.sockets) {
 			if (!ioSockets.sockets[socketId].ready) {
@@ -29,5 +27,13 @@ module.exports = {
 		}
 		
 		return allReady;
+	},
+	getPlayersNames: function (ioSockets, roomName){
+		var roomPlayers = this.getPlayers(ioSockets, roomName);	
+		var names = [];
+		for (socketId in roomPlayers.sockets) {
+			names.push(ioSockets.sockets[socketId].name);
+		}
+		return names;
 	}
 };

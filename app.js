@@ -47,13 +47,14 @@ io.sockets.on('connection', function (socket) {
 	// INIT ON CONNECTION
 	socket.ready = false;
 	socket.room = 'test';
+	socket.name = socket.id;
 	socket.join(socket.room);
 
 	// WAIT STAGE
 	socket.on('wait-set-ready', function () {
 		socket.ready = true;
-		if (game.allPlayersAreReady(io.sockets, socket) &&
-			game.getPlayers.length > 1) {
+		if (game.allPlayersAreReady(io.sockets, socket.room) &&
+			game.getPlayers(io.sockets, socket.room).length > 1) {
 			io.sockets.emit('wait-start-game');
 			game.timerId = setInterval(function () {
 				if (game.timer == 0) {
@@ -61,7 +62,7 @@ io.sockets.on('connection', function (socket) {
 					// Check if player grid is ready
 					io.sockets.emit('game-check-grid');
 					//io.sockets.emit('game-start-battle');
-					clearInterval(timerId);
+					clearInterval(game.timerId);
 				} else {
 					io.sockets.emit('game-timer-update', game.timer);
 					game.timer--;
@@ -76,37 +77,9 @@ io.sockets.on('connection', function (socket) {
 
 	// GAME STAGE
 	socket.on('game-set-ready', function (cells) {
-		//console.log('||||||||||||||||||||||||||||||||||||||||||||||||||\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n||||||||||||||||||||||||||||||||||||||||||||||||||');
-
-
-		socket.ready = true;
 		socket.cells = cells;
-		//var roomClients = io.sockets.adapter.rooms[socket.room];
-
-
-		var allReady = true;
-		//TODO optimize
-		if (roomClients.length > 1) {
-			for (socketId in roomClients.sockets) {
-				if (!io.sockets.sockets[socketId].ready) {
-					allReady = false;
-					break;
-				}
-			}
-		} else {
-			// SEE WHAT TO DO IF HE'S ALONE
-		}
-		if (allReady) {
-
-		} else {
-
-		}
-
-
-		/*
-		console.log(clients_in_the_room.sockets);
-		console.log(io.sockets.sockets);
-		*/
+		socket.emit('game-init-players-grids', game.getPlayersNames(io.sockets, socket.room));
+		//game.getPlayersCells(io.sockets, socket.room);
 	});
 
 

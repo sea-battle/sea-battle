@@ -60,13 +60,13 @@ const DEFAULT_BOATS = {
 };
 
 var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
 var boatsContainer = document.getElementById('boats-container');
 var canvasContainer = document.getElementById('canvas-wrapper');
 var randomGenerator = document.getElementById('random');
 var boatSelecters = document.getElementsByClassName('boat-selector');
 var readyButton = document.getElementById('ready');
 var timer = document.getElementById('timer');
+var otherPlayersCanvasContainer = document.getElementById('other-players-canvas');
 
 var previousMouseCoords = undefined;
 // images 
@@ -183,24 +183,14 @@ boatsSprite.onload = function () {
 		boatSelecters[i].addEventListener('click', handlers.placementStage.selectBoat);
 	}
 	randomGenerator.addEventListener('click', handlers.placementStage.random);
-
-
 	readyButton.addEventListener('click', function (e) {
 		if (grid.allBoatsArePlaced()) {
 			socket.emit('game-set-ready', grid.cells);
 		}
 	});
-
-
 	socket.on('game-timer-update', function (timeRemaining){
 		timer.innerHTML = timeRemaining;
 	});
-	
-	socket.on('game-start-battle', function (){
-		timer.remove();
-		console.log('Battle ! ');
-	});
-
 }
 
 window.addEventListener('resize', function (e) {
@@ -211,11 +201,27 @@ window.addEventListener('resize', function (e) {
 
 
 socket.on('game-check-grid', function (){
-	//grid.randomBoatsPosition();
-	if (!grid.allBoatsArePlaced){
+	console.log(grid.allBoatsArePlaced());
+	if (!grid.allBoatsArePlaced()){
 		handlers.placementStage.random();
+		grid.drawPlacedBoats(boatsSprite);
 	}
-	socket.emit();
+	//socket.emit('game-set-ready', grid.cells);
+});
+
+socket.on('game-init-players-grids', function (names){
+	names.forEach(function (name){
+		var otherPlayerCanvas = document.createElement('canvas');
+		var br = document.createElement('br');
+		otherPlayerCanvas.setAttribute('width', '100');
+		otherPlayerCanvas.setAttribute('height', '100');
+		
+		otherPlayersCanvasContainer.appendChild(otherPlayerCanvas);
+		otherPlayersCanvasContainer.appendChild(br);
+		
+		var otherPlayerGrid = new Grid(otherPlayerCanvas);
+		otherPlayerGrid.renderGrid();
+	});
 });
 
 
