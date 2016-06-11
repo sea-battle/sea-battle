@@ -71,8 +71,15 @@ io.sockets.on('connection', function (socket) {
 		}
 
 		if (allReady) {
-			setInterval(function (){
-				io.sockets.emit('game-timer', 'blabla');
+			var timerId = setInterval(function () {
+				if (game.timer == 0) {
+					game.timer = 30;
+					io.sockets.emit('game-start-battle');
+					clearInterval(timerId);
+				} else {
+					io.sockets.emit('game-timer-update', game.timer);
+					game.timer--;
+				}
 			}, 1000);
 		}
 
