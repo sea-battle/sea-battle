@@ -45,6 +45,10 @@ mongoose.connect(config.database.location, config.database.options);
 //io.of(game.roomToJoin).on('connection', function (socket) {
 io.sockets.on('connection', function (socket) {
 	// INIT ON CONNECTION
+	game.rooms['test'] = {
+		timer: game.defaultPlacementTime,
+		timerId: null
+	};
 	socket.ready = false;
 	socket.room = 'test';
 	socket.name = socket.id;
@@ -56,16 +60,16 @@ io.sockets.on('connection', function (socket) {
 		if (game.allPlayersAreReady(io.sockets, socket.room) &&
 			game.getPlayers(io.sockets, socket.room).length > 1) {
 			io.sockets.emit('wait-start-game');
-			game.timerId = setInterval(function () {
-				if (game.timer == 0) {
-					game.timer = 30;
+			game.rooms[socket.room].timerId = setInterval(function () {
+				if (game.rooms[socket.room].timer == 0) {
+					game.rooms[socket.room].timer = game.defaultShootTime;
 					// Check if player grid is ready
 					io.sockets.emit('game-check-grid');
 					//io.sockets.emit('game-start-battle');
-					clearInterval(game.timerId);
+					clearInterval(game.rooms[socket.room].timerId);
 				} else {
-					io.sockets.emit('game-timer-update', game.timer);
-					game.timer--;
+					io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
+					game.rooms[socket.room].timer--;
 				}
 			}, 1000);
 		}

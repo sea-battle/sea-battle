@@ -10,8 +10,8 @@ module.exports = {
 		}
 		return count;
 	},
-	timer: 1,
-	timerId: null,
+	defaultPlacementTime: 2,
+	defaultShootTime: 5,
 	// return players from player room
 	getPlayers: function (ioSockets, roomName) {
 		return ioSockets.adapter.rooms[roomName];
