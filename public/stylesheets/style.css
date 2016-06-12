@@ -269,6 +269,19 @@ header {
 /* Game
 ========================================================================== */
 
+.info,
+.content.game {
+	display: inline-block;
+	height: 100%;
+	vertical-align: top;
+}
+
+.content.game {
+	width: 75%;
+	background-color: red;
+	padding: 0;
+}
+
 .boat-selector {
     display: block;
 }
@@ -286,20 +299,6 @@ header {
 .placed {
     
 }
-
-/* Footer
-========================================================================== */
-
-footer {
-	background-color: #e1e1e1;
-	text-align: center;
-	line-height: 2em;
-}
-
-	footer p {
-		display: inline-block;
-		margin: 0 1em;
-	}
 
 /* Info Sidebar
 ========================================================================== */
@@ -409,20 +408,12 @@ footer {
 	height: 34%;
 }
 
-/* TESTS
+/* Main grids
 ========================================================================== */
 
-.info,
-.content.game {
-	display: inline-block;
-	height: 100%;
-	vertical-align: top;
-}
-
-.content.game {
-	width: 75%;
-	background-color: red;
-	padding: 0;
+.grids-wrapper {
+	width: 80%;
+	background-color: pink;
 }
 
 .players-grids,
@@ -432,46 +423,64 @@ footer {
 	height: inherit;
 }
 
+/* Players grids sidebar
+========================================================================== */
+
+.toggle-grids {
+	display: none;
+	position: absolute;
+	top: 8%;
+	right: 2%;
+	z-index: 10;
+}
+
 .players-grids {
-	width: 25%;
+	width: 20%;
 	background-color: orange;
-	max-width: 200px;
+	max-width: 300px;
+	padding: .5em;
+	overflow-y: scroll;
 }
 
-.grids-wrapper {
-	width: 75%;
-	background-color: pink;
+	.players-grids div {
+		border: 1px solid;
+		margin-bottom: .5em;
+	}
+
+	.players-grids div:after {
+		content: "";
+		display: block;
+		padding-bottom: 100%;
+	}
+
+/* Footer
+========================================================================== */
+
+footer {
+	background-color: #e1e1e1;
+	text-align: center;
+	line-height: 2em;
 }
 
-.visual-grid {
-	height: 60vh;
-	background-color: brown;
-}
+	footer p {
+		display: inline-block;
+		margin: 0 1em;
+	}
 
-.shots-grid {
-	height: 40vh;
-	background-color: lightblue;
-}
-
-.expand-sidebar {
-	display: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 10;
-}
-
-.expand-grids {
-	display: none;
-	position: absolute;
-	top: 50px;
-	left: 0;
-	z-index: 10;
-}
+/* Responsive
+========================================================================== */
 
 @media screen and (max-width: 59.95em), 
 screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
+	.toggle-info {
+		display: inline;
+	}
+
 	.info {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 5;
 		width: 100%;
 		max-width: 100%;
 		-webkit-transform: translate3d(-100%, 0, 0);
@@ -479,26 +488,16 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 		transition: -webkit-transform .5s;
 		transition: transform .5s;
 		transition: transform .5s, -webkit-transform .5s;
+		-webkit-backface-visibility: hidden;
+		        backface-visibility: hidden;
 	}
 
-	.expanded {
-		-webkit-transform: translate3d(0, 0, 0);
-		        transform: translate3d(0, 0, 0);
-		transition: -webkit-transform .5s;
-		transition: transform .5s;
-		transition: transform .5s, -webkit-transform .5s;
-	}
-
-	.toggle-info {
-		display: inline;
-	}
-
-	.socials,
-	.options,
-	.game-ranking ul {
-		max-width: 350px;
-		margin: auto;
-	}
+		.socials,
+		.options,
+		.game-ranking ul {
+			max-width: 350px;
+			margin: auto;
+		}
 }
 
 @media screen and (max-height: 47.95em) { /* < 768px height */
@@ -507,42 +506,40 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 	}
 }
 
-@media screen and (min-width: 66.875em) { /* < 1070px */
-	.grids-wrapper {
-		width: 100%;
-		position: absolute;
-	}
-}
-
-@media screen and (max-width: 60em) { /* < 960px */
-	.sidebar {
-		display: none;
-	}
-
-	.expand-sidebar {
-		display: block;
-	}
-
+@media screen and (max-width: 59.95em) { /* < 960px */
 	.content.game {
 		width: 100%;
 	}
 
-	.players-grids {
-		width: 20%;
-	}
+		.players-grids {
+			width: 20%;
+		}
 
-	.grids-wrapper {
-		width: 80%;
-	}
+		.grids-wrapper {
+			width: 80%;
+		}
 }
 
-@media screen and (max-width: 40.625em) { /* < 650px */
-	.players-grids {
-		display: none;
+@media screen and (max-width: 40.625em),
+screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
+	.toggle-grids {
+		display: inline;
 	}
 
-	.expand-grids {
-		display: block;
+	.players-grids {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 5;
+		width: 100%;
+		max-width: 100%;
+		-webkit-transform: translate3d(-100%, 0, 0);
+		        transform: translate3d(-100%, 0, 0);
+		transition: -webkit-transform .5s;
+		transition: transform .5s;
+		transition: transform .5s, -webkit-transform .5s;
+		-webkit-backface-visibility: hidden;
+		        backface-visibility: hidden;
 	}
 
 	.grids-wrapper {
@@ -559,4 +556,12 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 	form input {
 		width: 100%;
 	}
+}
+
+.expanded {
+	-webkit-transform: translate3d(0, 0, 0);
+	        transform: translate3d(0, 0, 0);
+	transition: -webkit-transform .5s;
+	transition: transform .5s;
+	transition: transform .5s, -webkit-transform .5s;
 }
