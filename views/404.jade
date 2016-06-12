@@ -3,17 +3,15 @@ extends inc/head.jade
 block title
 	title Erreur 404
 
+block styles
+	link(rel="stylesheet", href="/stylesheets/font-awesome.min.css")
+
 block content
-	section#sidebar.sidebar
-		section.player-info
-		section.game-ranking
-		section.chat
-	button#expand-sidebar.expand-sidebar
+	include inc/sidebar.jade
 
-
-	section.content.game
-		section.players-grids
-		button#expand-grids.expand-grids
-		section.grids-wrapper
-			section.visual-grid
-			section.shots-grid
+	//- section.content.game
+	//- 	section.players-grids
+	//- 	button#expand-grids.expand-grids
+	//- 	section.grids-wrapper
+	//- 		section.visual-grid
+	//- 		section.shots-grid

@@ -7,6 +7,16 @@
 	#bce784
  */
 
+/* Fonts
+========================================================================== */
+
+@font-face {
+    font-family: 'latoregular';
+    src: url('../fonts/lato-regular-webfont.woff2') format('woff2'),
+         url('../fonts/lato-regular-webfont.woff') format('woff'),
+         url('../fonts/lato-regular-webfont.ttf') format('truetype');
+}
+
 /* All
 ========================================================================== */
 
@@ -35,7 +45,6 @@ body {
 h1,
 h2,
 h3 {
-	font-family: 'ralewayregular';
 	text-transform: uppercase;
 	letter-spacing: 3px;
 	margin-top: 0;
@@ -43,6 +52,12 @@ h3 {
 
 p {
 	margin: 0;
+}
+
+ul {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
 }
 
 button {
@@ -99,19 +114,18 @@ a {
 	height: 2px;
 	background: #525174;
 	content: '';
-	-webkit-transition: -webkit-transform 0.3s;
-	-moz-transition: -moz-transform 0.3s;
+	transition: -webkit-transform 0.3s;
 	transition: transform 0.3s;
+	transition: transform 0.3s, -webkit-transform 0.3s;
 	-webkit-transform: scale(0.85);
-	-moz-transform: scale(0.85);
 	transform: scale(0.85);
 }
 
 .link-effect::after {
 	opacity: 0;
-	-webkit-transition: top 0.3s, opacity 0.3s, -webkit-transform 0.3s;
-	-moz-transition: top 0.3s, opacity 0.3s, -moz-transform 0.3s;
+	transition: top 0.3s, opacity 0.3s, -webkit-transform 0.3s;
 	transition: top 0.3s, opacity 0.3s, transform 0.3s;
+	transition: top 0.3s, opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
 }
 
 .link-effect:hover::before,
@@ -119,7 +133,6 @@ a {
 .link-effect:focus::before,
 .link-effect:focus::after {
 	-webkit-transform: scale(1);
-	-moz-transform: scale(1);
 	transform: scale(1);
 }
 
@@ -135,7 +148,6 @@ a {
 	display: block;
 	position: relative;
 	z-index: 1;
-	-webkit-transition: border-color 0.4s, color 0.4s;
 	transition: border-color 0.4s, color 0.4s;
 	border-color: #525174;
 	color: #525174;
@@ -154,15 +166,14 @@ a {
 	opacity: 0;
 	-webkit-transform: scale3d(0.7, 1, 1);
 	transform: scale3d(0.7, 1, 1);
-	-webkit-transition: -webkit-transform 0.4s, opacity 0.4s;
+	transition: opacity 0.4s, -webkit-transform 0.4s;
 	transition: transform 0.4s, opacity 0.4s;
-	-webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+	transition: transform 0.4s, opacity 0.4s, -webkit-transform 0.4s;
 	transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .button-effect,
 .button-effect::before {
-	-webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
 	transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
 }
 
@@ -175,22 +186,6 @@ a {
 	opacity: 1;
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
-}
-
-/* Fonts
-========================================================================== */
-
-@font-face {
-    font-family: 'latoregular';
-    src: url('../fonts/lato-regular-webfont.woff2') format('woff2'),
-         url('../fonts/lato-regular-webfont.woff') format('woff'),
-         url('../fonts/lato-regular-webfont.ttf') format('truetype');
-}
-@font-face {
-    font-family: 'ralewayregular';
-    src: url('../fonts/raleway-regular-webfont.woff2') format('woff2'),
-         url('../fonts/raleway-regular-webfont.woff') format('woff'),
-         url('../fonts/raleway-regular-webfont.ttf') format('truetype');
 }
 
 /* Content
@@ -262,17 +257,14 @@ header {
 .signup ul {
 	display: inline-block;
 	text-align: left;
-	list-style-type: none;
-	padding: 0;
 }
 
-/* Signup
+/* Manage account
 ========================================================================== */
 
 .delete-account {
 	margin: auto;
 }
-
 
 /* Game
 ========================================================================== */
@@ -304,50 +296,133 @@ footer {
 	line-height: 2em;
 }
 
-footer p {
-	display: inline-block;
-	margin: 0 1em;
+	footer p {
+		display: inline-block;
+		margin: 0 1em;
+	}
+
+/* Info Sidebar
+========================================================================== */
+
+.toggle-info {
+	display: none;
+	position: absolute;
+	top: 2%;
+	right: 2%;
+	z-index: 10;
+}
+
+.info {
+	position: relative;
+	width: 25%;
+	background-color: blue;
+	max-width: 350px;
+	text-align: center;
+}
+
+	.info section {
+		padding: 1em .5em;
+		overflow: hidden;
+	}
+
+/* Player */
+
+.player-info {
+	height: 26%;
+	background-color: green;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-direction: column;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-justify-content: space-between;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+}
+
+	.player-info a {
+		font-size: 2em;
+	}
+
+	.socials,
+	.options {
+		display: table;
+		width: 100%;
+	}
+
+		.socials a,
+		.options a {
+			display: table-cell;
+		}
+
+	.player {
+		margin: .5em 0;
+		word-wrap: break-word;	
+	}
+
+		.player span {
+			display: block;
+		}
+
+		.player-username {
+			font-size: 1.5em;
+		}
+
+		.player-points {
+			font-size: 1.2em;
+			font-style: italic;
+		}
+
+/* Ranking */
+
+.game-ranking {
+	background-color: yellow;
+	word-wrap: break-word;
+	height: 40%;
+}
+
+	.game-ranking ul {
+		min-height: 85%;
+		display: -webkit-flex;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-flex-direction: column;
+		    -ms-flex-direction: column;
+		        flex-direction: column;
+		-webkit-justify-content: space-around;
+		    -ms-flex-pack: distribute;
+		        justify-content: space-around;
+	}
+
+		.game-ranking p {
+			display: inline-block;
+			vertical-align: middle;
+			width: 50%;
+			font-size: 1.5em;
+		}
+		
+/* Chat */
+
+.chat {
+	background-color: purple;
+	height: 34%;
 }
 
 /* TESTS
 ========================================================================== */
 
-.sidebar,
+.info,
 .content.game {
 	display: inline-block;
-	height: 100vh;
+	height: 100%;
 	vertical-align: top;
-}
-
-.sidebar {
-	width: 25%;
-	background-color: blue;
-	max-width: 350px;
-}
-
-.sidebar section {
-	padding-bottom: 1.5em;
 }
 
 .content.game {
 	width: 75%;
 	background-color: red;
 	padding: 0;
-}
-
-.player-info {
-	background-color: green;
-	min-height: 15vh;
-}
-
-.game-ranking {
-	background-color: yellow;
-	min-height: 50vh;
-}
-
-.chat {
-	background-color: purple;
-	min-height: 35vh;
 }
 
 .players-grids,
@@ -394,14 +469,52 @@ footer p {
 	z-index: 10;
 }
 
-@media screen and (min-width: 66.875em) { /* 1070px */
+@media screen and (max-width: 59.95em), 
+screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
+	.info {
+		width: 100%;
+		max-width: 100%;
+		-webkit-transform: translate3d(-100%, 0, 0);
+		        transform: translate3d(-100%, 0, 0);
+		transition: -webkit-transform .5s;
+		transition: transform .5s;
+		transition: transform .5s, -webkit-transform .5s;
+	}
+
+	.expanded {
+		-webkit-transform: translate3d(0, 0, 0);
+		        transform: translate3d(0, 0, 0);
+		transition: -webkit-transform .5s;
+		transition: transform .5s;
+		transition: transform .5s, -webkit-transform .5s;
+	}
+
+	.toggle-info {
+		display: inline;
+	}
+
+	.socials,
+	.options,
+	.game-ranking ul {
+		max-width: 350px;
+		margin: auto;
+	}
+}
+
+@media screen and (max-height: 47.95em) { /* < 768px height */
+	.info {
+		height: auto;
+	}
+}
+
+@media screen and (min-width: 66.875em) { /* < 1070px */
 	.grids-wrapper {
 		width: 100%;
 		position: absolute;
 	}
 }
 
-@media screen and (max-width: 60em) { /* 960px */
+@media screen and (max-width: 60em) { /* < 960px */
 	.sidebar {
 		display: none;
 	}
@@ -423,7 +536,7 @@ footer p {
 	}
 }
 
-@media screen and (max-width: 40.625em) { /* 650px */
+@media screen and (max-width: 40.625em) { /* < 650px */
 	.players-grids {
 		display: none;
 	}
@@ -437,7 +550,7 @@ footer p {
 	}
 }
 
-@media screen and (max-width: 32.5em) { /* 520px */
+@media screen and (max-width: 32.5em) { /* < 520px */
 	.promotion div {
 		display: block;
 		margin-bottom: 1.5em;
