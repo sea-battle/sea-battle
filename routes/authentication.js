@@ -47,6 +47,16 @@ router.post('/signup', function (req, res) {
     });
 });
 
+router.post('/signin', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/'
+}));
+
+router.get('/signout', function (req, res) {
+    req.logout();
+    res.redirect('/login');
+});
+
 /*
 passport.use('signup', new LocalStrategy({
     // Override username with email

@@ -51,14 +51,15 @@ function checkPassword() {
 
     var signupPassword = document.getElementById('signup-password'),
         signupPasswordConfirmation = document.getElementById('signup-password-confirmation'),
-        signupPasswordMessage = document.getElementById('signup-password-message');
+        signupPasswordMessage = document.getElementById('signup-password-message'),
+        signupPasswordConfirmationMessage = document.getElementById('signup-password-confirmation-message');
 
     if (signupPassword.value === signupPasswordConfirmation.value) {
         event.target.classList.remove('error');
-        signupPasswordMessage.innerHTML = '';
+        signupPasswordConfirmationMessage.innerHTML = '';
     } else {
         event.target.classList.add('error');
-        signupPasswordMessage.innerHTML = 'Les mots de passe ne correspondent pas';
+        signupPasswordConfirmationMessage.innerHTML = 'Les mots de passe ne correspondent pas';
     }
 }
 
@@ -108,4 +109,4 @@ document.addEventListener('DOMContentLoaded', function () {
     signupUsername.addEventListener('keyup', checkUsername, false);
     signupPassword.addEventListener('keyup', checkPassword, false);
     signupPasswordConfirmation.addEventListener('keyup', checkPassword, false);
-});
+}, false);
