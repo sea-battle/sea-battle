@@ -39,8 +39,8 @@ Grid.prototype = {
                     boatId: null,
                     boatSize: null,
                     boatOrientation: null,
-                    touched: false,
-                    touchedBy: null
+                    shooted: false,
+                    shootedBy: []
                 });
             }
         }

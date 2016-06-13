@@ -11,7 +11,7 @@ module.exports = {
         return count;
     },
     defaultPlacementTime: 2,
-    defaultShootTime: 5,
+    defaultShootTime: 15,
     // return players from player room
     getPlayersId: function (ioSockets, roomName) {
         return ioSockets.adapter.rooms[roomName];
@@ -64,7 +64,14 @@ module.exports = {
         var roomPlayers = this.getPlayers(ioSockets, roomName);
         for (var i = 0; i < roomPlayers.length; i++) {
             var player = this.getPlayerById(ioSockets, roomPlayers[i].id);
-            
+            if (player.shootInfos.shootCoords != null &&
+                player.shootInfos.targetId) {
+                var target = this.getPlayerById(ioSockets, player.shootInfos.targetId);
+                var x = player.shootInfos.shootCoords.x,
+                    y = player.shootInfos.shootCoords.y
+                target.cells[x][x].shooted = true;
+                target.cells[x][x].shootedBy.push(player.id);
+            }
         }
     }
 };

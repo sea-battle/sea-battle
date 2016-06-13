@@ -86,7 +86,6 @@ io.sockets.on('connection', function (socket) {
     socket.on('game-set-ready', function (cells) {
         socket.cells = cells;
         socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
-        game.playShootTurn(io.sockets, socket.room);
 
         // Shoot timer
         game.rooms[socket.room].timerId = setInterval(function () {
