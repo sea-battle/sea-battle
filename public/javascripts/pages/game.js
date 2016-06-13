@@ -160,7 +160,7 @@ var handlers = {
 	},
 	battleStage: {
 		click: function (e) {
-			socket.emit()
+			socket.emit('game-shoot', e.gridInfo.coords, this.getAttribute('data-player-id'));
 		}
 	}
 };
@@ -195,18 +195,28 @@ socket.on('game-check-grid', function () {
 	canvas.removeEventListener('contextmenu', handlers.placementStage.contextmenu);
 
 	socket.emit('game-set-ready', grid.cells);
+    
+    //TODO add new canvas handlers
 });
-socket.on('game-init-players-grids', function (names) {
-	names.forEach(function (name) {
+socket.on('game-init-players-grids', function (players) {
+	players.forEach(function (player) {
 		var otherPlayerCanvas = document.createElement('canvas');
 		var br = document.createElement('br');
 		otherPlayerCanvas.setAttribute('width', '100');
 		otherPlayerCanvas.setAttribute('height', '100');
+        otherPlayerCanvas.setAttribute('data-player-id', player.id);
 
 		otherPlayersCanvasContainer.appendChild(otherPlayerCanvas);
 		otherPlayersCanvasContainer.appendChild(br);
 
 		var otherPlayerGrid = new Grid(otherPlayerCanvas);
+        otherPlayerCanvas.addEventListener('click', handlers.battleStage.click);
+        
+        
 		otherPlayerGrid.renderGrid();
 	});
+});
+
+socket.on('test', function (cells){
+    console.log(cells); 
 });

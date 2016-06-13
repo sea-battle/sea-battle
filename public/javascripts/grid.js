@@ -38,7 +38,9 @@ Grid.prototype = {
                     containBoat: false,
                     boatId: null,
                     boatSize: null,
-                    boatOrientation: null
+                    boatOrientation: null,
+                    shooted: false,
+                    shootedBy: []
                 });
             }
         }
@@ -243,7 +245,7 @@ Grid.prototype = {
         this.cellWidth = newWidth / grid.iterations;
         this.clearCanvas();
         this.renderGrid();
-		this.drawPlacedBoats(sprite);
+        this.drawPlacedBoats(sprite);
     },
     randomBoatsPosition: function (defaultBoats) {
         var self = this;
@@ -280,7 +282,7 @@ Grid.prototype = {
     getRandom: function (min, max, round) {
         return round ? Math.round(Math.random() * (max - min) + min) : Math.floor(Math.random() * (max - min) + min);
     },
-	allBoatsArePlaced: function (){
-		return this.cellsContainingBoats.length == 17;
-	}
+    allBoatsArePlaced: function () {
+        return this.cellsContainingBoats.length == 17;
+    }
 };
