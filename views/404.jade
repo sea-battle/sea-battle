@@ -8,6 +8,12 @@ block styles
 
 block content
 	include inc/sidebar.jade
+	section#rankings-overlay.rankings-overlay
+		span#close-overlay.close-overlay.fa.fa-times(aria-hidden="true")
+		h2 Classements
+		ul.tabs
+			li Général
+			li Flottant
 
 	button#toggle-grids.toggle-grids
 	section.content.game
@@ -30,3 +36,5 @@ block content
 			else
 				grids.className += ' ' + expandedClass;
 		});
+
+		var rankingOverlay = document.getElementById('rankings-overlay');
