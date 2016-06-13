@@ -1,14 +1,8 @@
 section.content.game
-    div#other-players-canvas
+    aside#switching-aside.switching-aside
+        include inc/boats.jade
 
-    div#canvas-wrapper
-    canvas#canvas(width='500', height='500')
+    section#canvas-wrapper.grids-wrapper
+        canvas#canvas(width='500', height='500')
 
-    i#timer
-    div#boats-container
-        button.boat-selector#tp(data-boat-size='2', data-placed='false') Torpedo
-        button.boat-selector#sm(data-boat-size='3', data-placed='false') Submarine
-        button.boat-selector#dt(data-boat-size='3', data-placed='false') Destroyer
-        button.boat-selector#cr(data-boat-size='4', data-placed='false') Cruiser
-        button.boat-selector#ca(data-boat-size='5', data-placed='false') Carrier
-    button#random Random
+        i#timer
