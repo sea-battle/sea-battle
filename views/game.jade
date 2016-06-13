@@ -1,37 +1,15 @@
-extends inc/head.jade
-
-block title
-	title Let's shoot
-
-block content
-	div#wait-stage
-		button#set-ready set ready
-		i#ready-status
+div#other-players-canvas
 
 
-	div#other-players-canvas
-        
+div#game-stage
+    div#canvas-wrapper
+        canvas#canvas(width='500', height='500')
 
-	div#game-stage
-		div#canvas-wrapper
-			canvas#canvas(width='500', height='500')
-
-		i#timer
-		div#boats-container
-			button.boat-selector#tp(data-boat-size='2', data-placed='false') Torpedo
-			button.boat-selector#sm(data-boat-size='3', data-placed='false') Submarine
-			button.boat-selector#dt(data-boat-size='3', data-placed='false') Destroyer
-			button.boat-selector#cr(data-boat-size='4', data-placed='false') Cruiser
-			button.boat-selector#ca(data-boat-size='5', data-placed='false') Carrier
-		button#random Random
-
-	script(src='/socket.io/socket.io.js')
-	script(src='/javascripts/prototype.js')
-	script(src='/javascripts/grid.js')
-	script(src='/javascripts/boat.js')
-	script(src='/javascripts/pages/wait.js')
-	script(src='/javascripts/pages/game.js')
-	
-	//TOREMOVE
-	script.
-		document.getElementById('game-stage').style.display = 'none';
+    i#timer
+    div#boats-container
+        button.boat-selector#tp(data-boat-size='2', data-placed='false') Torpedo
+        button.boat-selector#sm(data-boat-size='3', data-placed='false') Submarine
+        button.boat-selector#dt(data-boat-size='3', data-placed='false') Destroyer
+        button.boat-selector#cr(data-boat-size='4', data-placed='false') Cruiser
+        button.boat-selector#ca(data-boat-size='5', data-placed='false') Carrier
+    button#random Random

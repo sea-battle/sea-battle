@@ -5,6 +5,7 @@ var app = require('express')(),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     passport = require('passport'),
+    jade = require('jade'),
     LocalStrategy = require('passport-local').Strategy;
 
 var game = require('./game');
@@ -25,10 +26,27 @@ app.get('/rooms', function (req, res) {
     res.render(__dirname + '/views/rooms');
 });
 app.get('/wait', function (req, res) {
-    res.render(__dirname + '/views/wait');
+    var fn = jade.compileFile(__dirname + '/views/wait.jade');
+    var html = fn();
+    return res.json({
+        html: html,
+        title: 'Prepare to fight',
+        scriptsSrc: ['/javascripts/pages/wait.js']
+    });
 });
 app.get('/game', function (req, res) {
-    res.render(__dirname + '/views/game');
+    var fn = jade.compileFile(__dirname + '/views/game.jade');
+    var html = fn();
+    return res.json({
+        html: html,
+        title: 'Let\'s shoot',
+        scriptsSrc: [
+            '/javascripts/prototype.js',
+            '/javascripts/grid.js',
+            '/javascripts/boat.js',
+            '/javascripts/pages/game.js',
+        ]
+    });
 });
 app.get('*', function (req, res) {
     res.render(__dirname + '/views/404');
@@ -94,7 +112,7 @@ io.sockets.on('connection', function (socket) {
 
                 game.playShootTurn(io.sockets, socket.room);
                 socket.emit('test', socket.cells);
-                
+
                 clearInterval(game.rooms[socket.room].timerId);
             } else {
                 io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
