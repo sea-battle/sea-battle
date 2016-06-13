@@ -51,6 +51,10 @@ io.sockets.on('connection', function (socket) {
     };
     socket.ready = false;
     socket.room = 'test';
+    socket.shootInfos = {
+        shootCoords: null,
+        targetId: null
+    };
     socket.name = socket.id;
     socket.join(socket.room);
 
@@ -58,7 +62,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('wait-set-ready', function () {
         socket.ready = true;
         if (game.allPlayersAreReady(io.sockets, socket.room) &&
-            game.getPlayers(io.sockets, socket.room).length > 1) {
+            game.getPlayersId(io.sockets, socket.room).length > 1) {
             io.sockets.emit('wait-start-game');
             game.rooms[socket.room].timerId = setInterval(function () {
                 if (game.rooms[socket.room].timer == 0) {
@@ -81,30 +85,30 @@ io.sockets.on('connection', function (socket) {
     // GAME STAGE
     socket.on('game-set-ready', function (cells) {
         socket.cells = cells;
-        socket.emit('game-init-players-grids', game.getPlayersNames(io.sockets, socket.room));
+        socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
+        game.playShootTurn(io.sockets, socket.room);
 
         // Shoot timer
         game.rooms[socket.room].timerId = setInterval(function () {
             if (game.rooms[socket.room].timer == 0) {
                 game.rooms[socket.room].timer = game.defaultShootTime;
-                // Check if all player have selected a coord
-                io.sockets.emit('game-check-grid');
+
+
+                
                 clearInterval(game.rooms[socket.room].timerId);
             } else {
                 io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
                 game.rooms[socket.room].timer--;
             }
         }, 1000);
-
-        //game.getPlayersCells(io.sockets, socket.room);
-    });
-    socket.on('game-shoot', function (gridInfos) {
-        console.log(gridInfos);
     });
 
-
-
-
+    socket.on('game-shoot', function (shootCoords, targetId) {
+        socket.shootInfos = {
+            shootCoords: shootCoords,
+            targetId: targetId
+        };
+    });
 
     /* ROOMS
     socket.on('createRoom', function (name){
