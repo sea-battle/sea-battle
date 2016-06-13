@@ -160,7 +160,7 @@ var handlers = {
 	},
 	battleStage: {
 		click: function (e) {
-			socket.emit()
+			socket.emit('game-shoot', e.gridInfo.coords);
 		}
 	}
 };
@@ -195,6 +195,8 @@ socket.on('game-check-grid', function () {
 	canvas.removeEventListener('contextmenu', handlers.placementStage.contextmenu);
 
 	socket.emit('game-set-ready', grid.cells);
+    
+    //TODO add new canvas handlers
 });
 socket.on('game-init-players-grids', function (names) {
 	names.forEach(function (name) {
@@ -207,6 +209,9 @@ socket.on('game-init-players-grids', function (names) {
 		otherPlayersCanvasContainer.appendChild(br);
 
 		var otherPlayerGrid = new Grid(otherPlayerCanvas);
+        otherPlayerCanvas.addEventListener('click', handlers.battleStage.click);
+        
+        
 		otherPlayerGrid.renderGrid();
 	});
 });
