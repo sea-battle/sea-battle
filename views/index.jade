@@ -1,8 +1,10 @@
 extends inc/head.jade
 
 block content
-	include inc/header.jade
+	div.wrapper
+		include inc/header.jade
 
+<<<<<<< HEAD
 	section.content.home
 		h1 Sea Battle
 
@@ -11,7 +13,30 @@ block content
 			input#signin-email(type='text', placeholder='Email')
 			input#signin-password(type='password', placeholder='Mot de passe')
 			input#signin-submit(type='submit', value="Connexion")
+=======
+		section.content.home
+			h1 Sea Battle
+			p Blablabla blablabla
+>>>>>>> e3e6325dbe9bd84fd155e0cfc03c89edf23ce7ed
 
-		button#expand-signup Pas de compte ?
+			section.promotion
+				div
+					img(src="images/test1.jpg")
+					p Blablabla
+				div
+					img(src="images/test2.jpg")
+					p Blablabla
+			
+			h2 Jouer
+			form#signin(action="/signin" method="post")
+				input#signin-email(type='text', name="signin_email", placeholder='Email', value="john.doe@mail.com")
+				p#signin-email-message
+				input#signin-password(type='password', name="signin_password", placeholder='Mot de passe', value="johndoe")
+				p#signin-password
+				button#signin-submit.button-effect(type='submit') Connexion
+
+			a.link-effect(href="/signup", title="Vers la page de création de compte") Pas de compte ?
+
+			div.push
 
 	include inc/footer.jade

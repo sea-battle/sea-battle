@@ -236,13 +236,14 @@ Grid.prototype = {
 
         }
     },
-    rescaleCanvas: function (newWidth) {
+    rescaleCanvas: function (newWidth, sprite) {
         this.canvas.setAttribute('width', newWidth);
         this.canvas.setAttribute('height', newWidth);
         this.width = newWidth;
         this.cellWidth = newWidth / grid.iterations;
         this.clearCanvas();
         this.renderGrid();
+		this.drawPlacedBoats(sprite);
     },
     randomBoatsPosition: function (defaultBoats) {
         var self = this;
@@ -278,5 +279,8 @@ Grid.prototype = {
     },
     getRandom: function (min, max, round) {
         return round ? Math.round(Math.random() * (max - min) + min) : Math.floor(Math.random() * (max - min) + min);
-    }
+    },
+	allBoatsArePlaced: function (){
+		return this.cellsContainingBoats.length == 17;
+	}
 };

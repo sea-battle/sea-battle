@@ -3,4 +3,38 @@ extends inc/head.jade
 block title
 	title Erreur 404
 
+block styles
+	link(rel="stylesheet", href="/stylesheets/font-awesome.min.css")
+
 block content
+	include inc/sidebar.jade
+	section#rankings-overlay.rankings-overlay
+		span#close-overlay.close-overlay.fa.fa-times(aria-hidden="true")
+		h2 Classements
+		ul.tabs
+			li Général
+			li Flottant
+
+	button#toggle-grids.toggle-grids
+	section.content.game
+		aside#players-grids.players-grids
+			div
+			div
+			div
+			div
+			div
+			div
+		section.grids-wrapper
+
+	script.
+		var grids = document.getElementById('players-grids');
+		var expandedClass = 'expanded';
+
+		document.getElementById('toggle-grids').addEventListener('click', function() {
+			if ( new RegExp('(^| )' + expandedClass + '( |$)', 'gi').test(grids.className) )
+				grids.className = grids.className.replace(new RegExp('(^|\\b)' + expandedClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+			else
+				grids.className += ' ' + expandedClass;
+		});
+
+		var rankingOverlay = document.getElementById('rankings-overlay');
