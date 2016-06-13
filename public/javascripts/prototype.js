@@ -4,6 +4,12 @@ Element.prototype.remove = function () {
 Element.prototype.hasClass = function (className) {
     return this.className && new RegExp("(\\s|^)" + className + "(\\s|$)").test(this.className);
 };
+Element.prototype.addClass = function (className) {
+    this.className += ' ' + className;
+};
+Element.prototype.removeClass = function (className) {
+    this.className = this.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+};
 Element.prototype.getElementsNodes = function () {
     var elements = [];
     for (var i = 0; i < this.children.length; i++) {

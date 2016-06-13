@@ -8,12 +8,23 @@ block styles
 
 block content
 	include inc/sidebar.jade
+	
 	section#rankings-overlay.rankings-overlay
-		span#close-overlay.close-overlay.fa.fa-times(aria-hidden="true")
+		span#close-rankings.close-rankings.fa.fa-times(aria-hidden="true")
 		h2 Classements
-		ul.tabs
-			li Général
-			li Flottant
+		ul.rankings-tabs
+			li#general-ranking-tab Général
+			li#month-ranking-tab Flottant
+		include inc/ranking.jade
+
+	section#stats-overlay.stats-overlay
+		span#close-stats.close-stats.fa.fa-times(aria-hidden="true")
+		h2 Statistiques
+		ul.stats-tabs
+			li#general-stats-tab Général
+			li#month-stats-tab Flottant
+			li#score-stats-tab Score
+		include inc/stats.jade
 
 	button#toggle-grids.toggle-grids
 	section.content.game
@@ -26,15 +37,46 @@ block content
 			div
 		section.grids-wrapper
 
+	script(src='/javascripts/prototype.js')
 	script.
+		var info = document.getElementById('info');
+		var expandedClass = 'expanded';
 		var grids = document.getElementById('players-grids');
 		var expandedClass = 'expanded';
+		var rankingOverlay = document.getElementById('rankings-overlay');
+		var statsOverlay = document.getElementById('stats-overlay');
 
-		document.getElementById('toggle-grids').addEventListener('click', function() {
-			if ( new RegExp('(^| )' + expandedClass + '( |$)', 'gi').test(grids.className) )
-				grids.className = grids.className.replace(new RegExp('(^|\\b)' + expandedClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+		document.getElementById('toggle-info').addEventListener('click', function() {
+			if ( new RegExp('(^| )' + expandedClass + '( |$)', 'gi').test(info.className) )
+				info.className = info.className.replace(new RegExp('(^|\\b)' + expandedClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 			else
-				grids.className += ' ' + expandedClass;
+				info.className += ' ' + expandedClass;
 		});
 
-		var rankingOverlay = document.getElementById('rankings-overlay');
+		document.getElementById('toggle-grids').addEventListener('click', function() {
+			grids.hasClass(expandedClass) ? grids.removeClass(expandedClass) : grids.addClass(expandedClass);
+		});
+
+		document.getElementById('rankings-link').addEventListener('click', function(e) {
+			e.preventDefault();
+			rankingOverlay.addClass('opened');
+		});
+
+		document.getElementById('close-rankings').addEventListener('click', function() {
+			rankingOverlay.removeClass('opened');
+		});
+
+		document.getElementById('stats-link').addEventListener('click', function(e) {
+			e.preventDefault();
+			statsOverlay.addClass('opened');
+		});
+
+		document.getElementById('close-stats').addEventListener('click', function() {
+			statsOverlay.removeClass('opened');
+		});
+
+		document.getElementById('manage-link').addEventListener('click', function(e) {
+			e.preventDefault();
+			if (confirm('Il vous faut quitter la partie pour modifier vos informations, voulez-vous continuer ?'))
+				document.location.href = this.href;
+		});
