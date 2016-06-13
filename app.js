@@ -41,7 +41,6 @@ app.get('/game', function (req, res) {
         html: html,
         title: 'Let\'s shoot',
         scriptsSrc: [
-            '/javascripts/prototype.js',
             '/javascripts/grid.js',
             '/javascripts/boat.js',
             '/javascripts/pages/game.js',

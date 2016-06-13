@@ -208,6 +208,16 @@ a {
 			height: 2em;
 		}
 
+.info,
+.switching-content {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.switching-content {
+    width: 75%;
+}
+
 /* Header
 ========================================================================== */
 
@@ -252,6 +262,11 @@ header {
 .delete-account {
 	margin: auto;
 }
+
+/* Rooms
+========================================================================== */
+
+
 
 /* Game
 ========================================================================== */
@@ -525,7 +540,8 @@ footer {
 
 @media screen and (min-width: 87.5em),
 screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
-	.content.game {
+	.content.game,
+    .switching-content {
 		width: 100%;
 		max-width: 100%;
 		position: absolute;

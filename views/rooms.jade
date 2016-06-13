@@ -2,13 +2,17 @@ extends inc/head.jade
 
 block title
     title Choose your battlefield
-    
+block styles
+    link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
+
 block content
-    input#room-name(type='text', placeholder='Nom de la partie') 
-    button#create-room Créer une partie
+    include inc/sidebar.jade
+    div#switching-content.switching-content
+        input#room-name(type='text', placeholder='Nom de la partie') 
+        button#create-room Créer une partie
     
-    ul#rooms
-    script(src='/socket.io/socket.io.js')
+        ul#rooms
+        script(src='/socket.io/socket.io.js')
     script(src='/javascripts/prototype.js')
     script(src='/javascripts/pages/rooms.js')
     script(src='/javascripts/ajax.js')
