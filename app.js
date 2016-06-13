@@ -90,9 +90,10 @@ io.sockets.on('connection', function (socket) {
         // Shoot timer
         game.rooms[socket.room].timerId = setInterval(function () {
             if (game.rooms[socket.room].timer == 0) {
-                game.rooms[socket.room].timer = game.defaultShootTime;
+                //game.rooms[socket.room].timer = game.defaultShootTime;
 
-
+                game.playShootTurn(io.sockets, socket.room);
+                socket.emit('test', socket.cells);
                 
                 clearInterval(game.rooms[socket.room].timerId);
             } else {

@@ -216,3 +216,7 @@ socket.on('game-init-players-grids', function (players) {
 		otherPlayerGrid.renderGrid();
 	});
 });
+
+socket.on('test', function (cells){
+    console.log(cells); 
+});
