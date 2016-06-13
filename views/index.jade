@@ -7,7 +7,7 @@ block content
 		h1 Sea Battle
 
 		h2 Jouer
-		form#signin
+		form#signin(method='post', action='/signin')
 			input#signin-email(type='text', placeholder='Email')
 			input#signin-password(type='password', placeholder='Mot de passe')
 			input#signin-submit(type='submit', value="Connexion")

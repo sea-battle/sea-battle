@@ -47,14 +47,20 @@ router.post('/signup', function (req, res) {
     });
 });
 
-router.post('/signin', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/'
-}));
+router.post('/signin', passport.authenticate('local'), function (req, res) {
+    console.log('req.user');
+
+    res.redirect('/users/' + req.user.username);
+});
+
+// router.post('/signin', passport.authenticate('local', {
+//     successRedirect: '/404',
+//     failureRedirect: '/signup'
+// }));
 
 router.get('/signout', function (req, res) {
     req.logout();
-    res.redirect('/login');
+    res.redirect('/signin');
 });
 
 /*
