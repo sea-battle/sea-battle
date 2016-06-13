@@ -5,16 +5,16 @@ function proceedSignin() {
 
     var xhr = new XMLHttpRequest();
 
-    var email = document.getElementById('signin-email').value,
-        password = document.getElementById('signin-password').value,
+    var username = document.getElementById('signin-username').value,
+        password = document.getElementById('signin-password').value;
 
     var user = {
         username: username,
-        password: password,
+        password: password
     }
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && this.status === 200) {
+        if (xhr.readyState === 4 && (this.status === 200 || this.status === 401)) {
             var signinResponse = JSON.parse(xhr.responseText);
 
             document.getElementById('signin-message').innerHTML = signinResponse['signinMessage'];
@@ -31,5 +31,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var signinSubmit = document.getElementById('signin-submit');
 
-    // signinSubmit.addEventListener('click', proceedSignin, false);
+    signinSubmit.addEventListener('click', proceedSignin, false);
 }, false);

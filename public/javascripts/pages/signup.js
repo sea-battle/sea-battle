@@ -83,7 +83,7 @@ function proceedSignup() {
     }
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && this.status === 200) {
+        if (xhr.readyState === 4 && (this.status === 200 || this.status === 403)) {
             var signupResponse = JSON.parse(xhr.responseText);
 
             document.getElementById('signup-message').innerHTML = signupResponse['signupMessage'];

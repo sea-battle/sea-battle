@@ -14,11 +14,11 @@ var User = new Schema({
         type: String,
         required: true,
     },
-    skins: Skin,
     validated:  {
         type: Boolean,
         required: true
     },
+    skins: Skin,
     ip: String,
     games: [Game]
 });

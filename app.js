@@ -4,8 +4,8 @@ var app = require('express')(),
 	io = require('socket.io').listen(server),
 	bodyParser = require('body-parser'),
 	mongoose = require('mongoose'),
-	passport = require('passport'),
-	LocalStrategy = require('passport-local').Strategy;
+	passport = require('passport');
+    session = require('express-session');
 
 var game = require('./game');
 
@@ -20,6 +20,16 @@ app.use(bodyParser.urlencoded({
 
 // In a Connect or Express-based application, passport.initialize() middleware is required to initialize Passport.
 app.use(passport.initialize());
+
+// Sessions settings
+app.use(session({
+    cookie: {
+        maxAge: 60000
+    },
+    secret: 'sea-battle-is-the-shit',
+    resave: false,
+    saveUninitialized: false
+}));
 
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
@@ -54,7 +64,6 @@ app.get('*', function (req, res) {
 
 // Passport configuration
 var User = require('./models/user');
-passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 

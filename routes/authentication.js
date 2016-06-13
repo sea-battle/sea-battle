@@ -1,11 +1,12 @@
 var express = require('express');
-var passport = require('passport');
+var passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
 
 var User = require('../models/user');
 
 var router = express.Router();
 
-LocalStrategy = require('passport-local').Strategy;
+passport.use(new LocalStrategy(User.authenticate()));
 
 router.post('/check-username-availability', function (req, res) {
     User.findOne({ username: req.body.username }, function (err, user) {
@@ -30,16 +31,14 @@ router.post('/signup', function (req, res) {
         validated: false
     }), req.body.password, function (err, user) {
         if (err) {
-          return res.json({
+          return res.json(403, {
               signupSucceed : false,
               signupMessage : 'Une erreur est survenue lors de l\'inscription'
           });
         }
 
         passport.authenticate('local', { failureFlash: true })(req, res, function () {
-            console.log(res);
-
-            res.json({
+            res.json(200, {
                 signupSucceed : true,
                 signupMessage : 'Un e-mail de confirmation vous a été envoyé'
             });
@@ -47,67 +46,34 @@ router.post('/signup', function (req, res) {
     });
 });
 
-router.post('/signin', passport.authenticate('local'), function (req, res) {
-    console.log('req.user');
+router.post('/signin', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) {
+            return next(err);
+        }
 
-    res.redirect('/users/' + req.user.username);
+        if (!user) {
+            return res.send(401, {
+                signinSuccess: false,
+                signinMessage: 'Le pseudonyme ou le mot de passe est incorrect'
+            });
+        }
+
+        req.login(user, function(err) {
+            if (err) {
+                return next(err);
+            }
+            return res.send(200, {
+                signinSuccess: true,
+                signinMessage: 'Vous êtes maintenant connecté en tant que ' + user.username
+            });
+        });
+    })(req, res, next);
 });
-
-// router.post('/signin', passport.authenticate('local', {
-//     successRedirect: '/404',
-//     failureRedirect: '/signup'
-// }));
 
 router.get('/signout', function (req, res) {
     req.logout();
-    res.redirect('/signin');
+    res.redirect('/');
 });
-
-/*
-passport.use('signup', new LocalStrategy({
-    // Override username with email
-    usernameField: 'email',
-    passwordField: 'password',
-    // Allow to pass back the entire request to the callback
-    passReqToCallback : true
-},
-function (req, email, password, done) {
-    // Asynchronous. User.findOne wont fire unless data is sent back
-    process.nextTick(function () {
-        // Find a user whose e-mail is the same as the e-mail that was sent by the form
-        // Check if the user who is trying to login exists
-        User.findOne({
-            'local.email': email
-        },
-        function (err, user) {
-            // if there are any errors, return the error
-            if (err) {
-                return done(err);
-            }
-
-            // Check if there is already a user with that e-mail
-            if (user) {
-                return done(null, false, req.flash('signupFailureMessage', 'Un utilisateur utilise déjà cette adresse e-mail'));
-            } else {
-                // If there is no user registered with that email, create the user
-                var newUser = new User();
-
-                // Set the user's local credentials
-                newUser.local.email = email;
-                newUser.local.password = newUser.generateHash(password);
-
-                // Save the user
-                newUser.save(function (err) {
-                    if (err) {
-                        throw err;
-                    }
-
-                    return done(null, newUser);
-                });
-            }
-        });
-    });
-}));
-*/
 
 module.exports = router;
