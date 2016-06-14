@@ -63,7 +63,7 @@ boatsSprite.src = "/images/sprites.png";
 var grid = new Grid(canvas);
 var selectedBoat = null;
 
-var handlers = {
+var gameHandlers = {
 	placementStage: {
 		click: function (e) {
 			if (selectedBoat != null) {
@@ -167,14 +167,14 @@ var handlers = {
 
 boatsSprite.onload = function () {
 	// PLACEMENT STAGE
-	canvas.addEventListener('mousemove', handlers.placementStage.mousemove);
-	canvas.addEventListener('click', handlers.placementStage.click);
-	canvas.addEventListener('contextmenu', handlers.placementStage.contextmenu);
+	canvas.addEventListener('mousemove', gameHandlers.placementStage.mousemove);
+	canvas.addEventListener('click', gameHandlers.placementStage.click);
+	canvas.addEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
 
 	for (var i = 0; i < boatSelecters.length; i++) {
-		boatSelecters[i].addEventListener('click', handlers.placementStage.selectBoat);
+		boatSelecters[i].addEventListener('click', gameHandlers.placementStage.selectBoat);
 	}
-	randomGenerator.addEventListener('click', handlers.placementStage.random);
+	randomGenerator.addEventListener('click', gameHandlers.placementStage.random);
 }
 
 window.addEventListener('resize', function (e) {
@@ -187,16 +187,16 @@ socket.on('game-timer-update', function (timeRemaining) {
 });
 socket.on('game-check-grid', function () {
 	if (!grid.allBoatsArePlaced()) {
-		handlers.placementStage.random();
+		gameHandlers.placementStage.random();
 		grid.drawPlacedBoats(boatsSprite);
 	}
-	canvas.removeEventListener('click', handlers.placementStage.click);
-	canvas.removeEventListener('mousemove', handlers.placementStage.mousemove);
-	canvas.removeEventListener('contextmenu', handlers.placementStage.contextmenu);
+	canvas.removeEventListener('click', gameHandlers.placementStage.click);
+	canvas.removeEventListener('mousemove', gameHandlers.placementStage.mousemove);
+	canvas.removeEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
 
 	socket.emit('game-set-ready', grid.cells);
     
-    //TODO add new canvas handlers
+    //TODO add new canvas gameHandlers
 });
 socket.on('game-init-players-grids', function (players) {
 	players.forEach(function (player) {
@@ -210,7 +210,7 @@ socket.on('game-init-players-grids', function (players) {
 		otherPlayersCanvasContainer.appendChild(br);
 
 		var otherPlayerGrid = new Grid(otherPlayerCanvas);
-        otherPlayerCanvas.addEventListener('click', handlers.battleStage.click);
+        otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.click);
         
         
 		otherPlayerGrid.renderGrid();

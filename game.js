@@ -1,5 +1,6 @@
 module.exports = {
     rooms: [],
+    roomsName: [],
     ROOM_MAX_PLAYER: 6,
     getPlayerReadyCount: function () {
         var count = 0;
