@@ -1,34 +1,32 @@
 extends inc/head.jade
 
 block content
-    div.wrapper
-        include inc/header.jade
+	div.wrapper
+		include inc/header.jade
 
-        section.content.home
-            h1 Sea Battle
-            p Blablabla blablabla
+		section.content.home
+			h1 Sea Battle
+			p.catch-phrase Jeu 100 gratuit, revivez les sensations épiques de la bataille navale !
 
-            section.promotion
-                div
-                    img(src="images/test1.jpg")
-                    p Blablabla
-                div
-                    img(src="images/test2.jpg")
-                    p Blablabla
+			section.promotion
+				div
+					img(src="images/test1.jpg")
+					p GIF animé montrant l'écran de jeu
+				div
+					img(src="images/test2.jpg")
+					p GIF animé montrant les classements et statistiques
 
-            h2 Jouer
-            p#signin-message
-            form#signin
-                input#signin-username(type='text', name='username', placeholder='Pseudonyme', value='johndoe')
-                p#signin-email-message
-                input#signin-password(type='password', name='password', placeholder='Mot de passe', value='johndoe')
-                p#signin-password
-                button#signin-submit.button-effect(type='submit') Connexion
+			h2 Jouer
+			form#signin(action="/signin" method="post")
+				p#signin-message
+				input#signin-email(type='text', name="signin_email", placeholder='Email', value="john.doe@mail.com")
+				input#signin-password(type='password', name="signin_password", placeholder='Mot de passe', value="johndoe")
+				button#signin-submit.button-effect(type='submit') Connexion
 
-            a.link-effect(href='/signup', title='Vers la page de création de compte') Pas de compte ?
+			a.link-effect(href="/signup", title="Vers la page de création de compte") Pas de compte ?
 
-            div.push
+			div.push
 
-    include inc/footer.jade
+	include inc/footer.jade
 
-    script(src='/javascripts/pages/index.js')
+	script(src='/javascripts/pages/index.js')

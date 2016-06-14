@@ -1,22 +1,7 @@
 button#toggle-info.toggle-info
 
 aside#info.info
-	section.player-info
-		p.socials
-			a(href="/" title="Partager sur Facebook")
-				span.fa.fa-facebook-official(aria-hidden="true")
-			a(href="/" title="Partager sur Twitter")
-				span.fa.fa-twitter(aria-hidden="true")
-		p.player
-			span.player-username BigBoss (Champe)
-			span.player-points Grade - 9999pts
-		p.options
-			a(href="/" title="Modifier vos informations")
-				span.fa.fa-cog(aria-hidden="true")
-			a(href="/" title="Afficher les classements")
-				span.fa.fa-trophy(aria-hidden="true")
-			a(href="/" title="Afficher vos statistiques")
-				span.fa.fa-line-chart(aria-hidden="true")
+	include player-info.jade
 
 	section.game-ranking
 		h2 Nom Room
@@ -41,14 +26,3 @@ aside#info.info
 				p 6pts
 
 	section.chat
-
-script.
-	var info = document.getElementById('info');
-	var expandedClass = 'expanded';
-
-	document.getElementById('toggle-info').addEventListener('click', function() {
-		if ( new RegExp('(^| )' + expandedClass + '( |$)', 'gi').test(info.className) )
-			info.className = info.className.replace(new RegExp('(^|\\b)' + expandedClass.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-		else
-			info.className += ' ' + expandedClass;
-	});

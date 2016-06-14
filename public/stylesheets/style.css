@@ -54,15 +54,12 @@ p {
 	margin: 0;
 }
 
-<<<<<<< HEAD
-=======
 ul {
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
 }
 
->>>>>>> e3e6325dbe9bd84fd155e0cfc03c89edf23ce7ed
 button {
 	background-color: #fff;
 	border: 2px solid;
@@ -339,18 +336,32 @@ a {
 			height: 2em;
 		}
 
-/* Overlay
-========================================================================== */
-
-.overlay {
-	display: none;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
+.info,
+.content.wait,
+.content.game {
+    display: inline-block;
+    vertical-align: top;
 	height: 100%;
 }
 
+.switching-content {
+    width: 100%;
+}
+
+.switching-aside {
+	width: 20%;
+	background-color: orange;
+	max-width: 300px;
+	padding: .5em;
+}
+
+.toggle-aside {
+	display: none;
+	position: absolute;
+	top: 8%;
+	right: 2%;
+	z-index: 10;
+}
 
 /* Header
 ========================================================================== */
@@ -368,14 +379,22 @@ header {
 /* Home
 ========================================================================== */
 
+.catch-phrase {
+	font-weight: 700;
+	margin-bottom: 1.5em;
+}
+
 .promotion {
 	display: table;
 	width: 100%;
 	text-align: center;
+	margin-bottom: 1.5em;
 }
 
 	.promotion div {
 		display: table-cell;
+		max-width: 200px;
+		margin: auto;
 	}
 
 	.promotion img {
@@ -387,6 +406,7 @@ header {
 
 .signup ul {
 	display: inline-block;
+<<<<<<< HEAD
 	text-align: left;
 <<<<<<< HEAD
 	list-style-type: none;
@@ -395,29 +415,131 @@ header {
 
 /* Signup
 =======
+=======
+	margin-bottom: 1.5em;
+>>>>>>> 223b8b6ecc6e7f88c1d336e7b528318b1127894e
 }
+
+	.signup li {
+		font-size: 1.2em;
+		padding: .2em;
+	}
 
 /* Manage account
 >>>>>>> e3e6325dbe9bd84fd155e0cfc03c89edf23ce7ed
 ========================================================================== */
 
+.manage-account h2 {
+	font-size: 1.1em;
+}
+
+.manage-account form {
+	margin-bottom: 1.5em;
+}
+
 .delete-account {
 	margin: auto;
 }
+
+<<<<<<< HEAD
+
+/* Game
+=======
+/* Chat
+>>>>>>> 223b8b6ecc6e7f88c1d336e7b528318b1127894e
+========================================================================== */
+
+.chat {
+	max-width: 350px;
+	background-color: purple;
+}
+
+	.chat li {
+		display: inline-block;
+		width: 33.3%;
+		text-align: center;
+		background-color: orange;
+	}
+
+	.chat li:hover {
+		background-color: yellow;
+	}
+
+	.chat .messages {
+		min-height: 150px;
+	}
+
+	.chat input,
+	.chat button {
+		display: inline-block;
+	}
+	.chat input {
+		width: 80%;
+	}
+
+	.chat button {
+		width: 20%;
+	}
+
+/* Rooms & Wait
+========================================================================== */
+
+.rooms .game-ranking,
+.wait .game-ranking {
+	display: none;
+}
+
+.rooms .info,
+.wait .info,
+.rooms .switching-content,
+.wait .switching-content {
+	height: auto;
+}
+
+/* Rooms
+========================================================================== */
+
+.rooms .switching-content {
+	width: 100%;
+}
+
+	.rooms .player-info {
+		height: auto;
+		display: block;
+		text-align: center;
+	}
+
+		.rooms .socials,
+		.rooms .options {
+			width: 300px;
+		}
+
+		.rooms .player {
+			margin: 0;
+			width: auto;
+		}
+
+			.rooms .player-info p {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+				.rooms .player-info a {
+					display: inline-block;
+					margin: 0 .5em;
+				}
+
+/* Wait
+========================================================================== */
+
 
 
 /* Game
 ========================================================================== */
 
-.info,
 .content.game {
-	display: inline-block;
+	width: 100%;
 	height: 100%;
-	vertical-align: top;
-}
-
-.content.game {
-	width: 75%;
 	background-color: red;
 	padding: 0;
 }
@@ -430,11 +552,11 @@ header {
     background-color: #666;
 }
 
-#canvas-wrapper{
+/* #canvas-wrapper{
     width: 60%;
     height: 80%;
     padding: 50px 50px;
-}
+} */
 
 .placed {
 
@@ -497,7 +619,7 @@ header {
 
 	.player {
 		margin: .5em 0;
-		word-wrap: break-word;	
+		word-wrap: break-word;
 	}
 
 		.player span {
@@ -540,13 +662,6 @@ header {
 			width: 50%;
 			font-size: 1.5em;
 		}
-		
-/* Chat */
-
-.chat {
-	background-color: purple;
-	height: 34%;
-}
 
 /* Main grids
 ========================================================================== */
@@ -556,6 +671,7 @@ header {
 	background-color: pink;
 }
 
+.switching-aside,
 .players-grids,
 .grids-wrapper {
 	display: inline-block;
@@ -566,43 +682,28 @@ header {
 /* Players grids sidebar
 ========================================================================== */
 
-.toggle-grids {
-	display: none;
-	position: absolute;
-	top: 8%;
-	right: 2%;
-	z-index: 10;
+.players-grids div {
+	border: 1px solid;
+	margin-bottom: .5em;
 }
 
-.players-grids {
-	width: 20%;
-	background-color: orange;
-	max-width: 300px;
-	padding: .5em;
-	overflow-y: scroll;
+.players-grids div:after {
+	content: "";
+	display: block;
+	padding-bottom: 100%;
 }
-
-	.players-grids div {
-		border: 1px solid;
-		margin-bottom: .5em;
-	}
-
-	.players-grids div:after {
-		content: "";
-		display: block;
-		padding-bottom: 100%;
-	}
 
 /* Rankings overlay
 ========================================================================== */
 
-.close-overlay {
+.close-rankings {
 	position: absolute;
 	top: 2%;
 	right: 2%;
 }
 
 .rankings-overlay {
+	display: none;
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -613,16 +714,50 @@ header {
 	text-align: center;
 }
 
+	.rankings-tabs li {
+		display: inline-block;
+		width: 50%;
+		background: lightgreen;
+	}
 
-		.tabs li {
-			display: inline-block;
-			width: 50%;
-			background: lightgreen;
-		}
+	.rankings-tabs li:hover {
+		background-color: green;
+	}
 
-		.tabs li:hover {
-			background-color: green;
-		}
+	.ranking table {
+		width: 100%;
+	}
+
+/* Stats overlay
+========================================================================== */
+
+.close-rankings {
+	position: absolute;
+	top: 2%;
+	right: 2%;
+}
+
+.stats-overlay {
+	display: none;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgba(255, 255, 255, 0.9);
+	z-index: 20;
+	text-align: center;
+}
+
+	.stats-tabs li {
+		display: inline-block;
+		width: 33.3%;
+		background: lightgreen;
+	}
+
+	.stats-tabs li:hover {
+		background-color: green;
+	}
 
 /* Footer
 ========================================================================== */
@@ -631,138 +766,6 @@ footer {
 	background-color: #e1e1e1;
 	text-align: center;
 	line-height: 2em;
-<<<<<<< HEAD
-}
-
-footer p {
-	display: inline-block;
-	margin: 0 1em;
-}
-
-/* TESTS
-========================================================================== */
-
-.sidebar,
-.content.game {
-	display: inline-block;
-	height: 100vh;
-	vertical-align: top;
-}
-
-.sidebar {
-	width: 25%;
-	background-color: blue;
-	max-width: 350px;
-}
-
-.sidebar section {
-	padding-bottom: 1.5em;
-}
-
-.content.game {
-	width: 75%;
-	background-color: red;
-	padding: 0;
-}
-
-.player-info {
-	background-color: green;
-	min-height: 15vh;
-}
-
-.game-ranking {
-	background-color: yellow;
-	min-height: 50vh;
-}
-
-.chat {
-	background-color: purple;
-	min-height: 35vh;
-}
-
-.players-grids,
-.grids-wrapper {
-	display: inline-block;
-	vertical-align: top;
-	height: inherit;
-}
-
-.players-grids {
-	width: 25%;
-	background-color: orange;
-	max-width: 200px;
-}
-
-.grids-wrapper {
-	width: 75%;
-	background-color: pink;
-}
-
-.visual-grid {
-	height: 60vh;
-	background-color: brown;
-}
-
-.shots-grid {
-	height: 40vh;
-	background-color: lightblue;
-}
-
-.expand-sidebar {
-	display: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 10;
-}
-
-.expand-grids {
-	display: none;
-	position: absolute;
-	top: 50px;
-	left: 0;
-	z-index: 10;
-}
-
-@media screen and (min-width: 66.875em) { /* 1070px */
-	.grids-wrapper {
-		width: 100%;
-		position: absolute;
-	}
-}
-
-@media screen and (max-width: 60em) { /* 960px */
-	.sidebar {
-		display: none;
-	}
-
-	.expand-sidebar {
-		display: block;
-	}
-
-	.content.game {
-		width: 100%;
-	}
-
-	.players-grids {
-		width: 20%;
-	}
-
-	.grids-wrapper {
-		width: 80%;
-	}
-}
-
-@media screen and (max-width: 40.625em) { /* 650px */
-	.players-grids {
-		display: none;
-	}
-
-	.expand-grids {
-		display: block;
-	}
-
-=======
 }
 
 	footer p {
@@ -775,7 +778,8 @@ footer p {
 
 @media screen and (min-width: 87.5em),
 screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
-	.content.game {
+	.content.game,
+    .switching-content {
 		width: 100%;
 		max-width: 100%;
 		position: absolute;
@@ -783,7 +787,7 @@ screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
 	}
 }
 
-@media screen and (max-width: 59.95em), 
+@media screen and (max-width: 59.95em),
 screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 	.toggle-info {
 		display: inline;
@@ -820,16 +824,28 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 }
 
 @media screen and (max-width: 59.95em) { /* < 960px */
+	.switching-content,
 	.content.game {
 		width: 100%;
 	}
 
-		.players-grids {
+		.players-grids,
+		.switching-aside {
 			width: 20%;
 		}
 
 		.grids-wrapper {
 			width: 80%;
+		}
+}
+
+@media screen and (max-width: 50em) { /* < 800px */
+	.rooms .player-info p {
+		display: block;
+	}
+
+		.rooms .player-info a {
+			margin: .5em;
 		}
 }
 
@@ -839,7 +855,8 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 		display: inline;
 	}
 
-	.players-grids {
+	.players-grids,
+	.switching-aside {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -858,20 +875,15 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 		.players-grids div {
 			display: inline-block;
 			width: 200px;
-			margin: 1em;			
+			margin: 1em;
 		}
 
->>>>>>> e3e6325dbe9bd84fd155e0cfc03c89edf23ce7ed
 	.grids-wrapper {
 		width: 100%;
 	}
 }
 
-<<<<<<< HEAD
-@media screen and (max-width: 32.5em) { /* 520px */
-=======
 @media screen and (max-width: 32.5em) { /* < 520px */
->>>>>>> e3e6325dbe9bd84fd155e0cfc03c89edf23ce7ed
 	.promotion div {
 		display: block;
 		margin-bottom: 1.5em;
@@ -880,8 +892,6 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 	form input {
 		width: 100%;
 	}
-<<<<<<< HEAD
-=======
 }
 
 .expanded {
@@ -890,5 +900,8 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 	transition: -webkit-transform .5s;
 	transition: transform .5s;
 	transition: transform .5s, -webkit-transform .5s;
->>>>>>> e3e6325dbe9bd84fd155e0cfc03c89edf23ce7ed
+}
+
+.opened {
+	display: block;
 }

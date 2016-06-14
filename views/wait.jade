@@ -1,10 +1,6 @@
-extends inc/head.jade
-
-block title
-    title Prepare to fight
-
-block content
-    button#set-ready set ready
-    i#ready-status
-    script(src='/socket.io/socket.io.js')
-    script(src='/javascripts/pages/wait.js')
+aside.info
+	include inc/player-info.jade
+	include inc/chat.jade
+section.content.wait
+	button#set-ready set ready
+	i#ready-status

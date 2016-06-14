@@ -8,12 +8,13 @@ block content
         include inc/header.jade
 
         section.content.signup
-            h1 Creez votre compte
+            h1 Créez votre compte
 
-            p Cela permet
+            p.catch-phrase Créer un compte vous permet
             ul
-                li Classements...
-                li Statistiques...
+                li De faire partie des classements,
+                li De consulter vos statistiques de jeu,
+                li Et surtout de jouer sans limites !
 
             form#signup(method="post", action="/signup")
                 input#signup-email(type='email', name='email' value='john.doe@mail.com', placeholder='E-mail')

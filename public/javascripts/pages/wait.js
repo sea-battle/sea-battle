@@ -1,4 +1,3 @@
-var socket = io();
 var playerIsReady = false;
 var setReadyButton = document.getElementById('set-ready');
 var readyStatus = document.getElementById('ready-status');
@@ -15,6 +14,5 @@ setReadyButton.addEventListener('click', function (e) {
 });
 
 socket.on('wait-start-game', function () {
-	document.getElementById('wait-stage').style.display = 'none';
-	document.getElementById('game-stage').style.display = 'block';
+	ajax.get('/game', handlers);
 });
