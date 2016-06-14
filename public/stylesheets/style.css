@@ -326,8 +326,14 @@ header {
 
 	.rooms .player-info p {
 		display: inline-block;
+		vertical-align: middle;
 		width: auto;
 		margin: 0 3em;
+	}
+
+	.rooms .player-info a {
+		display: inline;
+		margin: 0 1em;
 	}
 
 
