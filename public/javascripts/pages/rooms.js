@@ -10,21 +10,25 @@ function joinHandler(e) {
 function addRoom(roomName, playerCount) {
     var newLi = document.createElement('li');
     newLi.setAttribute('data-room-name', roomName);
-    var p = document.createElement('p');
+    var pRoomName = document.createElement('p');
+    var pPlayersCount = document.createElement('p');
     var buttonJoin = document.createElement('button');
     var leftDiv = document.createElement('div');
-    var rightDiv = document.createElement('div');
 
-    p.innerHTML = roomName + '<span class="players-count">' + playerCount + '</span>';
+    pRoomName.innerHTML = roomName;
+    pRoomName.className = 'room-name';
+    pPlayersCount.innerHTML = playerCount;
+    pPlayersCount.className = 'players-count';
     buttonJoin.innerHTML = 'Rejoindre';
+    buttonJoin.className = 'button-effect';
     buttonJoin.setAttribute('data-room', roomName);
     buttonJoin.addEventListener('click', joinHandler);
-    leftDiv.appendChild(p);
-    leftDiv.className = 'room-name';
-    rightDiv.appendChild(buttonJoin);
+    leftDiv.appendChild(pRoomName);
+    leftDiv.appendChild(pPlayersCount);
+    leftDiv.className = 'room-info';
 
     newLi.appendChild(leftDiv);
-    newLi.appendChild(rightDiv);
+    newLi.appendChild(buttonJoin);
 
     rooms.appendChild(newLi);
 }

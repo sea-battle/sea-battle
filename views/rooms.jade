@@ -34,11 +34,11 @@ block content
 
             h2 Créez votre propre salle
             input#room-name(type='text', placeholder='Nom de la salle') 
-            button#create-room Créer une salle
+            button#create-room.button-effect Créer une salle
         
             h2 Rejoignez une salle
 
-            p x salles disponibles
+            p.rooms-count x salles disponibles
             ul#rooms.rooms-list
 
     script(src='/socket.io/socket.io.js')

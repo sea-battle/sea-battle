@@ -72,7 +72,7 @@ button {
 
 /* Forms */
 
-form input {
+input {
 	display: block;
 	margin: auto;
 	margin-bottom: 1.5em;
@@ -82,16 +82,16 @@ form input {
 	transition: border-color 1s;
 }
 
-form input:hover {
+input:hover {
 	border-color: #525174;
 	transition: border-color .5s;
 }
 
-form input:focus {
+input:focus {
 	border-color: #525174;
 }
 
-form button {
+button {
 	margin: auto;
 	margin-bottom: 1em;
 }
@@ -374,17 +374,45 @@ header {
 	display: inline-block;
 }
 
+.rooms button {
+	margin-left: .3em; 
+}
+
+.rooms-count {
+	margin-bottom: 1em;
+}
+
+.rooms-list button {
+	padding: 1.4em 1.3em;
+}
+
 .rooms-list div {
 	display: inline-block;
 	vertical-align: top;
 }
 
-.room-name {
+.room-info {
 	width: 80%;
 	background-color: #fff;
-	height: 2.5em;
-	line-height: 2.5em;
 }
+
+	.room-info p {
+		display: inline-block;
+		width: 50%;
+		vertical-align: top;
+		padding: 0 2em;
+	}
+
+	.room-name {
+		text-align: left;
+		font-size: 2.5em;
+	}
+
+	.players-count {
+		text-align: right;
+		font-size: 1.5em;
+		line-height: 2.5em;
+	}
 
 /* Wait
 ========================================================================== */
@@ -442,7 +470,7 @@ header {
 
 .player-info {
 	height: 26%;
-	background-color: green;
+	/* background-color: green; */
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
@@ -740,9 +768,16 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 		margin-bottom: 1.5em;
 	}
 
-	form input {
+	input {
 		width: 100%;
 	}
+
+	.room-info p {
+	    display: block;
+	    width: 100%;
+	    padding: 0 .5em;
+	    text-align: center;
+   }
 }
 
 .expanded {
