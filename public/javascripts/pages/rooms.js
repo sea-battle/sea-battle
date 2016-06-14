@@ -3,6 +3,10 @@ var roomName = document.getElementById('room-name');
 var createRoomButton = document.getElementById('create-room');
 var roomsContainer = document.getElementById('rooms');
 
+function joinHandler(e){
+    socket.emit('rooms-join', this.getAttribute('data-room'));
+}
+
 function addRoom(roomName) {
     var newLi = document.createElement('li');
     newLi.setAttribute('data-room-name', roomName);
@@ -13,6 +17,8 @@ function addRoom(roomName) {
 
     p.innerHTML = roomName;
     buttonJoin.innerHTML = 'Rejoindre';
+    buttonJoin.setAttribute('data-room', roomName);
+    buttonJoin.addEventListener('click', joinHandler);
     leftDiv.appendChild(p);
     rightDiv.appendChild(buttonJoin);
 
@@ -23,7 +29,7 @@ function addRoom(roomName) {
 }
 
 socket.on('rooms-join', function () {
-    //ajax.get('/wait', handlers);
+    ajax.get('/wait', handlers);
 });
 
 

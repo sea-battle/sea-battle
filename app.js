@@ -100,9 +100,15 @@ io.sockets.on('connection', function (socket) {
         io.sockets.emit('rooms-update', game.rooms);
         socket.emit('rooms-join');
     });
-    
-    socket.on('rooms-get', function (){
+
+    socket.on('rooms-get', function () {
         socket.emit('rooms-update', game.rooms);
+    });
+
+    socket.on('rooms-join', function (roomName) {
+        socket.room = roomName;
+        socket.join(roomName);
+        socket.emit('rooms-join');
     });
 
     // WAIT STAGE
@@ -155,17 +161,6 @@ io.sockets.on('connection', function (socket) {
             targetId: targetId
         };
     });
-
-    /* ROOMS
-    socket.on('createRoom', function (name){
-        game.rooms.push(name);
-        socket.room = name;
-        socket.join(name);
-        io.sockets.emit('updateRooms', game.rooms);
-        socket.join(name);
-        socket.emit('joinRoom');
-    });
-	*/
 });
 
 server.listen(3000);
