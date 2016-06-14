@@ -176,6 +176,17 @@ io.sockets.on('connection', function (socket) {
 
         io.sockets.emit('receive-message', socket.name, message, game.getMessageTime());
     });
+
+    socket.on('disconnect', function () {
+        if (socket.room != '') {
+            socket.leave(socket.room);
+            game.rooms[socket.room].playerCount--;
+            if (game.rooms[socket.room].playerCount == 0) {
+                delete game.rooms[socket.room];
+            }
+            socket.broadcast.emit('rooms-update', game.getRoomsInfos());
+        }
+    });
 });
 
 server.listen(3000);
