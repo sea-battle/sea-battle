@@ -300,7 +300,38 @@ header {
 	margin: auto;
 }
 
+/* Rooms & Wait
+========================================================================== */
+
+.rooms .game-ranking,
+.wait .game-ranking {
+	display: none;
+}
+
+.rooms .info,
+.wait .info,
+.rooms .switching-content,
+.wait .switching-content {
+	height: auto;
+}
+
 /* Rooms
+========================================================================== */
+
+.rooms .player-info {
+	height: auto;
+	display: block;
+	text-align: center;
+}
+
+	.rooms .player-info p {
+		display: inline-block;
+		width: auto;
+		margin: 0 3em;
+	}
+
+
+/* Wait
 ========================================================================== */
 
 

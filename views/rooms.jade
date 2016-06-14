@@ -7,36 +7,33 @@ block styles
 
 block content
     include inc/header.jade
-    div.wrapper
-        include inc/sidebar.jade
+    include inc/player-info.jade
 
-        section#rankings-overlay.rankings-overlay
-            span#close-rankings.close-rankings.fa.fa-times(aria-hidden="true")
-            h2 Classements
-            ul.rankings-tabs
-                li#general-ranking-tab Général
-                li#month-ranking-tab Flottant
-            include inc/ranking.jade
+    section#rankings-overlay.rankings-overlay
+        span#close-rankings.close-rankings.fa.fa-times(aria-hidden="true")
+        h2 Classements
+        ul.rankings-tabs
+            li#general-ranking-tab Général
+            li#month-ranking-tab Flottant
+        include inc/ranking.jade
 
-        section#stats-overlay.stats-overlay
-            span#close-stats.close-stats.fa.fa-times(aria-hidden="true")
-            h2 Statistiques
-            ul.stats-tabs
-                li#general-stats-tab Général
-                li#month-stats-tab Flottant
-                li#score-stats-tab Score
-            include inc/stats.jade
+    section#stats-overlay.stats-overlay
+        span#close-stats.close-stats.fa.fa-times(aria-hidden="true")
+        h2 Statistiques
+        ul.stats-tabs
+            li#general-stats-tab Général
+            li#month-stats-tab Flottant
+            li#score-stats-tab Score
+        include inc/stats.jade
 
-        section#switching-content.switching-content
-            input#room-name(type='text', placeholder='Nom de la partie') 
-            button#create-room Créer une partie
-        
-            ul#rooms
+    section#switching-content.switching-content
+        input#room-name(type='text', placeholder='Nom de la partie') 
+        button#create-room Créer une partie
+    
+        ul#rooms
 
     script(src='/socket.io/socket.io.js')
     script(src='/javascripts/prototype.js')
-    script(src='/javascripts/pages/rooms.js')
     script(src='/javascripts/ajax.js')
     script(src='/javascripts/navigation.js')
-    //script.
-        ajax.get('/wait', handlers);
+    script(src='/javascripts/pages/rooms.js')
