@@ -28,9 +28,9 @@ app.get('/rooms', function (req, res) {
         bodyClass: 'rooms'
     });
 });
-app.get('/manage-account', function (req, res) {
-    res.render(__dirname + '/views/manage-account', {
-        bodyClass: 'manage-account'
+app.get('/profil', function (req, res) {
+    res.render(__dirname + '/views/profil', {
+        bodyClass: 'profil'
     });
 });
 app.get('/signup', function (req, res) {

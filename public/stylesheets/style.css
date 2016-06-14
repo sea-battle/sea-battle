@@ -80,6 +80,7 @@ input {
 	width: 35em;
 	height: 3em;
 	transition: border-color 1s;
+	outline: none;
 }
 
 input:hover {
@@ -574,6 +575,18 @@ header {
 	padding-bottom: 100%;
 }
 
+/* Overlays
+========================================================================== */
+
+.rankings-overlay h2,
+.stats-overlay h2 {
+	margin: 0;
+	padding: 1em 0;
+	color: #fff;
+	font-size: 1.4em;
+	background-image: linear-gradient(0deg, #5dd39e, #bce784);
+}
+
 /* Rankings overlay
 ========================================================================== */
 
@@ -598,16 +611,31 @@ header {
 	.rankings-tabs li {
 		display: inline-block;
 		width: 50%;
-		background: lightgreen;
+		background-color: #525174;
+		font-size: 1.5em;
+		height: 2em;
+		line-height: 2em;
+		color: #fff;
+		transition: background-color .5s;
 	}
 
 	.rankings-tabs li:hover {
-		background-color: green;
+		background-color: #513b56;
+		transition: background-color .5s;
 	}
 
 	.ranking table {
 		width: 100%;
+		font-size: 1.2em;
 	}
+
+		.ranking tr:nth-child(odd) {
+			background-color: lightgrey;
+		}
+
+		.ranking td {
+			word-wrap: break-word;
+		}
 
 /* Stats overlay
 ========================================================================== */
@@ -633,11 +661,14 @@ header {
 	.stats-tabs li {
 		display: inline-block;
 		width: 33.3%;
-		background: lightgreen;
+		background: #bce784;
+		font-size: 1.5em;
+		height: 2em;
+		line-height: 2em;
 	}
-
+	
 	.stats-tabs li:hover {
-		background-color: green;
+		background-color: #5dd39e;
 	}
 
 /* Footer

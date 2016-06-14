@@ -17,7 +17,7 @@ function addRoom(roomName, playerCount) {
 
     pRoomName.innerHTML = roomName;
     pRoomName.className = 'room-name';
-    pPlayersCount.innerHTML = playerCount;
+    pPlayersCount.innerHTML = playerCount > 1 ? playerCount + ' joueurs' : playerCount + ' joueur';
     pPlayersCount.className = 'players-count';
     buttonJoin.innerHTML = 'Rejoindre';
     buttonJoin.className = 'button-effect';
