@@ -92,7 +92,7 @@ io.sockets.on('connection', function (socket) {
         game.rooms[roomName] = {
             timer: game.defaultPlacementTime,
             timerId: null,
-            chat = []
+            chat: []
         };
         socket.room = roomName;
         socket.join(roomName);
