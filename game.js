@@ -1,5 +1,5 @@
 module.exports = {
-    rooms: [],
+    rooms: {},
     roomsName: [],
     ROOM_MAX_PLAYER: 6,
     getPlayerReadyCount: function () {
@@ -74,5 +74,43 @@ module.exports = {
                 target.cells[x][x].shootedBy.push(player.id);
             }
         }
+    },
+    getMessageTime: function () {
+        var d = new Date();
+        var hours = d.getHours();
+        var mins = d.getMinutes();
+        if (mins < 10) {
+            mins = '0' + mins;
+        }
+        return hours + ':' + mins;
+    },
+    getRoomsInfos: function () {
+        var roomsInfos = [];
+        for (var key in this.rooms) {
+            roomsInfos.push({
+                name: this.rooms[key].name,
+                playerCount: this.rooms[key].playerCount
+            });
+        }
+        return roomsInfos;
+    },
+    getMessagesFrom: function(room, filter){
+        var filteredMessages = [];
+        var needFilter = false;
+        
+        if (filter != 'all-messages'){
+            needFilter = true;
+        }
+        
+        this.rooms[room].chat.forEach(function (message){
+            if (needFilter){
+                if (message.filter == filter){
+                    filteredMessages.push(message);
+                }
+            }else{
+                filteredMessages.push(message);
+            }
+        });
+        return filteredMessages;
     }
 };

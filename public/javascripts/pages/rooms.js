@@ -3,30 +3,34 @@ var roomName = document.getElementById('room-name');
 var createRoomButton = document.getElementById('create-room');
 var roomsContainer = document.getElementById('rooms');
 
-function joinHandler(e){
+function joinHandler(e) {
     socket.emit('rooms-join', this.getAttribute('data-room'));
 }
 
-function addRoom(roomName) {
+function addRoom(roomName, playerCount) {
     var newLi = document.createElement('li');
     newLi.setAttribute('data-room-name', roomName);
-    var p = document.createElement('p');
+    var pRoomName = document.createElement('p');
+    var pPlayersCount = document.createElement('p');
     var buttonJoin = document.createElement('button');
     var leftDiv = document.createElement('div');
-    var rightDiv = document.createElement('div');
 
-    p.innerHTML = roomName + '<span class="players-count"></span>';
+    pRoomName.innerHTML = roomName;
+    pRoomName.className = 'room-name';
+    pPlayersCount.innerHTML = playerCount > 1 ? playerCount + ' joueurs' : playerCount + ' joueur';
+    pPlayersCount.className = 'players-count';
     buttonJoin.innerHTML = 'Rejoindre';
+    buttonJoin.className = 'button-effect';
     buttonJoin.setAttribute('data-room', roomName);
     buttonJoin.addEventListener('click', joinHandler);
-    leftDiv.appendChild(p);
-    leftDiv.className = 'room-name';
-    rightDiv.appendChild(buttonJoin);
+    leftDiv.appendChild(pRoomName);
+    leftDiv.appendChild(pPlayersCount);
+    leftDiv.className = 'room-info';
 
     newLi.appendChild(leftDiv);
-    newLi.appendChild(rightDiv);
+    newLi.appendChild(buttonJoin);
 
-    rooms.appendChild(newLi);
+    roomsContainer.appendChild(newLi);
 }
 
 socket.on('rooms-join', function () {
@@ -51,10 +55,10 @@ socket.on('rooms-update', function (rooms) {
     //TODO Do not remove all but check if room doesn't exist to add
     roomsContainer.removeChildren();
     rooms.forEach(function (room) {
-        addRoom(room);
+        addRoom(room.name, room.playerCount);
     });
 });
 
-window.addEventListener('hashchange', function(e){
+window.addEventListener('hashchange', function (e) {
     e.preventDefault();
 });
