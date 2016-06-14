@@ -53,3 +53,7 @@ socket.on('rooms-update', function (rooms) {
         addRoom(room);
     });
 });
+
+window.addEventListener('hashchange', function(e){
+    e.preventDefault();
+});

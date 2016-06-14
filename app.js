@@ -44,7 +44,10 @@ app.get('/wait', function (req, res) {
     return res.json({
         bodyClass: 'wait',
         html: html,
-        scriptsSrc: ['/javascripts/pages/wait.js'],
+        scriptsSrc: [
+            '/javascripts/pages/wait.js',
+            '/javascripts/chat.js'
+        ],
         title: 'Prepare to fight',
     });
 });
@@ -157,18 +160,19 @@ io.sockets.on('connection', function (socket) {
             targetId: targetId
         };
     });
-    
+
     // CHAT
-    socket.on('chat-is-writing', function (){
+    socket.on('chat-is-writing', function () {
         socket.broadcast.emit('is-writing', socket.name);
     });
-    
-    socket.on('chat-player-message', function (message){
+
+    socket.on('chat-player-message', function (message) {
+        console.log(message);
         game.rooms[socket.room].chat.push({
             sender: socket.name,
             message: message
         });
-        socket.broadcast.emit('receive-message', socket.name, message);
+        io.sockets.emit('receive-message', socket.name, message);
     });
 });
 
