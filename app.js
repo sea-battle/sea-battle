@@ -94,9 +94,16 @@ io.sockets.on('connection', function (socket) {
 
     // ROOMS STAGE
     socket.on('rooms-create', function (roomName) {
-
+        game.rooms.push(roomName);
+        socket.room = roomName;
+        socket.join(roomName);
+        io.sockets.emit('rooms-update', game.rooms);
+        socket.emit('rooms-join');
     });
-    socket.join(socket.room);
+    
+    socket.on('rooms-get', function (){
+        socket.emit('rooms-update', game.rooms);
+    });
 
     // WAIT STAGE
     socket.on('wait-set-ready', function () {
@@ -157,14 +164,6 @@ io.sockets.on('connection', function (socket) {
         io.sockets.emit('updateRooms', game.rooms);
         socket.join(name);
         socket.emit('joinRoom');
-    });
-    
-    socket.on('getRooms', function (){
-        socket.emit('updateRooms', game.rooms);
-    });
-    
-    socket.on('fromWait', function (){
-        console.log(socket.room);
     });
 	*/
 });
