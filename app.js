@@ -35,22 +35,24 @@ app.get('/wait', function (req, res) {
     var fn = jade.compileFile(__dirname + '/views/wait.jade');
     var html = fn();
     return res.json({
+        bodyClass: 'wait',
         html: html,
+        scriptsSrc: ['/javascripts/pages/wait.js'],
         title: 'Prepare to fight',
-        scriptsSrc: ['/javascripts/pages/wait.js']
     });
 });
 app.get('/game', function (req, res) {
     var fn = jade.compileFile(__dirname + '/views/game.jade');
     var html = fn();
     return res.json({
+        bodyClass: 'game',
         html: html,
-        title: 'Let\'s shoot',
         scriptsSrc: [
             '/javascripts/grid.js',
             '/javascripts/boat.js',
             '/javascripts/pages/game.js',
-        ]
+        ],
+        title: 'Let\'s shoot'
     });
 });
 app.get('*', function (req, res) {
