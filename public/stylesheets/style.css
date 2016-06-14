@@ -209,14 +209,15 @@ a {
 		}
 
 .info,
-.switching-content {
+.content.wait,
+.content.game {
     display: inline-block;
     vertical-align: top;
 	height: 100%;
 }
 
 .switching-content {
-    width: 75%;
+    width: 100%;
 }
 
 .switching-aside {
