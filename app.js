@@ -99,10 +99,11 @@ io.sockets.on('connection', function (socket) {
         };
         socket.room = roomName;
         socket.join(roomName);
-        io.sockets.emit('rooms-update', game.roomsName);
+        io.sockets.emit('rooms-update', game.roomsName, 1);
         socket.emit('rooms-join');
     });
     socket.on('rooms-get', function () {
+        console.log('HERE', game.getPlayersId(io.sockets, socket.room));
         socket.emit('rooms-update', game.roomsName);
     });
     socket.on('rooms-join', function (roomName) {
@@ -172,7 +173,8 @@ io.sockets.on('connection', function (socket) {
             sender: socket.name,
             message: message
         });
-        io.sockets.emit('receive-message', socket.name, message);
+
+        io.sockets.emit('receive-message', socket.name, message, game.getMessageTime());
     });
 });
 

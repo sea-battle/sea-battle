@@ -74,5 +74,14 @@ module.exports = {
                 target.cells[x][x].shootedBy.push(player.id);
             }
         }
+    },
+    getMessageTime: function () {
+        var d = new Date();
+        var hours = d.getHours();
+        var mins = d.getMinutes();
+        if (mins < 10){
+            mins = '0' + mins;
+        }
+        return hours + ':' + mins;
     }
 };

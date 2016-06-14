@@ -21,9 +21,8 @@ window.addEventListener('keyup', function (e) {
 
 socket.emit('chat-is-writing');
 
-socket.on('receive-message', function (playerName, message) {
-    console.log(playerName, message);
+socket.on('receive-message', function (playerName, message, time) {
     var p = document.createElement('p');
-    p.innerHTML = playerName + ' : ' + message;
+    p.innerHTML = time + ' ' + playerName + ' => ' + message;
     messagesContainer.appendChild(p);
 });

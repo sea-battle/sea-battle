@@ -3,11 +3,11 @@ var roomName = document.getElementById('room-name');
 var createRoomButton = document.getElementById('create-room');
 var roomsContainer = document.getElementById('rooms');
 
-function joinHandler(e){
+function joinHandler(e) {
     socket.emit('rooms-join', this.getAttribute('data-room'));
 }
 
-function addRoom(roomName) {
+function addRoom(roomName, playerCount) {
     var newLi = document.createElement('li');
     newLi.setAttribute('data-room-name', roomName);
     var p = document.createElement('p');
@@ -15,7 +15,7 @@ function addRoom(roomName) {
     var leftDiv = document.createElement('div');
     var rightDiv = document.createElement('div');
 
-    p.innerHTML = roomName + '<span class="players-count"></span>';
+    p.innerHTML = roomName + '<span class="players-count">' + playerCount + '</span>';
     buttonJoin.innerHTML = 'Rejoindre';
     buttonJoin.setAttribute('data-room', roomName);
     buttonJoin.addEventListener('click', joinHandler);
@@ -55,6 +55,6 @@ socket.on('rooms-update', function (rooms) {
     });
 });
 
-window.addEventListener('hashchange', function(e){
+window.addEventListener('hashchange', function (e) {
     e.preventDefault();
 });
