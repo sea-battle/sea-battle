@@ -26,7 +26,7 @@ function addRoom(roomName, playerCount) {
     newLi.appendChild(leftDiv);
     newLi.appendChild(rightDiv);
 
-    rooms.appendChild(newLi);
+    roomsContainer.appendChild(newLi);
 }
 
 socket.on('rooms-join', function () {
@@ -51,7 +51,7 @@ socket.on('rooms-update', function (rooms) {
     //TODO Do not remove all but check if room doesn't exist to add
     roomsContainer.removeChildren();
     rooms.forEach(function (room) {
-        addRoom(room);
+        addRoom(room.name, room.playerCount);
     });
 });
 

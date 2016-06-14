@@ -91,23 +91,24 @@ io.sockets.on('connection', function (socket) {
 
     // ROOMS STAGE
     socket.on('rooms-create', function (roomName) {
-        game.roomsName.push(roomName);
         game.rooms[roomName] = {
             timer: game.defaultPlacementTime,
             timerId: null,
-            chat: []
+            chat: [],
+            playerCount: 1,
+            name: roomName
         };
         socket.room = roomName;
         socket.join(roomName);
-        io.sockets.emit('rooms-update', game.roomsName, 1);
+        socket.broadcast.emit('rooms-update', game.getRoomsInfos());
         socket.emit('rooms-join');
     });
     socket.on('rooms-get', function () {
-        console.log('HERE', game.getPlayersId(io.sockets, socket.room));
-        socket.emit('rooms-update', game.roomsName);
+        socket.emit('rooms-update', game.getRoomsInfos());
     });
     socket.on('rooms-join', function (roomName) {
         socket.room = roomName;
+        game.rooms[roomName].playerCount++;
         socket.join(roomName);
         socket.emit('rooms-join');
     });
@@ -168,7 +169,6 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('chat-player-message', function (message) {
-        console.log(message);
         game.rooms[socket.room].chat.push({
             sender: socket.name,
             message: message
