@@ -17,7 +17,6 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 
 app.use('/', routeAuthentication);
-
 app.get('/', function (req, res) {
     //game.roomToJoin = '/tamere';
     res.render(__dirname + '/views/index', {
@@ -77,13 +76,8 @@ passport.deserializeUser(User.deserializeUser());
 
 mongoose.connect(config.database.location, config.database.options);
 
-//io.of(game.roomToJoin).on('connection', function (socket) {
 io.sockets.on('connection', function (socket) {
     // INIT ON CONNECTION
-    game.rooms['test'] = {
-        timer: game.defaultPlacementTime,
-        timerId: null
-    };
     socket.ready = false;
     socket.room = '';
     socket.shootInfos = {
@@ -94,15 +88,23 @@ io.sockets.on('connection', function (socket) {
 
     // ROOMS STAGE
     socket.on('rooms-create', function (roomName) {
-        game.rooms.push(roomName);
+        game.roomsName.push(roomName);
+        game.rooms[roomName] = {
+            timer: game.defaultPlacementTime,
+            timerId: null
+        };
         socket.room = roomName;
         socket.join(roomName);
-        io.sockets.emit('rooms-update', game.rooms);
+        io.sockets.emit('rooms-update', game.roomsName);
         socket.emit('rooms-join');
     });
-    
-    socket.on('rooms-get', function (){
-        socket.emit('rooms-update', game.rooms);
+    socket.on('rooms-get', function () {
+        socket.emit('rooms-update', game.roomsName);
+    });
+    socket.on('rooms-join', function (roomName) {
+        socket.room = roomName;
+        socket.join(roomName);
+        socket.emit('rooms-join');
     });
 
     // WAIT STAGE
@@ -127,7 +129,6 @@ io.sockets.on('connection', function (socket) {
     socket.on('wait-set-unready', function () {
         socket.ready = false;
     });
-
 
     // GAME STAGE
     socket.on('game-set-ready', function (cells) {
@@ -155,17 +156,11 @@ io.sockets.on('connection', function (socket) {
             targetId: targetId
         };
     });
-
-    /* ROOMS
-    socket.on('createRoom', function (name){
-        game.rooms.push(name);
-        socket.room = name;
-        socket.join(name);
-        io.sockets.emit('updateRooms', game.rooms);
-        socket.join(name);
-        socket.emit('joinRoom');
-    });
-	*/
+    
+    // CHAT
+    socket.on('chat-is-writing', function (){
+        io.sockets.
+    })
 });
 
 server.listen(3000);
