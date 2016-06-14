@@ -30,7 +30,7 @@ socket.on('joinRoom', function (name) {
 createRoomButton.addEventListener('click', function (e) {
     var name = roomName.value;
     if (name != '') {
-        socket.emit('createRoom', name);
+        socket.emit('rooms-create', name);
         roomName.value = '';
     } else {
         roomName.focus();

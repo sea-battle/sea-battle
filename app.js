@@ -20,20 +20,28 @@ app.use('/', routeAuthentication);
 
 app.get('/', function (req, res) {
     //game.roomToJoin = '/tamere';
-    res.render(__dirname + '/views/index');
+    res.render(__dirname + '/views/index', {
+        bodyClass: 'home'
+    });
 });
 app.get('/rooms', function (req, res) {
-    res.render(__dirname + '/views/rooms');
+    res.render(__dirname + '/views/rooms', {
+        bodyClass: 'rooms'
+    });
 });
 app.get('/manage-account', function (req, res) {
-    res.render(__dirname + '/views/manage-account');
+    res.render(__dirname + '/views/manage-account', {
+        bodyClass: 'manage-account'
+    });
 });
 app.get('/signup', function (req, res) {
-    res.render(__dirname + '/views/signup');
+    res.render(__dirname + '/views/signup', {
+        bodyClass: 'signup'
+    });
 });
 app.get('/wait', function (req, res) {
     var fn = jade.compileFile(__dirname + '/views/wait.jade');
-    var html = fn();
+    var html = fn( /*Variables*/ );
     return res.json({
         bodyClass: 'wait',
         html: html,
@@ -56,7 +64,9 @@ app.get('/game', function (req, res) {
     });
 });
 app.get('*', function (req, res) {
-    res.render(__dirname + '/views/404');
+    res.render(__dirname + '/views/404', {
+        bodyClass: '404'
+    });
 });
 
 // passport config
@@ -75,12 +85,17 @@ io.sockets.on('connection', function (socket) {
         timerId: null
     };
     socket.ready = false;
-    socket.room = 'test';
+    socket.room = '';
     socket.shootInfos = {
         shootCoords: null,
         targetId: null
     };
     socket.name = socket.id;
+
+    // ROOMS STAGE
+    socket.on('rooms-create', function (roomName) {
+
+    });
     socket.join(socket.room);
 
     // WAIT STAGE
@@ -127,7 +142,6 @@ io.sockets.on('connection', function (socket) {
             }
         }, 1000);
     });
-
     socket.on('game-shoot', function (shootCoords, targetId) {
         socket.shootInfos = {
             shootCoords: shootCoords,
@@ -153,34 +167,6 @@ io.sockets.on('connection', function (socket) {
         console.log(socket.room);
     });
 	*/
-    /* TEST
-    console.log(io);
-    //socket.on('init', function (data) {});
-    if (game.players.length < game.ROOM_MAX_PLAYER &&
-        game.roomToJoin != '/') {
-        socket.player = {
-            ready: false
-        };
-        game.players.push(socket);
-
-        socket.on('setReady', function () {
-            if (!socket.player.ready) {
-                socket.player.ready = true;
-                if (game.getPlayerReadyCount() == game.players.length &&
-                    game.players.length > 1) {
-                    io.sockets.emit('startGame', socket.player);
-                }
-            }
-        });
-    }
-
-    socket.on('disconnect', function () {
-        var i = game.players.indexOf(socket);
-        game.players.splice(i, 1);
-    });
-
-    console.log(game.roomToJoin + ' => ' + 'game.players.length:', game.players.length);
-    */
 });
 
 server.listen(3000);
