@@ -25,6 +25,12 @@ app.get('/', function (req, res) {
 app.get('/rooms', function (req, res) {
     res.render(__dirname + '/views/rooms');
 });
+app.get('/manage-account', function (req, res) {
+    res.render(__dirname + '/views/manage-account');
+});
+app.get('/signup', function (req, res) {
+    res.render(__dirname + '/views/signup');
+});
 app.get('/wait', function (req, res) {
     var fn = jade.compileFile(__dirname + '/views/wait.jade');
     var html = fn();

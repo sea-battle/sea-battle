@@ -10,6 +10,12 @@ block content
 		section.content.manage-account
 			h1 Gérez votre compte
 
+			h2 Modifiez votre email
+			form#email-modification
+				input#email(type='text', name="email", placeholder='Email')
+				p#email-message
+				button#email-submit.button-effect(type='submit') Modifier
+
 			h2 Modifiez votre pseudonyme
 			form#username-modification
 				input#username(type='text', name="username", placeholder='Pseudonyme')

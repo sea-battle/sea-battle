@@ -250,14 +250,22 @@ header {
 /* Home
 ========================================================================== */
 
+.catch-phrase {
+	font-weight: 700;
+	margin-bottom: 1.5em;
+}
+
 .promotion {
 	display: table;
 	width: 100%;
 	text-align: center;
+	margin-bottom: 1.5em;
 }
 
 	.promotion div {
 		display: table-cell;
+		max-width: 200px;
+		margin: auto;
 	}
 
 	.promotion img {
@@ -269,11 +277,24 @@ header {
 
 .signup ul {
 	display: inline-block;
-	text-align: left;
+	margin-bottom: 1.5em;
 }
+
+	.signup li {
+		font-size: 1.2em;
+		padding: .2em;
+	}
 
 /* Manage account
 ========================================================================== */
+
+.manage-account h2 {
+	font-size: 1.1em;
+}
+
+.manage-account form {
+	margin-bottom: 1.5em;
+}
 
 .delete-account {
 	margin: auto;

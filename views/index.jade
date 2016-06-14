@@ -6,22 +6,21 @@ block content
 
 		section.content.home
 			h1 Sea Battle
-			p Blablabla blablabla
+			p.catch-phrase Jeu 100 gratuit, revivez les sensations épiques de la bataille navale !
 
 			section.promotion
 				div
 					img(src="images/test1.jpg")
-					p Blablabla
+					p GIF animé montrant l'écran de jeu
 				div
 					img(src="images/test2.jpg")
-					p Blablabla
+					p GIF animé montrant les classements et statistiques
 			
 			h2 Jouer
 			form#signin(action="/signin" method="post")
+				p#signin-message
 				input#signin-email(type='text', name="signin_email", placeholder='Email', value="john.doe@mail.com")
-				p#signin-email-message
 				input#signin-password(type='password', name="signin_password", placeholder='Mot de passe', value="johndoe")
-				p#signin-password
 				button#signin-submit.button-effect(type='submit') Connexion
 
 			a.link-effect(href="/signup", title="Vers la page de création de compte") Pas de compte ?
@@ -29,3 +28,5 @@ block content
 			div.push
 
 	include inc/footer.jade
+
+	script(src='/javascripts/pages/index.js')
