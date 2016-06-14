@@ -17,6 +17,11 @@ sendButton.addEventListener('click', function (e) {
 
 for (var i = 0; i < filters.length; i++) {
     filters[i].addEventListener('click', function (e) {
+        for (var i = 0; i < filters.length; i++) {
+            filters[i].setAttribute('data-active', 'false');
+        }
+        
+        this.setAttribute('data-active', 'true');
         socket.emit('chat-filter', this.id);
     });
 }
