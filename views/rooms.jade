@@ -6,8 +6,6 @@ block styles
     link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
 
 block content
-    include inc/header.jade
-    include inc/player-info.jade
 
     section#rankings-overlay.rankings-overlay
         span#close-rankings.close-rankings.fa.fa-times(aria-hidden="true")
@@ -27,6 +25,8 @@ block content
         include inc/stats.jade
 
     section#switching-content.switching-content
+        include inc/header.jade
+        include inc/player-info.jade
         input#room-name(type='text', placeholder='Nom de la partie') 
         button#create-room Créer une partie
     

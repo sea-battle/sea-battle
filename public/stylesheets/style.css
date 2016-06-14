@@ -300,6 +300,41 @@ header {
 	margin: auto;
 }
 
+/* Chat
+========================================================================== */
+
+.chat {
+	max-width: 350px;
+	background-color: purple;
+}
+
+	.chat li {
+		display: inline-block;
+		width: 33.3%;
+		text-align: center;
+		background-color: orange;
+	}
+
+	.chat li:hover {
+		background-color: yellow;
+	}
+
+	.chat .messages {
+		min-height: 150px;
+	}
+
+	.chat input,
+	.chat button {
+		display: inline-block;
+	}
+	.chat input {
+		width: 80%;
+	}
+
+	.chat button {
+		width: 20%;
+	}
+
 /* Rooms & Wait
 ========================================================================== */
 
@@ -318,24 +353,35 @@ header {
 /* Rooms
 ========================================================================== */
 
-.rooms .player-info {
-	height: auto;
-	display: block;
-	text-align: center;
+.rooms .switching-content {
+	width: 100%;
 }
 
-	.rooms .player-info p {
-		display: inline-block;
-		vertical-align: middle;
-		width: auto;
-		margin: 0 3em;
+	.rooms .player-info {
+		height: auto;
+		display: block;
+		text-align: center;
 	}
 
-	.rooms .player-info a {
-		display: inline;
-		margin: 0 1em;
-	}
+		.rooms .socials,
+		.rooms .options {
+			width: 300px;
+		}
 
+		.rooms .player {
+			margin: 0;
+			width: auto;
+		}
+
+			.rooms .player-info p {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+				.rooms .player-info a {
+					display: inline-block;
+					margin: 0 .5em;
+				}
 
 /* Wait
 ========================================================================== */
@@ -470,13 +516,6 @@ header {
 			width: 50%;
 			font-size: 1.5em;
 		}
-		
-/* Chat */
-
-.chat {
-	background-color: purple;
-	height: 34%;
-}
 
 /* Main grids
 ========================================================================== */
@@ -651,6 +690,16 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 
 		.grids-wrapper {
 			width: 80%;
+		}
+}
+
+@media screen and (max-width: 50em) { /* < 800px */
+	.rooms .player-info p {
+		display: block;
+	}
+
+		.rooms .player-info a {
+			margin: .5em;
 		}
 }
 
