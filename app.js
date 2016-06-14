@@ -111,6 +111,17 @@ io.sockets.on('connection', function (socket) {
         game.rooms[roomName].playerCount++;
         socket.join(roomName);
         socket.emit('rooms-join');
+
+        var from = 'System';
+        var message = socket.name + ' join the game.';
+        var time = game.getMessageTime();
+        game.rooms[socket.room].chat.push({
+            filter: 'game-messages',
+            sender: from,
+            message: message,
+            time: time
+        });
+        socket.broadcast.emit('receive-message', from, message, time);
     });
 
     // WAIT STAGE
@@ -167,14 +178,31 @@ io.sockets.on('connection', function (socket) {
     socket.on('chat-is-writing', function () {
         socket.broadcast.emit('is-writing', socket.name);
     });
-
     socket.on('chat-player-message', function (message) {
+        var time = game.getMessageTime();
         game.rooms[socket.room].chat.push({
+            filter: 'players-messages',
             sender: socket.name,
-            message: message
+            message: message,
+            time: time
         });
 
-        io.sockets.emit('receive-message', socket.name, message, game.getMessageTime());
+        io.sockets.emit('receive-message', socket.name, message, time);
+    });
+    socket.on('chat-filter', function (filter){
+        var messages = game.getMessagesFrom(socket.room, filter);
+        socket.emit('chat-filter', messages);
+    });
+
+    socket.on('disconnect', function () {
+        if (socket.room != '') {
+            socket.leave(socket.room);
+            game.rooms[socket.room].playerCount--;
+            if (game.rooms[socket.room].playerCount == 0) {
+                delete game.rooms[socket.room];
+            }
+            socket.broadcast.emit('rooms-update', game.getRoomsInfos());
+        }
     });
 });
 

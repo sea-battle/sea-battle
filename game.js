@@ -93,5 +93,24 @@ module.exports = {
             });
         }
         return roomsInfos;
+    },
+    getMessagesFrom: function(room, filter){
+        var filteredMessages = [];
+        var needFilter = false;
+        
+        if (filter != 'all-messages'){
+            needFilter = true;
+        }
+        
+        this.rooms[room].chat.forEach(function (message){
+            if (needFilter){
+                if (message.filter == filter){
+                    filteredMessages.push(message);
+                }
+            }else{
+                filteredMessages.push(message);
+            }
+        });
+        return filteredMessages;
     }
 };
