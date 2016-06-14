@@ -27,10 +27,6 @@ app.set('view engine', 'jade');
 
 app.get('/database', function (req, res) {
 });
-
-app.get('/', function (req, res) {
-	res.render(__dirname + '/views/index');
-});
 app.get('/rooms', function (req, res) {
 	res.render(__dirname + '/views/rooms');
 });

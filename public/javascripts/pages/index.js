@@ -17,7 +17,11 @@ function proceedSignin() {
         if (xhr.readyState === 4 && (this.status === 200 || this.status === 401)) {
             var signinResponse = JSON.parse(xhr.responseText);
 
-            document.getElementById('signin-message').innerHTML = signinResponse['signinMessage'];
+            if (!signinResponse['signinSuccess']) {
+                document.getElementById('signin-message').innerHTML = signinResponse['signinMessage'];
+            } else {
+                window.location = '/rooms';
+            }
         }
     };
 

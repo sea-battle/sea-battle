@@ -29,7 +29,7 @@ router.use(session({
     cookie: {
         maxAge: 1000 * 3600
     },
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     secret: 'sea-battle-is-the-shit',
 }));
@@ -101,7 +101,7 @@ router.post('/signin', function (req, res, next) {
             }
             return res.status(200).send({
                 signinSuccess: true,
-                signinMessage: 'Vous êtes maintenant connecté en tant que ' + user.username
+                signinMessage: null
             });
         });
     })(req, res, next);
@@ -110,7 +110,7 @@ router.post('/signin', function (req, res, next) {
 // Route middleware: make sure the user is authenticated
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        res.redirect('/YOLO');
+        res.redirect('/rooms');
     }
     else {
         return next();
@@ -118,6 +118,10 @@ function isAuthenticated(req, res, next) {
 }
 
 // Routes: method GET
+router.get('/', isAuthenticated, function (req, res) {
+	res.render(__dirname + '/../views/index');
+});
+
 router.get('/signup', isAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/signup');
 });
