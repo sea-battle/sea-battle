@@ -15,10 +15,10 @@ function proceedSignin() {
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && (this.status === 200 || this.status === 401)) {
-            var signinResponse = JSON.parse(xhr.responseText);
+            var response = JSON.parse(xhr.responseText);
 
-            if (!signinResponse['signinSuccess']) {
-                document.getElementById('signin-message').innerHTML = signinResponse['signinMessage'];
+            if (!response['success']) {
+                document.getElementById('signin-message').innerHTML = response['message'];
             } else {
                 window.location = '/rooms';
             }

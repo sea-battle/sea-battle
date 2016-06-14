@@ -41,16 +41,18 @@ router.use(passport.session());
 
 // Routes: method POST
 router.post('/check-username-availability', function (req, res) {
-    User.findOne({ username: req.body.username }, function (err, user) {
+    User.findOne({
+        username: req.body.username
+    }, function (err, user) {
         if (user) {
             return res.json({
-                usernameAvailability: false,
-                usernameAvailabilityMessage: 'Ce pseudonyme est déjà utlisé'
+                success: false,
+                message: 'Ce pseudonyme est déjà utlisé'
             });
         } else {
             return res.json({
-                usernameAvailability: true,
-                usernameAvailabilityMessage: 'Ce pseudonyme est disponible'
+                success: true,
+                message: 'Ce pseudonyme est disponible'
             });
         }
     });
@@ -65,17 +67,15 @@ router.post('/signup', function (req, res) {
         req.body.password, function (err, user) {
             if (err) {
                 return res.status(403).send({
-                    signupSucceed: false,
-                    signupMessage: 'Une erreur est survenue lors de l\'inscription'
+                    success: false,
+                    message: 'Une erreur est survenue lors de l\'inscription'
                 });
             }
 
-            passport.authenticate('local', {
-                failureFlash: true
-            })(req, res, function () {
+            passport.authenticate('local')(req, res, function () {
                 return res.status(200).send({
-                    signupSucceed: true,
-                    signupMessage: 'Un e-mail de confirmation vous a été envoyé'
+                    success: true,
+                    message: 'Un e-mail de confirmation vous a été envoyé'
                 });
             });
         }
@@ -90,8 +90,8 @@ router.post('/signin', function (req, res, next) {
 
         if (!user) {
             return res.status(401).send({
-                signinSuccess: false,
-                signinMessage: 'Le pseudonyme ou le mot de passe est incorrect'
+                success: false,
+                message: 'Le pseudonyme ou le mot de passe est incorrect'
             });
         }
 
@@ -99,21 +99,93 @@ router.post('/signin', function (req, res, next) {
             if (err) {
                 return next(err);
             }
+
+            // Initialize session
+            req.session.user = user;
+
             return res.status(200).send({
-                signinSuccess: true,
-                signinMessage: null
+                success: true
             });
         });
     })(req, res, next);
 });
 
+router.post('/edit-email', function(req, res) {
+    User.update({
+        email: req.session.user.email
+    }, {
+        email: req.body.email
+    }, function(err, response) {
+        if (err) {
+            return res.status(500).send({
+                success: false,
+                message: 'L\'adresse e-mail n\'a pas pu être changé'
+            });
+        }
+
+        // Persist session after updating user data
+        req.logIn(req.session.user, function (err) {
+        })
+
+        return res.status(200).send({
+            success: true,
+            message: 'L\'adresse e-mail a été changé avec succès'
+        });
+    });
+});
+
+router.post('/edit-username', function(req, res) {
+    User.update({
+        username: req.session.user.username
+    }, {
+        username: req.body.username
+    }, function(err, response) {
+        if (err) {
+            return res.status(500).send({
+                success: false,
+                message: 'Le pseudonyme n\'a pas pu être changé'
+            });
+        }
+
+        // Persist session after updating user data
+        req.logIn(req.session.user, function (err) {
+        })
+
+        return res.status(200).send({
+            success: true,
+            message: 'Le pseudonyme a été changé avec succès'
+        });
+    });
+});
+
+router.post('/delete-user', function (req, res, next) {
+    User.remove({ username: req.session.user.username }, function (err, response) {
+        if (err) {
+            return next(err);
+        }
+
+        // Destroy session
+        req.session = null;
+
+        // Redirect in case JavaScript is disabled
+        res.redirect('/');
+    });
+});
+
 // Route middleware: make sure the user is authenticated
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        res.redirect('/rooms');
-    }
-    else {
-        return next();
+        if (req.route.path === '/signup' || req.route.path === '/') {
+            res.redirect('/rooms');
+        } else {
+            return next();
+        }
+    } else {
+        if (req.route.path === '/profile') {
+            res.redirect('/');
+        } else {
+            return next();
+        }
     }
 }
 
@@ -126,12 +198,13 @@ router.get('/signup', isAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/signup');
 });
 
-router.get('/manage-account', function (req, res) {
-    res.render(__dirname + '/../views/manage-account');
+router.get('/profile', isAuthenticated, function (req, res) {
+    res.render(__dirname + '/../views/profile');
 });
 
 router.get('/signout', function (req, res) {
     req.logout();
+    req.session = null;
     res.redirect('/');
 });
 

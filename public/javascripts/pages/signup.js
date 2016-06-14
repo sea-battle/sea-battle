@@ -28,15 +28,15 @@ function checkUsername() {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && this.status === 200) {
                 var signupUsername = document.getElementById('signup-username'),
-                    checkUsernameAvailabilityResponse = JSON.parse(xhr.responseText);
+                    response = JSON.parse(xhr.responseText);
 
-                if (!checkUsernameAvailabilityResponse['usernameAvailability']) {
+                if (!response['success']) {
                     signupUsername.classList.add('error');
                 } else {
                     signupUsername.classList.remove('error');
                 }
 
-                signupUsernameMessage.innerHTML = checkUsernameAvailabilityResponse['usernameAvailabilityMessage'];
+                signupUsernameMessage.innerHTML = response['message'];
             }
         };
 
@@ -84,9 +84,9 @@ function proceedSignup() {
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && (this.status === 200 || this.status === 403)) {
-            var signupResponse = JSON.parse(xhr.responseText);
+            var response = JSON.parse(xhr.responseText);
 
-            document.getElementById('signup-message').innerHTML = signupResponse['signupMessage'];
+            document.getElementById('signup-message').innerHTML = response['message'];
         }
     };
 
