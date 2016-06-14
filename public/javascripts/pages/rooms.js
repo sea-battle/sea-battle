@@ -22,8 +22,8 @@ function addRoom(roomName) {
     rooms.appendChild(newLi);
 }
 
-socket.on('joinRoom', function (name) {
-    window.location.href = '/wait';
+socket.on('rooms-join', function () {
+    //ajax.get('/wait', handlers);
 });
 
 
@@ -39,8 +39,8 @@ createRoomButton.addEventListener('click', function (e) {
     }
 });
 
-socket.emit('getRooms');
-socket.on('updateRooms', function (rooms) {
+socket.emit('rooms-get');
+socket.on('rooms-update', function (rooms) {
     //TODO Do not remove all but check if room doesn't exist to add
     roomsContainer.removeChildren();
     rooms.forEach(function (room) {
