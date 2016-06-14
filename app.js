@@ -91,7 +91,8 @@ io.sockets.on('connection', function (socket) {
         game.roomsName.push(roomName);
         game.rooms[roomName] = {
             timer: game.defaultPlacementTime,
-            timerId: null
+            timerId: null,
+            chat = []
         };
         socket.room = roomName;
         socket.join(roomName);
@@ -159,8 +160,16 @@ io.sockets.on('connection', function (socket) {
     
     // CHAT
     socket.on('chat-is-writing', function (){
-        io.sockets.
-    })
+        socket.broadcast.emit('is-writing', socket.name);
+    });
+    
+    socket.on('chat-player-message', function (message){
+        game.rooms[socket.room].chat.push({
+            sender: socket.name,
+            message: message
+        });
+        socket.broadcast.emit('receive-message', socket.name, message);
+    });
 });
 
 server.listen(3000);
