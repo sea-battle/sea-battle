@@ -15,11 +15,12 @@ function addRoom(roomName) {
     var leftDiv = document.createElement('div');
     var rightDiv = document.createElement('div');
 
-    p.innerHTML = roomName;
+    p.innerHTML = roomName + '<span class="players-count"></span>';
     buttonJoin.innerHTML = 'Rejoindre';
     buttonJoin.setAttribute('data-room', roomName);
     buttonJoin.addEventListener('click', joinHandler);
     leftDiv.appendChild(p);
+    leftDiv.className = 'room-name';
     rightDiv.appendChild(buttonJoin);
 
     newLi.appendChild(leftDiv);

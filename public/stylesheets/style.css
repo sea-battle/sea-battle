@@ -50,6 +50,10 @@ h3 {
 	margin-top: 0;
 }
 
+h2 {
+	font-size: 1.1em;
+}
+
 p {
 	margin: 0;
 }
@@ -289,10 +293,6 @@ header {
 /* Manage account
 ========================================================================== */
 
-.manage-account h2 {
-	font-size: 1.1em;
-}
-
 .manage-account form {
 	margin-bottom: 1.5em;
 }
@@ -336,53 +336,55 @@ header {
 		width: 20%;
 	}
 
-/* Rooms & Wait
-========================================================================== */
-
-.rooms .game-ranking,
-.wait .game-ranking {
-	display: none;
-}
-
-.rooms .info,
-.wait .info,
-.rooms .switching-content,
-.wait .switching-content {
-	height: auto;
-}
-
 /* Rooms
 ========================================================================== */
 
-.rooms .switching-content {
-	width: 100%;
+.rooms {
+	text-align: center;
 }
 
-	.rooms .player-info {
-		height: auto;
-		display: block;
-		text-align: center;
+.rooms .player-info {
+	height: auto;
+	display: block;
+	text-align: center;
+}
+
+	.rooms .socials,
+	.rooms .options {
+		width: 300px;
 	}
 
-		.rooms .socials,
-		.rooms .options {
-			width: 300px;
+	.rooms .player {
+		margin: 0;
+		width: auto;
+	}
+
+		.rooms .player-info p {
+			display: inline-block;
+			vertical-align: middle;
 		}
 
-		.rooms .player {
-			margin: 0;
-			width: auto;
-		}
-
-			.rooms .player-info p {
+			.rooms .player-info a {
 				display: inline-block;
-				vertical-align: middle;
+				margin: 0 .5em;
 			}
 
-				.rooms .player-info a {
-					display: inline-block;
-					margin: 0 .5em;
-				}
+.rooms input,
+.rooms button {
+	display: inline-block;
+}
+
+.rooms-list div {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.room-name {
+	width: 80%;
+	background-color: #fff;
+	height: 2.5em;
+	line-height: 2.5em;
+}
 
 /* Wait
 ========================================================================== */
@@ -407,11 +409,6 @@ header {
     background-color: #666;
 }
 
-/* #canvas-wrapper{
-    width: 60%;
-    height: 80%;
-    padding: 50px 50px;
-} */
 
 .placed {
     
@@ -633,8 +630,7 @@ footer {
 
 @media screen and (min-width: 87.5em),
 screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
-	.content.game,
-    .switching-content {
+	.content.game {
 		width: 100%;
 		max-width: 100%;
 		position: absolute;
