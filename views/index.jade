@@ -17,10 +17,10 @@ block content
 					p GIF animé montrant les classements et statistiques
 
 			h2 Jouer
-			form#signin(action="/signin" method="post")
+			form#signin
 				p#signin-message
-				input#signin-email(type='text', name="signin_email", placeholder='Email', value="john.doe@mail.com")
-				input#signin-password(type='password', name="signin_password", placeholder='Mot de passe', value="johndoe")
+				input#signin-email(type='text', name='username', placeholder='Pseudonyme', value='johndoe')
+				input#signin-password(type='password', name='password', placeholder='Mot de passe', value='johndoe')
 				button#signin-submit.button-effect(type='submit') Connexion
 
 			a.link-effect(href="/signup", title="Vers la page de création de compte") Pas de compte ?

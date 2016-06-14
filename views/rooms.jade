@@ -26,14 +26,25 @@ block content
 
     section#switching-content.switching-content
         include inc/header.jade
-        include inc/player-info.jade
-        input#room-name(type='text', placeholder='Nom de la partie') 
-        button#create-room Créer une partie
-    
-        ul#rooms
+
+        section.content 
+            include inc/player-info.jade
+
+            h1 Salles de jeu
+
+            h2 Créez votre propre salle
+            form
+                input#room-name(type='text', placeholder='Nom de la salle') 
+                button#create-room Créer une salle
+        
+            h2 Rejoignez une salle
+
+            p x salles disponibles
+            ul#rooms.rooms-list
 
     script(src='/socket.io/socket.io.js')
     script(src='/javascripts/prototype.js')
     script(src='/javascripts/ajax.js')
     script(src='/javascripts/navigation.js')
     script(src='/javascripts/pages/rooms.js')
+    script(src='/javascripts/chat.js')
