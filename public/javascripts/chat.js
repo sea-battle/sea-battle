@@ -11,6 +11,21 @@ function sendMessage() {
     }
 }
 
+function getActiveChatTabFilter() {
+    var tabs = document.getElementsByClassName('filters');
+    var activeTabFilter;
+    var found = false;
+    var i = 0;
+    while (i < tabs.length && !found) {
+        if (tabs[i].getAttribute('data-active') == 'true') {
+            activeTabFilter = tabs[i].id;
+            found = true;
+        }
+    }
+
+    return activeTabFilter;
+};
+
 sendButton.addEventListener('click', function (e) {
     sendMessage();
 });
@@ -19,9 +34,11 @@ for (var i = 0; i < filters.length; i++) {
     filters[i].addEventListener('click', function (e) {
         for (var i = 0; i < filters.length; i++) {
             filters[i].setAttribute('data-active', 'false');
+            filters[i].removeClass('active');
         }
-        
+
         this.setAttribute('data-active', 'true');
+        this.addClass('active');
         socket.emit('chat-filter', this.id);
     });
 }
@@ -50,7 +67,9 @@ socket.on('chat-filter', function (messages) {
         var from = message.sender,
             mess = message.message,
             time = message.time;
-            
+
         addMessage(from, mess, time);
     });
 });
+
+console.log(getActiveChatTabFilter());
