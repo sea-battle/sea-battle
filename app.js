@@ -120,13 +120,14 @@ io.sockets.on('connection', function (socket) {
         var from = 'System';
         var message = socket.name + ' join the game.';
         var time = game.getMessageTime();
+        var filter = 'game-messages';
         game.rooms[socket.room].chat.push({
-            filter: 'game-messages',
+            filter: filter,
             sender: from,
             message: message,
             time: time
         });
-        socket.broadcast.emit('receive-message', from, message, time);
+        socket.broadcast.emit('receive-message', from, message, time, filter);
     });
 
     // Stage 2: wait
@@ -185,14 +186,15 @@ io.sockets.on('connection', function (socket) {
     });
     socket.on('chat-player-message', function (message) {
         var time = game.getMessageTime();
+        var filter = 'players-messages';
         game.rooms[socket.room].chat.push({
-            filter: 'players-messages',
+            filter: filter,
             sender: socket.name,
             message: message,
             time: time
         });
 
-        io.sockets.emit('receive-message', socket.name, message, time);
+        io.sockets.emit('receive-message', socket.name, message, time, filter);
     });
     socket.on('chat-filter', function (filter){
         var messages = game.getMessagesFrom(socket.room, filter);
@@ -211,4 +213,4 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-server.listen(3000);
+server.listen(3000, '0.0.0.0');
