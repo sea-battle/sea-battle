@@ -57,8 +57,14 @@ function addMessage(from, message, time) {
     messagesContainer.appendChild(p);
 }
 
-socket.on('receive-message', function (playerName, message, time) {
-    addMessage(playerName, message, time);
+socket.on('receive-message', function (playerName, message, time, filter) {
+    var activeTabFilter = getActiveChatTabFilter();
+    if (activeTabFilter == filter ||
+        activeTabFilter == 'all-messages') {
+        addMessage(playerName, message, time);
+    } else {
+        console.log('obj');
+    }
 });
 
 socket.on('chat-filter', function (messages) {
@@ -71,5 +77,3 @@ socket.on('chat-filter', function (messages) {
         addMessage(from, mess, time);
     });
 });
-
-console.log(getActiveChatTabFilter());
