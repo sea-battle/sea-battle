@@ -306,7 +306,6 @@ header {
 ========================================================================== */
 
 .chat {
-	max-width: 350px;
 	background-color: purple;
 }
 
@@ -314,15 +313,12 @@ header {
 		display: inline-block;
 		width: 33.3%;
 		text-align: center;
+		font-size: 1.3em;
 		background-color: orange;
 	}
 
 	.chat li:hover {
 		background-color: yellow;
-	}
-
-	.chat .messages {
-		min-height: 150px;
 	}
 
 	.chat input,
@@ -337,14 +333,16 @@ header {
 		width: 20%;
 	}
 
-/* Rooms
+/* Rooms & wait pages
 ========================================================================== */
 
-.rooms {
+.rooms,
+.wait {
 	text-align: center;
 }
 
-.rooms .player-info {
+.rooms .player-info,
+.wait .player-info {
 	height: auto;
 	display: block;
 	text-align: center;
@@ -352,74 +350,109 @@ header {
 }
 
 	.rooms .socials,
-	.rooms .options {
+	.rooms .options,
+	.wait .socials,
+	.wait .options {
 		width: 300px;
 	}
 
-	.rooms .player {
+	.rooms .player,
+	.wait .player {
 		margin: 0;
 		width: auto;
 	}
 
-		.rooms .player-info p {
+		.rooms .player-info p,
+		.wait .player-info p {
 			display: inline-block;
 			vertical-align: middle;
 		}
 
-			.rooms .player-info a {
+			.rooms .player-info a,
+			.wait .player-info a {
 				display: inline-block;
 				margin: 0 .5em;
 			}
+
+	.rooms button,
+	.wait button {
+		margin-left: .3em; 
+		display: inline-block;
+	}
+
+	.rooms-list button,
+	.players-list button {
+		padding: 1.4em 1.3em;
+	}
+
+	.rooms-list div,
+	.players-list div {
+		display: inline-block;
+		vertical-align: top;
+	}
+
+	.room-info,
+	.players-list div {
+		background-color: #fff;
+		width: 80%;
+	}
+
+		.room-info p,
+		.players-list p {
+			display: inline-block;
+			width: 50%;
+			vertical-align: middle;
+			padding: 0 2em;
+		}
+
+		.room-name,
+		.players-list .player-username {
+			text-align: left;
+			font-size: 2.5em;
+		}
+
+/* Rooms page
+========================================================================== */
 
 .rooms input,
 .rooms button {
 	display: inline-block;
 }
 
-.rooms button {
-	margin-left: .3em; 
-}
-
 .rooms-count {
 	margin-bottom: 1em;
 }
 
-.rooms-list button {
-	padding: 1.4em 1.3em;
+.players-count {
+	text-align: right;
+	font-size: 1.5em;
+	line-height: 2.5em;
 }
 
-.rooms-list div {
-	display: inline-block;
-	vertical-align: top;
-}
-
-.room-info {
-	width: 80%;
-	background-color: #fff;
-}
-
-	.room-info p {
-		display: inline-block;
-		width: 50%;
-		vertical-align: top;
-		padding: 0 2em;
-	}
-
-	.room-name {
-		text-align: left;
-		font-size: 2.5em;
-	}
-
-	.players-count {
-		text-align: right;
-		font-size: 1.5em;
-		line-height: 2.5em;
-	}
-
-/* Wait
+/* Wait page
 ========================================================================== */
 
+.wait .content {
+	width: 75%;
+}
 
+	.wait aside {
+		padding: 1.5em;
+		padding-right: 0;
+	}
+
+	.wait .chat {
+		margin-top: 1.5em;
+	}
+
+		.wait .messages {
+			min-height: 350px;
+		}
+
+	.players-total {
+		font-size: 1.5em;
+		margin-bottom: 1.5em;
+	}
 
 /* Game
 ========================================================================== */
@@ -459,12 +492,14 @@ header {
 	position: relative;
 	width: 25%;
 	background-color: blue;
-	max-width: 350px;
 	text-align: center;
 }
 
+.game .info {
+	max-width: 350px;
+}
+
 	.info section {
-		padding: 1em .5em;
 		overflow: hidden;
 	}
 
@@ -472,6 +507,7 @@ header {
 
 .player-info {
 	height: 26%;
+	padding: 1em .5em;
 	/* background-color: green; */
 	display: -webkit-flex;
 	display: -ms-flexbox;
@@ -578,74 +614,7 @@ header {
 /* Overlays
 ========================================================================== */
 
-.rankings-overlay h2,
-.stats-overlay h2 {
-	margin: 0;
-	padding: 1em 0;
-	color: #fff;
-	font-size: 1.4em;
-	background-image: linear-gradient(0deg, #5dd39e, #bce784);
-}
-
-/* Rankings overlay
-========================================================================== */
-
-.close-rankings {
-	position: absolute;
-	top: 2%;
-	right: 2%;
-}
-
-.rankings-overlay {
-	display: none;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background: rgba(255, 255, 255, 0.9);
-	z-index: 20;
-	text-align: center;
-}
-
-	.rankings-tabs li {
-		display: inline-block;
-		width: 50%;
-		background-color: #525174;
-		font-size: 1.5em;
-		height: 2em;
-		line-height: 2em;
-		color: #fff;
-		transition: background-color .5s;
-	}
-
-	.rankings-tabs li:hover {
-		background-color: #513b56;
-		transition: background-color .5s;
-	}
-
-	.ranking table {
-		width: 100%;
-		font-size: 1.2em;
-	}
-
-		.ranking tr:nth-child(odd) {
-			background-color: lightgrey;
-		}
-
-		.ranking td {
-			word-wrap: break-word;
-		}
-
-/* Stats overlay
-========================================================================== */
-
-.close-rankings {
-	position: absolute;
-	top: 2%;
-	right: 2%;
-}
-
+.rankings-overlay,
 .stats-overlay {
 	display: none;
 	width: 100%;
@@ -658,18 +627,76 @@ header {
 	text-align: center;
 }
 
+	.close-rankings,
+	.close-stats {
+		position: absolute;
+		top: .6em;
+		right: .6em;
+	}
+
+	.rankings-overlay h2,
+	.stats-overlay h2 {
+		margin: 0;
+		padding: 1em 0;
+		color: #fff;
+		font-size: 1.4em;
+		background-image: linear-gradient(0deg, #5dd39e, #bce784);
+	}
+
+	.rankings-tabs li ,
 	.stats-tabs li {
 		display: inline-block;
-		width: 33.3%;
-		background: #bce784;
+		background-color: #348aa7;
 		font-size: 1.5em;
 		height: 2em;
 		line-height: 2em;
+		color: #fff;
+		transition: background-color .5s;
 	}
-	
+
+	.rankings-tabs li:hover,
 	.stats-tabs li:hover {
-		background-color: #5dd39e;
+		background-color: #513b56;
+		transition: background-color .5s;
 	}
+
+	.rankings-tabs li.active,
+	.stats-tabs li.active {
+
+	}
+
+/* Rankings overlay
+========================================================================== */
+
+.rankings-tabs li {
+	width: 50%;
+}
+
+.ranking table {
+	width: 100%;
+	font-size: 1.2em;
+	max-width: 75em;
+	margin: auto;
+}
+
+	.ranking tr:nth-child(odd) {
+		background-color: lightgrey;
+	}
+
+	.ranking td {
+		word-wrap: break-word;
+	}
+
+	.player-rank {
+
+	}
+
+/* Stats overlay
+========================================================================== */
+
+.stats-tabs li {
+	width: 33.3%;
+}
 
 /* Footer
 ========================================================================== */
@@ -751,13 +778,38 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 }
 
 @media screen and (max-width: 50em) { /* < 800px */
-	.rooms .player-info p {
+	.rooms .player-info p,
+	.wait .player-info p {
 		display: block;
 	}
 
-		.rooms .player-info a {
+		.rooms .player-info a,
+		.wait .player-info a {
 			margin: .5em;
 		}
+
+		.rooms .socials,
+		.rooms .options,
+		.wait .socials,
+		.wait .options {
+			width: auto;
+		}
+
+	.players-list div {
+		width: 100%;
+	}
+
+		.room-info p,
+		.players-list p {
+		    display: block;
+		    width: 100%;
+		    padding: 0 .5em;
+		    text-align: center;
+	   }
+
+	   .players-list .player-username {
+	   		text-align: center;
+	   }
 }
 
 @media screen and (max-width: 40.625em),
@@ -803,13 +855,6 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 	input {
 		width: 100%;
 	}
-
-	.room-info p {
-	    display: block;
-	    width: 100%;
-	    padding: 0 .5em;
-	    text-align: center;
-   }
 }
 
 .expanded {

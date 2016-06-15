@@ -8,7 +8,7 @@ block styles
 block content
 
     section#rankings-overlay.rankings-overlay
-        span#close-rankings.close-rankings.fa.fa-times(aria-hidden="true")
+        span#close-rankings.close-rankings.fa.fa-times.fa-2x(aria-hidden="true")
         h2 Classements
         ul.rankings-tabs
             li#general-ranking-tab Général
@@ -16,7 +16,7 @@ block content
         include inc/ranking.jade
 
     section#stats-overlay.stats-overlay
-        span#close-stats.close-stats.fa.fa-times(aria-hidden="true")
+        span#close-stats.close-stats.fa.fa-times.fa-2x(aria-hidden="true")
         h2 Statistiques
         ul.stats-tabs
             li#general-stats-tab Général
@@ -27,7 +27,7 @@ block content
     section#switching-content.switching-content
         include inc/header.jade
 
-        section.content 
+        section.content
             include inc/player-info.jade
 
             h1 Salles de jeu
@@ -38,7 +38,7 @@ block content
         
             h2 Rejoignez une salle
 
-            p.rooms-count x salles disponibles
+            p.rooms-count x salles disponibles (Sinon "Pas de salle disponible")
             ul#rooms.rooms-list
 
     script(src='/socket.io/socket.io.js')
