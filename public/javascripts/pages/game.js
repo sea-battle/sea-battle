@@ -197,6 +197,7 @@ socket.on('game-check-grid', function () {
 	socket.emit('game-set-ready', grid.cells);
     
     //TODO add new canvas gameHandlers
+    canvas.addEventListener('click', gameHandlers.battleStage.click);
 });
 socket.on('game-init-players-grids', function (players) {
 	players.forEach(function (player) {

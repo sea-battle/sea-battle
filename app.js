@@ -51,7 +51,7 @@ app.get('/signup', function (req, res) {
 });
 app.get('/wait', function (req, res) {
     var fn = jade.compileFile(__dirname + '/views/wait.jade');
-    var html = fn(/* Variables */);
+    var html = fn( /* Variables */ );
     return res.json({
         bodyClass: 'wait',
         html: html,
@@ -128,6 +128,7 @@ io.sockets.on('connection', function (socket) {
             time: time
         });
         socket.broadcast.emit('receive-message', from, message, time, filter);
+        socket.broadcast.emit('room-update', socket.name);
     });
 
     // Stage 2: wait
@@ -193,16 +194,26 @@ io.sockets.on('connection', function (socket) {
             message: message,
             time: time
         });
-
         io.sockets.emit('receive-message', socket.name, message, time, filter);
     });
-    socket.on('chat-filter', function (filter){
+    socket.on('chat-filter', function (filter) {
         var messages = game.getMessagesFrom(socket.room, filter);
         socket.emit('chat-filter', messages);
     });
 
     socket.on('disconnect', function () {
         if (socket.room != '') {
+            var from = 'System';
+            var message = socket.name + ' left the game.';
+            var time = game.getMessageTime();
+            var filter = 'game-messages';
+            game.rooms[socket.room].chat.push({
+                filter: filter,
+                sender: from,
+                message: message,
+                time: time
+            });
+            socket.broadcast.emit('receive-message', from, message, time, filter);
             socket.leave(socket.room);
             game.rooms[socket.room].playerCount--;
             if (game.rooms[socket.room].playerCount == 0) {
