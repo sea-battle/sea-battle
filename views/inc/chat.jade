@@ -9,20 +9,6 @@ section.chat
 			li#players-messages.filters(data-active='false') Joueurs
 				span#new-messages-count(data-count="0")
 		div#messages.messages
-		input#player-message(type="text", name="message", placeholder="Votre message")
-		button#send-message(type="button") Envoyer
-
-script.
-	var chat = document.getElementById('chat');
-	var chatToggle = document.getElementById('chat-toggle');
-	var openedClass = 'opened';
-
-	chatToggle.addEventListener('click', function(e) {
-		if (chatToggle.hasClass(openedClass)) {
-			chatToggle.removeClass(openedClass);
-			chat.removeClass(openedClass);
-		} else {
-			chatToggle.addClass(openedClass);
-			chat.addClass(openedClass);
-		}
-	});
+		div.send-container
+			input#player-message(type="text", name="message", placeholder="Votre message")
+			button#send-message(type="button") Envoyer
