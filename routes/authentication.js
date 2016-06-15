@@ -159,7 +159,9 @@ router.post('/edit-username', function(req, res) {
 });
 
 router.post('/delete-user', function (req, res, next) {
-    User.remove({ username: req.session.user.username }, function (err, response) {
+    User.remove({
+        username: req.session.user.username
+    }, function (err, response) {
         if (err) {
             return next(err);
         }
