@@ -1,11 +1,11 @@
 var app = require('express')(),
     bodyParser = require('body-parser'),
-	express = require('express'),
+    express = require('express'),
     io = require('socket.io').listen(server),
     jade = require('jade'),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
-	server = require('http').createServer(app);
+    server = require('http').createServer(app);
 
 var config = require('./config'),
     game = require('./game');
