@@ -306,31 +306,33 @@ header {
 ========================================================================== */
 
 .chat {
-	background-color: purple;
+	background-color: #E1E1E1;
 }
+
+	.chat-toggle {
+		display: none;
+		position: absolute;
+		z-index: 10;
+	}
 
 	.chat li {
 		display: inline-block;
 		width: 33.3%;
 		text-align: center;
 		font-size: 1.3em;
-		background-color: orange;
+		background-color: #5DD39E;
+		height: 3.125em;
+		line-height: 3.125em;
+		color: #F3F3F3;
 	}
 
 	.chat li:hover {
-		background-color: yellow;
+		background-color: #348AA7;
 	}
 
-	.chat input,
-	.chat button {
-		display: inline-block;
-	}
 	.chat input {
-		width: 80%;
-	}
-
-	.chat button {
-		width: 20%;
+		width: 90%;
+		margin-bottom: .5em;
 	}
 
 /* Rooms & wait pages
@@ -353,7 +355,7 @@ header {
 	.rooms .options,
 	.wait .socials,
 	.wait .options {
-		width: 300px;
+		width: 250px;
 	}
 
 	.rooms .player,
@@ -375,7 +377,7 @@ header {
 			}
 
 	.rooms button,
-	.wait button {
+	.players-list button {
 		margin-left: .3em; 
 		display: inline-block;
 	}
@@ -437,8 +439,7 @@ header {
 }
 
 	.wait aside {
-		padding: 1.5em;
-		padding-right: 0;
+		padding: 1.5em 0;
 	}
 
 	.wait .chat {
@@ -446,7 +447,7 @@ header {
 	}
 
 		.wait .messages {
-			min-height: 350px;
+			min-height: 300px;
 		}
 
 	.players-total {
@@ -489,9 +490,7 @@ header {
 }
 
 .info {
-	position: relative;
 	width: 25%;
-	background-color: blue;
 	text-align: center;
 }
 
@@ -753,6 +752,10 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 			max-width: 350px;
 			margin: auto;
 		}
+
+	.wait .content {
+		width: 100%;
+	}
 }
 
 @media screen and (max-height: 47.95em) { /* < 768px height */
@@ -797,6 +800,7 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 
 	.players-list div {
 		width: 100%;
+		margin-bottom: .5em;
 	}
 
 		.room-info p,
