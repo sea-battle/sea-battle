@@ -70,6 +70,12 @@ button {
 	padding: .7em 1.3em;
 }
 
+.toggle {
+	border: none;
+	padding: 0;
+	background-color: transparent;
+}
+
 /* Forms */
 
 input {
@@ -213,7 +219,7 @@ a {
 			height: 2em;
 		}
 
-.info,
+.wait .chat,
 .content.wait,
 .content.game {
     display: inline-block;
@@ -313,6 +319,12 @@ header {
 		display: none;
 		position: absolute;
 		z-index: 10;
+		top: 15em;
+		right: 1.4em;
+	}
+
+	.chat-toggle .close {
+		display: none;
 	}
 
 	.chat li {
@@ -326,7 +338,8 @@ header {
 		color: #F3F3F3;
 	}
 
-	.chat li:hover {
+	.chat li:hover,
+	.chat li.active {
 		background-color: #348AA7;
 	}
 
@@ -438,12 +451,8 @@ header {
 	width: 75%;
 }
 
-	.wait aside {
-		padding: 1.5em 0;
-	}
-
 	.wait .chat {
-		margin-top: 1.5em;
+		margin-top: 3em;
 	}
 
 		.wait .messages {
@@ -489,6 +498,7 @@ header {
 	z-index: 10;
 }
 
+.wait .chat,
 .info {
 	width: 25%;
 	text-align: center;
@@ -755,6 +765,43 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 
 	.wait .content {
 		width: 100%;
+	}
+
+	.wait .chat {
+		display: none;
+		width: 100%;
+	}
+
+	.chat {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 5;
+	}
+
+	.wait .chat {
+		margin: 0;
+	}
+
+	.chat-toggle {
+		display: block;
+	}
+
+	.chat-toggle.opened {
+		top: 5.4em;
+	}
+
+		.chat-toggle.opened .open {
+			display: none;
+		}
+
+		.chat-toggle.opened .close {
+			display: block;
+		}
+
+	.chat.opened {
+		display: block;
 	}
 }
 
