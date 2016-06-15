@@ -28,7 +28,6 @@ var ajax = {
             if (this.readyState === 4) {
                 if (this.status >= 200 && this.status < 400) {
                     var data = JSON.parse(this.responseText);
-                    console.log(data);
                     handlers.onComplete(data);
                 } else {
                     //TODO

@@ -52,9 +52,7 @@ app.get('/signup', function (req, res) {
 app.post('/wait', function (req, res) {
     console.log(req.body);
     var fn = jade.compileFile(__dirname + '/views/wait.jade');
-    var html = fn({
-        name: req.body.name
-    });
+    var html = fn(req.body);
     return res.json({
         bodyClass: 'wait',
         html: html,
@@ -132,7 +130,7 @@ io.sockets.on('connection', function (socket) {
         });
         socket.broadcast.emit('receive-message', from, message, time, filter);
         var playersName = game.getPlayersNames(io.sockets, socket.room);
-        //io.sockets.broadcast.emit('room-update-players', playersName);
+        io.sockets.broadcast.emit('room-update-players', playersName);
     });
 
     // Stage 2: wait

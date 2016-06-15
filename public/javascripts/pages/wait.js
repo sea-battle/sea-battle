@@ -2,6 +2,7 @@ var playerIsReady = false;
 var setReadyButton = document.getElementById('set-ready');
 var readyStatus = document.getElementById('ready-status');
 var playersList = document.getElementById('players-list');
+var playerUsername = document.getElementById('player-username');
 
 setReadyButton.addEventListener('click', function (e) {
     playerIsReady = !playerIsReady;
@@ -19,8 +20,8 @@ socket.on('wait-start-game', function () {
 });
 
 socket.on('room-update-players', function (playersName) {
-    console.log(socket);
-    var indexToRemove = playersName.indexOf(socket.name);
+    var indexToRemove = playersName.indexOf(playerUsername.innerHTML);
+    console.log(indexToRemove);
     playersName.splice(indexToRemove, 1);
 
     var otherPlayersRow = document.getElementsByClassName('other-player');
