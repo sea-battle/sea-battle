@@ -193,7 +193,6 @@ io.sockets.on('connection', function (socket) {
             message: message,
             time: time
         });
-
         io.sockets.emit('receive-message', socket.name, message, time, filter);
     });
     socket.on('chat-filter', function (filter){

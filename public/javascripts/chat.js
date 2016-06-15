@@ -2,6 +2,7 @@ var sendButton = document.getElementById('send-message');
 var playerMessage = document.getElementById('player-message');
 var messagesContainer = document.getElementById('messages');
 var filters = document.getElementsByClassName('filters');
+var newMessagesCount = document.getElementById('new-messages-count');
 
 function sendMessage() {
     var message = playerMessage.value;
@@ -21,6 +22,7 @@ function getActiveChatTabFilter() {
             activeTabFilter = tabs[i].id;
             found = true;
         }
+        i++;
     }
 
     return activeTabFilter;
@@ -39,6 +41,12 @@ for (var i = 0; i < filters.length; i++) {
 
         this.setAttribute('data-active', 'true');
         this.addClass('active');
+        if (this.id == 'all-messages' ||
+            this.id == 'players-messages') {
+            newMessagesCount.setAttribute('data-count', '0');
+            newMessagesCount.innerHTML = '';
+        }
+
         socket.emit('chat-filter', this.id);
     });
 }
@@ -63,7 +71,10 @@ socket.on('receive-message', function (playerName, message, time, filter) {
         activeTabFilter == 'all-messages') {
         addMessage(playerName, message, time);
     } else {
-        console.log('obj');
+        var count = parseInt(newMessagesCount.getAttribute('data-count'));
+        count++;
+        newMessagesCount.setAttribute('data-count', count);
+        newMessagesCount.innerHTML = count;
     }
 });
 

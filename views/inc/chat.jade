@@ -5,6 +5,7 @@ section.chat
             li#all-messages.filters.active(data-active='true') Tout
             li#game-messages.filters(data-active='false') Jeu
             li#players-messages.filters(data-active='false') Joueurs
+                span#new-messages-count(data-count="0")
     div#messages.messages
     input#player-message(type="text", name="message", placeholder="Votre message")
     button#send-message(type="button") Envoyer
