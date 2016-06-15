@@ -803,6 +803,12 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 	.chat.opened {
 		display: block;
 	}
+
+	.send-container {
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+	}
 }
 
 @media screen and (max-height: 47.95em) { /* < 768px height */
