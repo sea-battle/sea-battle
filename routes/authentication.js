@@ -1,7 +1,8 @@
 var cookieParser = require('cookie-parser');
 var express = require('express');
 var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
+    LocalStrategy = require('passport-local').Strategy,
+    passportLocalMongoose = require('passport-local-mongoose');
 var session = require('express-session');
 
 var User = require('../models/user');
@@ -22,6 +23,7 @@ passport.deserializeUser(function (id, done) {
     });
 });
 
+// Passport: set strategy
 passport.use(new LocalStrategy(User.authenticate()));
 
 // Sessions settings
@@ -41,16 +43,14 @@ router.use(passport.session());
 
 // Routes: method POST
 router.post('/check-username-availability', function (req, res) {
-    User.findOne({
-        username: req.body.username
-    }, function (err, user) {
+    User.findOne({ username: req.body.username }, function (err, user) {
         if (user) {
-            return res.json({
+            res.json({
                 success: false,
                 message: 'Ce pseudonyme est déjà utlisé'
             });
         } else {
-            return res.json({
+            res.json({
                 success: true,
                 message: 'Ce pseudonyme est disponible'
             });
@@ -66,14 +66,14 @@ router.post('/signup', function (req, res) {
         }),
         req.body.password, function (err, user) {
             if (err) {
-                return res.status(403).send({
+                res.status(403).json({
                     success: false,
                     message: 'Une erreur est survenue lors de l\'inscription'
                 });
             }
 
             passport.authenticate('local')(req, res, function () {
-                return res.status(200).send({
+                res.status(200).json({
                     success: true,
                     message: 'Un e-mail de confirmation vous a été envoyé'
                 });
@@ -82,95 +82,77 @@ router.post('/signup', function (req, res) {
     );
 });
 
-router.post('/signin', function (req, res, next) {
-    passport.authenticate('local', function (err, user, info) {
-        if (err) {
-            return next(err);
-        }
-
-        if (!user) {
-            return res.status(401).send({
-                success: false,
-                message: 'Le pseudonyme ou le mot de passe est incorrect'
-            });
-        }
-
-        req.login(user, function (err) {
-            if (err) {
-                return next(err);
-            }
-
-            // Initialize session
-            req.session.user = user;
-
-            return res.status(200).send({
-                success: true
-            });
-        });
-    })(req, res, next);
+router.post('/signin', passport.authenticate('local'), function (req, res) {
+    res.send(req.user)
 });
 
-router.post('/edit-email', function(req, res) {
-    User.update({
-        email: req.session.user.email
-    }, {
-        email: req.body.email
-    }, function(err, response) {
+router.post('/edit-email', function (req, res) {
+    User.update({ _id: req.user._id }, { email: req.body.email }, function (err, response) {
         if (err) {
-            return res.status(500).send({
+            res.status(500).json({
                 success: false,
                 message: 'L\'adresse e-mail n\'a pas pu être changé'
             });
         }
 
-        // Persist session after updating user data
-        req.logIn(req.session.user, function (err) {
-        })
-
-        return res.status(200).send({
+        res.status(200).json({
             success: true,
             message: 'L\'adresse e-mail a été changé avec succès'
         });
     });
 });
 
-router.post('/edit-username', function(req, res) {
-    User.update({
-        username: req.session.user.username
-    }, {
-        username: req.body.username
-    }, function(err, response) {
+router.post('/edit-username', function (req, res) {
+    User.update({ _id: req.user._id }, { username: req.body.username }, function (err, response) {
         if (err) {
-            return res.status(500).send({
+            res.status(500).json({
                 success: false,
                 message: 'Le pseudonyme n\'a pas pu être changé'
             });
         }
 
-        // Persist session after updating user data
-        req.logIn(req.session.user, function (err) {
-        })
-
-        return res.status(200).send({
+        res.status(200).json({
             success: true,
             message: 'Le pseudonyme a été changé avec succès'
         });
     });
 });
 
+router.post('/edit-password', function (req, res, next) {
+    // Find a user with an identifier matching the one stored in the session
+    User.findById(req.user._id, function (err, user) {
+        if (err) {
+            next(err);
+        }
+        // Test authentication with found user and password from form
+        user.authenticate(req.body.oldPassword, function (err, user) {
+            if (err) {
+                res.status(401).json({
+                    message: 'Le mot de passe actuel est erroné'
+                });
+            }
+
+            // Replace current password with new password
+            user.setPassword(req.body.password, function () {
+                user.save();
+                res.status(200).json({
+                    message: 'Le mot de passe a été changé avec succès'
+                });
+            });
+        });
+    });
+});
+
 router.post('/delete-user', function (req, res, next) {
-    User.remove({
-        username: req.session.user.username
-    }, function (err, response) {
+    User.remove({ _id: req.user._id }, function (err, response) {
         if (err) {
             return next(err);
         }
 
-        // Destroy session
-        req.session = null;
-
-        // Redirect in case JavaScript is disabled
-        res.redirect('/');
+        // Destroy session and redirect to home page
+        req.session.destroy(function (err) {
+            res.redirect('/');
+        })
     });
 });
 
@@ -205,9 +187,9 @@ router.get('/profile', isAuthenticated, function (req, res) {
 });
 
 router.get('/signout', function (req, res) {
-    req.logout();
-    req.session = null;
-    res.redirect('/');
+    req.session.destroy(function (err) {
+        res.redirect('/');
+    })
 });
 
 module.exports = router;

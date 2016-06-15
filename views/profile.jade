@@ -25,11 +25,9 @@ block content
             h2 Modifiez votre mot de passe
             form
                 input#old-password(type='password', name='old_password', placeholder='Mot de passe actuel')
-                p#current-password-message
                 input#password(type='password', name='password', placeholder='Nouveau mot de passe')
-                p#new-password-message
                 input#password-confirmation(type='password', name='password_confirmation', placeholder='Confirmez le nouveau mot de passe')
-                p#new-password-confirmation-message
+                p#password-message
                 button#password-submit.button-effect(type='submit') Modifier
 
             h2 Supprimez votre compte

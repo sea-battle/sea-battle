@@ -16,16 +16,15 @@ block content
                 li De consulter vos statistiques de jeu,
                 li Et surtout de jouer sans limites !
 
-            form#signup(method="post", action="/signup")
+            form#signup
                 p#signup-message
                 input#email(type='email', name='email' value='john.doe@mail.com', placeholder='E-mail')
                 p#email-message
                 input#username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
                 p#username-message
                 input#password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
-                p#password-message
                 input#password-confirmation(type='password', name='password_confirmation' value="johndoe", placeholder='Confirmez le mot de passe')
-                p#password-confirmation-message
+                p#password-message
                 button#signup-submit.button-effect(type='submit') Créer
 
             div.push

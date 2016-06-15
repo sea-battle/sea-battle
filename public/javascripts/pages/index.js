@@ -14,13 +14,13 @@ function proceedSignin() {
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && (this.status === 200 || this.status === 401)) {
-            var response = JSON.parse(xhr.responseText);
-
-            if (!response['success']) {
-                document.getElementById('signin-message').innerHTML = response['message'];
-            } else {
+        if (xhr.readyState === 4) {
+            if (this.status === 200) {
                 window.location = '/rooms';
+            }
+
+            if (this.status === 401) {
+                document.getElementById('signin-message').innerHTML = 'Le mot de passe ou le pseudonyme est incorrect';
             }
         }
     };

@@ -50,16 +50,15 @@ function checkPassword() {
     'use strict';
 
     var passwordField = document.getElementById('password'),
-        passwordMessage = document.getElementById('password-message'),
         passwordConfirmationField = document.getElementById('password-confirmation'),
-        passwordConfirmationMessage = document.getElementById('password-confirmation-message');
+        passwordMessage = document.getElementById('password-message');
 
     if (passwordField.value !== passwordConfirmationField.value) {
         event.target.classList.add('error');
-        passwordConfirmationMessage.innerHTML = 'Les mots de passe ne correspondent pas';
+        passwordMessage.innerHTML = 'Les mots de passe ne correspondent pas';
     } else {
         event.target.classList.remove('error');
-        passwordConfirmationMessage.innerHTML = '';
+        passwordMessage.innerHTML = '';
     }
 }
 

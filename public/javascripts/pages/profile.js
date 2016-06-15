@@ -26,7 +26,23 @@ function checkUsername() {
 
         xhr.open('POST', '/check-username-availability', true);
         xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify({ username: event.target.value }));
+        xhr.send(JSON.stringify({ username: usernameField.value }));
+    }
+}
+
+function checkPassword() {
+    'use strict';
+
+    var passwordField = document.getElementById('password'),
+        passwordConfirmationField = document.getElementById('password-confirmation'),
+        passwordMessage = document.getElementById('password-message');
+
+    if (passwordField.value !== passwordConfirmationField.value) {
+        event.target.classList.add('error');
+        passwordMessage.innerHTML = 'Les mots de passe ne correspondent pas';
+    } else {
+        event.target.classList.remove('error');
+        passwordMessage.innerHTML = '';
     }
 }
 
@@ -84,6 +100,32 @@ function editUsername() {
     xhr.send(JSON.stringify({ username: usernameField.value }));
 }
 
+function editPassword() {
+    'use strict';
+
+    event.preventDefault();
+
+    var oldPasswordField = document.getElementById('old-password'),
+        passwordField = document.getElementById('password'),
+        passwordMessage = document.getElementById('password-message')
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && (this.status === 200 || this.status === 401)) {
+            var response = JSON.parse(xhr.responseText);
+            passwordMessage.innerHTML = response['message'];
+        }
+    };
+
+    xhr.open('POST', '/edit-password', true);
+    xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+    xhr.send(JSON.stringify({
+        oldPassword: oldPasswordField.value,
+        password: passwordField.value
+    }));
+}
+
 function deleteUser() {
     'use strict';
 
@@ -108,10 +150,16 @@ document.addEventListener('DOMContentLoaded', function () {
     var emailSubmit = document.getElementById('email-submit'),
         usernameField = document.getElementById('username'),
         usernameSubmit = document.getElementById('username-submit'),
+        passwordField = document.getElementById('password'),
+        passwordConfirmationField = document.getElementById('password-confirmation'),
+        passwordSubmit = document.getElementById('password-submit'),
         deleteUserSubmit = document.getElementById('delete-user');
 
     emailSubmit.addEventListener('click', editEmail, false);
     usernameField.addEventListener('keyup', checkUsername, false);
     usernameSubmit.addEventListener('click', editUsername, false);
+    passwordField.addEventListener('keyup', checkPassword, false);
+    passwordConfirmationField.addEventListener('keyup', checkPassword, false);
+    passwordSubmit.addEventListener('click', editPassword, false);
     deleteUserSubmit.addEventListener('click', deleteUser, false);
 }, false);
