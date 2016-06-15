@@ -1,24 +1,36 @@
 var app = require('express')(),
-    express = require('express'),
-    server = require('http').createServer(app),
-    io = require('socket.io').listen(server),
     bodyParser = require('body-parser'),
-    mongoose = require('mongoose'),
-    passport = require('passport'),
+	express = require('express'),
+    io = require('socket.io').listen(server),
     jade = require('jade'),
-    LocalStrategy = require('passport-local').Strategy;
+    mongoose = require('mongoose'),
+    morgan = require('morgan'),
+	server = require('http').createServer(app);
 
-var game = require('./game');
-var config = require('./config');
+var config = require('./config'),
+    game = require('./game');
 
-var routeAuthentication = require('./routes/authentication');
+// Log everything to the console
+app.use(morgan('dev'));
 
+// Get informations from HTML forms. Needs to be loaded before routesAuthentication
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+// Load all routes and middlewares required for authentication
+var routesAuthentication = require('./routes/authentication');
+app.use('/', routesAuthentication);
+
+// Load stylesheets, JavaScript files, images and fonts
 app.use(express.static(__dirname + '/public'));
+
+// Set templating engine
 app.set('view engine', 'jade');
 
-app.use('/', routeAuthentication);
 app.get('/', function (req, res) {
-    //game.roomToJoin = '/tamere';
+    // game.roomToJoin = '';
     res.render(__dirname + '/views/index', {
         bodyClass: 'home'
     });
@@ -40,7 +52,7 @@ app.get('/signup', function (req, res) {
 });
 app.get('/wait', function (req, res) {
     var fn = jade.compileFile(__dirname + '/views/wait.jade');
-    var html = fn( /*Variables*/ );
+    var html = fn(/* Variables */);
     return res.json({
         bodyClass: 'wait',
         html: html,
@@ -71,16 +83,10 @@ app.get('*', function (req, res) {
     });
 });
 
-// passport config
-var User = require('./models/user');
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
 mongoose.connect(config.database.location, config.database.options);
 
 io.sockets.on('connection', function (socket) {
-    // INIT ON CONNECTION
+    // Initialize on connection
     socket.ready = false;
     socket.room = '';
     socket.shootInfos = {
@@ -89,7 +95,7 @@ io.sockets.on('connection', function (socket) {
     };
     socket.name = socket.id;
 
-    // ROOMS STAGE
+    // Stage 1: rooms
     socket.on('rooms-create', function (roomName) {
         game.rooms[roomName] = {
             timer: game.defaultPlacementTime,
@@ -124,7 +130,7 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('receive-message', from, message, time);
     });
 
-    // WAIT STAGE
+    // Stage 2: wait
     socket.on('wait-set-ready', function () {
         socket.ready = true;
         if (game.allPlayersAreReady(io.sockets, socket.room) &&
@@ -147,7 +153,7 @@ io.sockets.on('connection', function (socket) {
         socket.ready = false;
     });
 
-    // GAME STAGE
+    // Stage 3: game
     socket.on('game-set-ready', function (cells) {
         socket.cells = cells;
         socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
@@ -155,7 +161,7 @@ io.sockets.on('connection', function (socket) {
         // Shoot timer
         game.rooms[socket.room].timerId = setInterval(function () {
             if (game.rooms[socket.room].timer == 0) {
-                //game.rooms[socket.room].timer = game.defaultShootTime;
+                // game.rooms[socket.room].timer = game.defaultShootTime;
 
                 game.playShootTurn(io.sockets, socket.room);
                 socket.emit('test', socket.cells);
@@ -174,7 +180,7 @@ io.sockets.on('connection', function (socket) {
         };
     });
 
-    // CHAT
+    // Chat
     socket.on('chat-is-writing', function () {
         socket.broadcast.emit('is-writing', socket.name);
     });
