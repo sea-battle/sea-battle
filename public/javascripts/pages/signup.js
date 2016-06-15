@@ -17,9 +17,10 @@ function checkEmailAddress() {
 function checkUsername() {
     'use strict';
 
-    var signupUsernameMessage = document.getElementById('signup-username-message');
+    var usernameField = document.getElementById('username'),
+        usernameMessage = document.getElementById('username-message');
 
-    if (event.target.value === '') {
+    if (usernameField.value === '') {
         signupUsernameMessage.innerHTML = '';
         return;
     } else {
@@ -27,39 +28,38 @@ function checkUsername() {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && this.status === 200) {
-                var signupUsername = document.getElementById('signup-username'),
-                    response = JSON.parse(xhr.responseText);
+                var response = JSON.parse(xhr.responseText);
 
                 if (!response['success']) {
-                    signupUsername.classList.add('error');
+                    usernameField.classList.add('error');
                 } else {
-                    signupUsername.classList.remove('error');
+                    usernameField.classList.remove('error');
                 }
 
-                signupUsernameMessage.innerHTML = response['message'];
+                usernameMessage.innerHTML = response['message'];
             }
         };
 
         xhr.open('POST', '/check-username-availability', true);
         xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify({ username: event.target.value }));
+        xhr.send(JSON.stringify({ username: usernameField.value }));
     }
 }
 
 function checkPassword() {
     'use strict';
 
-    var signupPassword = document.getElementById('signup-password'),
-        signupPasswordConfirmation = document.getElementById('signup-password-confirmation'),
-        signupPasswordMessage = document.getElementById('signup-password-message'),
-        signupPasswordConfirmationMessage = document.getElementById('signup-password-confirmation-message');
+    var passwordField = document.getElementById('password'),
+        passwordMessage = document.getElementById('password-message'),
+        passwordConfirmationField = document.getElementById('password-confirmation'),
+        passwordConfirmationMessage = document.getElementById('password-confirmation-message');
 
-    if (signupPassword.value === signupPasswordConfirmation.value) {
-        event.target.classList.remove('error');
-        signupPasswordConfirmationMessage.innerHTML = '';
-    } else {
+    if (passwordField.value !== passwordConfirmationField.value) {
         event.target.classList.add('error');
-        signupPasswordConfirmationMessage.innerHTML = 'Les mots de passe ne correspondent pas';
+        passwordConfirmationMessage.innerHTML = 'Les mots de passe ne correspondent pas';
+    } else {
+        event.target.classList.remove('error');
+        passwordConfirmationMessage.innerHTML = '';
     }
 }
 
@@ -70,22 +70,21 @@ function proceedSignup() {
 
     var xhr = new XMLHttpRequest();
 
-    var username = document.getElementById('signup-username').value,
-        email = document.getElementById('signup-email').value,
-        password = document.getElementById('signup-password').value,
-        passwordConfirmation = document.getElementById('signup-password-confirmation').value;
+    var emailField = document.getElementById('email'),
+        usernameField = document.getElementById('username'),
+        passwordField = document.getElementById('password'),
+        passwordConfirmationField = document.getElementById('password-confirmation');
 
     var user = {
-        username: username,
-        email: email,
-        password: password,
-        password_confirmation: passwordConfirmation
+        email: emailField.value,
+        username: usernameField.value,
+        password: passwordField.value,
+        password_confirmation: passwordConfirmationField.value
     }
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && (this.status === 200 || this.status === 403)) {
             var response = JSON.parse(xhr.responseText);
-
             document.getElementById('signup-message').innerHTML = response['message'];
         }
     };
@@ -98,15 +97,15 @@ function proceedSignup() {
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    var signupSubmit = document.getElementById('signup-submit'),
-        signupEmail = document.getElementById('signup-email'),
-        signupUsername = document.getElementById('signup-username'),
-        signupPassword = document.getElementById('signup-password'),
-        signupPasswordConfirmation = document.getElementById('signup-password-confirmation');
+    var emailField = document.getElementById('email'),
+        usernameField = document.getElementById('username'),
+        passwordField = document.getElementById('password'),
+        passwordConfirmationField = document.getElementById('password-confirmation'),
+        signupSubmit = document.getElementById('signup-submit');
 
+    emailField.addEventListener('blur', checkEmailAddress, false);
+    usernameField.addEventListener('keyup', checkUsername, false);
+    passwordField.addEventListener('keyup', checkPassword, false);
+    passwordConfirmationField.addEventListener('keyup', checkPassword, false);
     signupSubmit.addEventListener('click', proceedSignup, false);
-    signupEmail.addEventListener('blur', checkEmailAddress, false);
-    signupUsername.addEventListener('keyup', checkUsername, false);
-    signupPassword.addEventListener('keyup', checkPassword, false);
-    signupPasswordConfirmation.addEventListener('keyup', checkPassword, false);
 }, false);

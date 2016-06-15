@@ -5,7 +5,7 @@ block content
 		include inc/header.jade
 
 		section.content.home
-			p.catch-phrase Jeu 100 gratuit, revivez les sensations épiques de la bataille navale !
+			p.catch-phrase Jeu 100% gratuit, revivez les sensations épiques de la bataille navale !
 
 			section.promotion
 				div
@@ -18,11 +18,11 @@ block content
 			h2 Jouer
 			form#signin
 				p#signin-message
-				input#signin-username(type='text', name='username', placeholder='Pseudonyme', value='johndoe')
-				input#signin-password(type='password', name='password', placeholder='Mot de passe', value='johndoe')
+				input#username(type='text', name='username', placeholder='Pseudonyme', value='johndoe')
+				input#password(type='password', name='password', placeholder='Mot de passe', value='johndoe')
 				button#signin-submit.button-effect(type='submit') Connexion
 
-			a.link-effect(href="/signup", title="Vers la page de création de compte") Pas de compte ?
+			a.link-effect(href='/signup', title='Vers la page de création de compte') Pas de compte ?
 
 			div.push
 

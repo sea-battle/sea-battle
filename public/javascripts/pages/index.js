@@ -3,15 +3,15 @@ function proceedSignin() {
 
     event.preventDefault();
 
-    var xhr = new XMLHttpRequest();
-
-    var username = document.getElementById('signin-username').value,
-        password = document.getElementById('signin-password').value;
+    var usernameField = document.getElementById('username'),
+        passwordField = document.getElementById('password');
 
     var user = {
-        username: username,
-        password: password
+        username: usernameField.value,
+        password: passwordField.value
     }
+
+    var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && (this.status === 200 || this.status === 401)) {

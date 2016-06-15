@@ -1,9 +1,10 @@
 function checkUsername() {
     'use strict';
 
-    var usernameMessage = document.getElementById('username-message');
+    var usernameField = document.getElementById('username'),
+        usernameMessage = document.getElementById('username-message');
 
-    if (event.target.value === '') {
+    if (usernameField.value === '') {
         usernameMessage.innerHTML = '';
         return;
     } else {
@@ -11,13 +12,12 @@ function checkUsername() {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && this.status === 200) {
-                var editUsername = document.getElementById('edit-username'),
-                    response = JSON.parse(xhr.responseText);
+                var response = JSON.parse(xhr.responseText);
 
                 if (!response['success']) {
-                    editUsername.classList.add('error');
+                    usernameField.classList.add('error');
                 } else {
-                    editUsername.classList.remove('error');
+                    usernameField.classList.remove('error');
                 }
 
                 usernameMessage.innerHTML = response['message'];
@@ -35,13 +35,12 @@ function editEmail() {
 
     event.preventDefault();
 
-    var email = document.getElementById('edit-email').value,
-        emailField = document.getElementById('edit-email'),
+    var emailField = document.getElementById('email'),
         emailMessage = document.getElementById('email-message');
 
     var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-    if (!regexEmail.test(email)) {
+    if (!regexEmail.test(emailField.value)) {
         emailField.classList.add('error');
         emailMessage.innerHTML = 'Entrez une adresse e-mail valide';
     } else {
@@ -51,16 +50,15 @@ function editEmail() {
         var xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && this.status === 200) {
+            if (xhr.readyState === 4 && (this.status === 200 || this.status === 500)) {
                 var response = JSON.parse(xhr.responseText);
-
                 emailMessage.innerHTML = response['message'];
             }
         };
 
         xhr.open('POST', '/edit-email', true);
         xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
-        xhr.send(JSON.stringify({ email: email }));
+        xhr.send(JSON.stringify({ email: emailField.value }));
     }
 }
 
@@ -69,22 +67,21 @@ function editUsername() {
 
     event.preventDefault();
 
-    var xhr = new XMLHttpRequest();
-
-    var username = document.getElementById('edit-username').value,
+    var usernameField = document.getElementById('username'),
         usernameMessage = document.getElementById('username-message');
+
+    var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && this.status === 200) {
             var response = JSON.parse(xhr.responseText);
-
             usernameMessage.innerHTML = response['message'];
         }
     };
 
     xhr.open('POST', '/edit-username', true);
     xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
-    xhr.send(JSON.stringify({ username: username }));
+    xhr.send(JSON.stringify({ username: usernameField.value }));
 }
 
 function deleteUser() {
@@ -108,13 +105,13 @@ function deleteUser() {
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    var editEmailSubmit = document.getElementById('email-submit'),
-        deleteUserSubmit = document.getElementById('delete-user'),
-        editUsernameField = document.getElementById('edit-username'),
-        editUsernameSubmit = document.getElementById('username-submit');
+    var emailSubmit = document.getElementById('email-submit'),
+        usernameField = document.getElementById('username'),
+        usernameSubmit = document.getElementById('username-submit'),
+        deleteUserSubmit = document.getElementById('delete-user');
 
-    editEmailSubmit.addEventListener('click', editEmail, false);
-    editUsernameField.addEventListener('keyup', checkUsername, false);
-    editUsernameSubmit.addEventListener('click', editUsername, false);
+    emailSubmit.addEventListener('click', editEmail, false);
+    usernameField.addEventListener('keyup', checkUsername, false);
+    usernameSubmit.addEventListener('click', editUsername, false);
     deleteUserSubmit.addEventListener('click', deleteUser, false);
 }, false);

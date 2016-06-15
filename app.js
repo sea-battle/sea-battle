@@ -7,10 +7,10 @@ var app = require('express')(),
     morgan = require('morgan'),
 	server = require('http').createServer(app);
 
-var game = require('./game');
+var config = require('./config'),
+    game = require('./game');
 
-var config = require('./config');
-
+// Log everything to the console
 app.use(morgan('dev'));
 
 // Get informations from HTML forms. Needs to be loaded before routesAuthentication
@@ -23,11 +23,14 @@ app.use(bodyParser.urlencoded({
 var routesAuthentication = require('./routes/authentication');
 app.use('/', routesAuthentication);
 
+// Load stylesheets, JavaScript files, images and fonts
 app.use(express.static(__dirname + '/public'));
+
+// Set templating engine
 app.set('view engine', 'jade');
 
 app.get('/', function (req, res) {
-    //game.roomToJoin = '/tamere';
+    // game.roomToJoin = '';
     res.render(__dirname + '/views/index', {
         bodyClass: 'home'
     });
@@ -37,9 +40,9 @@ app.get('/rooms', function (req, res) {
         bodyClass: 'rooms'
     });
 });
-app.get('/profil', function (req, res) {
-    res.render(__dirname + '/views/profil', {
-        bodyClass: 'profil'
+app.get('/profile', function (req, res) {
+    res.render(__dirname + '/views/profile', {
+        bodyClass: 'profile'
     });
 });
 app.get('/signup', function (req, res) {
@@ -49,7 +52,7 @@ app.get('/signup', function (req, res) {
 });
 app.get('/wait', function (req, res) {
     var fn = jade.compileFile(__dirname + '/views/wait.jade');
-    var html = fn( /*Variables*/ );
+    var html = fn(/* Variables */);
     return res.json({
         bodyClass: 'wait',
         html: html,
@@ -83,7 +86,7 @@ app.get('*', function (req, res) {
 mongoose.connect(config.database.location, config.database.options);
 
 io.sockets.on('connection', function (socket) {
-    // INIT ON CONNECTION
+    // Initialize on connection
     socket.ready = false;
     socket.room = '';
     socket.shootInfos = {
@@ -92,7 +95,7 @@ io.sockets.on('connection', function (socket) {
     };
     socket.name = socket.id;
 
-    // ROOMS STAGE
+    // Stage 1: rooms
     socket.on('rooms-create', function (roomName) {
         game.rooms[roomName] = {
             timer: game.defaultPlacementTime,
@@ -127,7 +130,7 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('receive-message', from, message, time);
     });
 
-    // WAIT STAGE
+    // Stage 2: wait
     socket.on('wait-set-ready', function () {
         socket.ready = true;
         if (game.allPlayersAreReady(io.sockets, socket.room) &&
@@ -150,7 +153,7 @@ io.sockets.on('connection', function (socket) {
         socket.ready = false;
     });
 
-    // GAME STAGE
+    // Stage 3: game
     socket.on('game-set-ready', function (cells) {
         socket.cells = cells;
         socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
@@ -158,7 +161,7 @@ io.sockets.on('connection', function (socket) {
         // Shoot timer
         game.rooms[socket.room].timerId = setInterval(function () {
             if (game.rooms[socket.room].timer == 0) {
-                //game.rooms[socket.room].timer = game.defaultShootTime;
+                // game.rooms[socket.room].timer = game.defaultShootTime;
 
                 game.playShootTurn(io.sockets, socket.room);
                 socket.emit('test', socket.cells);
@@ -177,7 +180,7 @@ io.sockets.on('connection', function (socket) {
         };
     });
 
-    // CHAT
+    // Chat
     socket.on('chat-is-writing', function () {
         socket.broadcast.emit('is-writing', socket.name);
     });

@@ -11,23 +11,25 @@ block content
             h1 Gérez votre compte
 
             h2 Modifiez votre email
-            form#email-modification
-                input#edit-email(type='text', name='email', placeholder='E-mail')
+            form
+                input#email(type='text', name='email', placeholder='E-mail')
                 p#email-message
                 button#email-submit.button-effect(type='submit') Modifier
 
             h2 Modifiez votre pseudonyme
-            form#username-modification
-                input#edit-username(type='text', name='username', placeholder='Pseudonyme')
+            form
+                input#username(type='text', name='username', placeholder='Pseudonyme')
                 p#username-message
                 button#username-submit.button-effect(type='submit') Modifier
 
             h2 Modifiez votre mot de passe
-            form#password-modification
-                input#current-password(type='password', name='current_password', placeholder='Mot de passe actuel')
+            form
+                input#old-password(type='password', name='old_password', placeholder='Mot de passe actuel')
                 p#current-password-message
-                input#new-password(type='password', name='new_password', placeholder='Nouveau mot de passe')
+                input#password(type='password', name='password', placeholder='Nouveau mot de passe')
                 p#new-password-message
+                input#password-confirmation(type='password', name='password_confirmation', placeholder='Confirmez le nouveau mot de passe')
+                p#new-password-confirmation-message
                 button#password-submit.button-effect(type='submit') Modifier
 
             h2 Supprimez votre compte
