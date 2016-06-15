@@ -33,8 +33,8 @@ function addRoom(roomName, playerCount) {
     roomsContainer.appendChild(newLi);
 }
 
-socket.on('rooms-join', function () {
-    ajax.get('/wait', handlers);
+socket.on('rooms-join', function (name) {
+    ajax.post('/wait', handlers, 'name=' + name);
 });
 
 

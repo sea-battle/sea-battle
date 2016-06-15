@@ -49,9 +49,12 @@ app.get('/signup', function (req, res) {
         bodyClass: 'signup'
     });
 });
-app.get('/wait', function (req, res) {
+app.post('/wait', function (req, res) {
+    console.log(req.body);
     var fn = jade.compileFile(__dirname + '/views/wait.jade');
-    var html = fn( /* Variables */ );
+    var html = fn({
+        name: req.body.name
+    });
     return res.json({
         bodyClass: 'wait',
         html: html,
@@ -106,7 +109,7 @@ io.sockets.on('connection', function (socket) {
         socket.room = roomName;
         socket.join(roomName);
         socket.broadcast.emit('rooms-update', game.getRoomsInfos());
-        socket.emit('rooms-join');
+        socket.emit('rooms-join', socket.name);
     });
     socket.on('rooms-get', function () {
         socket.emit('rooms-update', game.getRoomsInfos());
@@ -115,7 +118,7 @@ io.sockets.on('connection', function (socket) {
         socket.room = roomName;
         game.rooms[roomName].playerCount++;
         socket.join(roomName);
-        socket.emit('rooms-join');
+        socket.emit('rooms-join', socket.name);
 
         var from = 'System';
         var message = socket.name + ' join the game.';
@@ -128,7 +131,8 @@ io.sockets.on('connection', function (socket) {
             time: time
         });
         socket.broadcast.emit('receive-message', from, message, time, filter);
-        socket.broadcast.emit('room-update', socket.name);
+        var playersName = game.getPlayersNames(io.sockets, socket.room);
+        //io.sockets.broadcast.emit('room-update-players', playersName);
     });
 
     // Stage 2: wait
