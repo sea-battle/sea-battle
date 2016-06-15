@@ -1,11 +1,11 @@
 var app = require('express')(),
     bodyParser = require('body-parser'),
     express = require('express'),
-    io = require('socket.io').listen(server),
     jade = require('jade'),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
-    server = require('http').createServer(app);
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server);
 
 var config = require('./config'),
     game = require('./game');
@@ -30,7 +30,6 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 
 app.get('/', function (req, res) {
-    // game.roomToJoin = '';
     res.render(__dirname + '/views/index', {
         bodyClass: 'home'
     });
