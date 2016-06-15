@@ -395,11 +395,6 @@ header {
 		display: inline-block;
 	}
 
-	.rooms-list button,
-	.players-list button {
-		padding: 1.4em 1.3em;
-	}
-
 	.rooms-list div,
 	.players-list div {
 		display: inline-block;
@@ -417,13 +412,13 @@ header {
 			display: inline-block;
 			width: 50%;
 			vertical-align: middle;
-			padding: 0 2em;
+			padding: 0 1.4em;
 		}
 
 		.room-name,
 		.players-list .player-username {
 			text-align: left;
-			font-size: 2.5em;
+			word-wrap: break-word;
 		}
 
 /* Rooms page
@@ -444,6 +439,14 @@ header {
 	line-height: 2.5em;
 }
 
+.room-name {
+	font-size: 2.5em;
+}
+
+.rooms-list button {
+	padding: 1.4em 1.3em;
+}
+
 /* Wait page
 ========================================================================== */
 
@@ -462,6 +465,14 @@ header {
 	.players-total {
 		font-size: 1.5em;
 		margin-bottom: 1.5em;
+	}
+
+	.players-list .player-username {
+		font-size: 1.5em;
+	}
+
+	.players-list button {
+		padding: .4em 1.3em;
 	}
 
 /* Game
@@ -763,6 +774,30 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 			margin: auto;
 		}
 
+	
+}
+
+@media screen and (max-height: 47.95em) { /* < 768px height */
+	.info {
+		height: auto;
+	}
+}
+
+@media screen and (max-width: 59.95em) { /* < 960px */
+	.switching-content,
+	.content.game {
+		width: 100%;
+	}
+
+		.players-grids,
+		.switching-aside {
+			width: 20%;
+		}
+
+		.grids-wrapper {
+			width: 80%;
+		}
+
 	.wait .content {
 		width: 100%;
 	}
@@ -809,28 +844,6 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 		width: 100%;
 		bottom: 0;
 	}
-}
-
-@media screen and (max-height: 47.95em) { /* < 768px height */
-	.info {
-		height: auto;
-	}
-}
-
-@media screen and (max-width: 59.95em) { /* < 960px */
-	.switching-content,
-	.content.game {
-		width: 100%;
-	}
-
-		.players-grids,
-		.switching-aside {
-			width: 20%;
-		}
-
-		.grids-wrapper {
-			width: 80%;
-		}
 }
 
 @media screen and (max-width: 50em) { /* < 800px */
