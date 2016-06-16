@@ -48,8 +48,9 @@ const DEFAULT_BOATS = {
 	}
 };
 
-var canvas = document.getElementById('canvas');
+var playerCanvas = document.getElementById('player-canvas');
 var boatsContainer = document.getElementById('boats-container');
+var canvasWrapper = document.getElementById('canvas-wrapper');
 var randomGenerator = document.getElementById('random');
 var boatSelecters = document.getElementsByClassName('boat-selector');
 var timer = document.getElementById('timer');
@@ -62,10 +63,10 @@ var previousMouseCoords = undefined;
 var boatsSprite = new Image();
 boatsSprite.src = "/images/sprites.png";
 
-var grid = new Grid(canvas);
+var grid = new Grid(playerCanvas);
 grids.push(grid);
 var selectedBoat = null;
-
+var targetId = null;
 var gameHandlers = {
 	placementStage: {
 		click: function (e) {
@@ -162,17 +163,25 @@ var gameHandlers = {
 		}
 	},
 	battleStage: {
-		click: function (e) {
-			socket.emit('game-shoot', e.gridInfo.coords, this.getAttribute('data-player-id'));
+		otherPlayersGrid: {
+			click: function (e){
+				targetId = this.getAttribute('data-player-id');
+				console.log(targetId);
+			}
+		},
+		shooterGrid: {
+			click: function (e) {
+				socket.emit('game-shoot', e.gridInfo.coords, targetId);
+			}
 		}
 	}
 };
 
 boatsSprite.onload = function () {
 	// PLACEMENT STAGE
-	canvas.addEventListener('mousemove', gameHandlers.placementStage.mousemove);
-	canvas.addEventListener('click', gameHandlers.placementStage.click);
-	canvas.addEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
+	playerCanvas.addEventListener('mousemove', gameHandlers.placementStage.mousemove);
+	playerCanvas.addEventListener('click', gameHandlers.placementStage.click);
+	playerCanvas.addEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
 
 	for (var i = 0; i < boatSelecters.length; i++) {
 		boatSelecters[i].addEventListener('click', gameHandlers.placementStage.selectBoat);
@@ -195,14 +204,14 @@ socket.on('game-check-grid', function () {
 		gameHandlers.placementStage.random();
 		grid.drawPlacedBoats(boatsSprite);
 	}
-	canvas.removeEventListener('click', gameHandlers.placementStage.click);
-	canvas.removeEventListener('mousemove', gameHandlers.placementStage.mousemove);
-	canvas.removeEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
+	playerCanvas.removeEventListener('click', gameHandlers.placementStage.click);
+	playerCanvas.removeEventListener('mousemove', gameHandlers.placementStage.mousemove);
+	playerCanvas.removeEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
 
 	socket.emit('game-set-ready', grid.cells);
 
 	//TODO add new canvas gameHandlers
-	canvas.addEventListener('click', gameHandlers.battleStage.click);
+	//playerCanvas.addEventListener('click', gameHandlers.battleStage.click);
 });
 socket.on('game-init-players-grids', function (players) {
 	document.getElementById('boats-container').style.display = 'none';
@@ -217,9 +226,13 @@ socket.on('game-init-players-grids', function (players) {
 
 		var otherPlayerGrid = new Grid(otherPlayerCanvas);
 		grids.push(otherPlayerGrid);
-		otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.click);
-
-
-		otherPlayerGrid.renderGrid();
+		otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.otherPlayersGrid.click);
 	});
+
+	// grid shooter
+	var shooterCanvas = document.createElement('canvas');
+	canvasWrapper.appendChild(shooterCanvas);
+	var shooterGrid = new Grid(shooterCanvas);
+	grids.push(shooterGrid);
+	shooterCanvas.addEventListener('click', gameHandlers.battleStage.shooterGrid.click);
 });

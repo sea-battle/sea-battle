@@ -58,11 +58,6 @@ socket.on('rooms-update', function (rooms) {
         addRoom(room.name, room.playerCount);
     });
 });
-
-socket.on('test', function (){
-	console.log('test worked ! ');
-});
-
 window.addEventListener('hashchange', function (e) {
     e.preventDefault();
 });

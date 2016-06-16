@@ -18,7 +18,10 @@ module.exports = {
 					timerId: null,
 					chat: [],
 					playerCount: 1,
-					name: roomName
+					name: roomName,
+					gameStarted: false,
+					turnCount: 0,
+					turns: []
 				};
 				socket.room = roomName;
 				socket.leave(game.defaultRoom);
@@ -77,6 +80,7 @@ module.exports = {
 							// Check if player grid is ready
 							io.sockets.emit('game-check-grid');
 							clearInterval(game.rooms[socket.room].timerId);
+							game.rooms[socket.room].gameStarted = true;
 							game.rooms[socket.room].timerId = null;
 						} else {
 							io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
@@ -102,8 +106,9 @@ module.exports = {
 							game.rooms[socket.room].timer = game.defaultShootTime;
 
 							game.playShootTurn(io.sockets, socket.room);
-							socket.emit('test', socket.cells);
-
+							//io.sockets.emit('update-after-turn', )
+							var currentRoom = game.rooms[socket.room];
+							console.log(currentRoom.turns[currentRoom.turnCount].touchedPlayers);
 							clearInterval(game.rooms[socket.room].timerId);
 						} else {
 							io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
@@ -113,7 +118,16 @@ module.exports = {
 				}
 			});
 			socket.on('game-shoot', function (shootCoords, targetId) {
-				socket.shootInfos = {
+				var currentRoom = game.rooms[socket.room];
+				var turnCount = currentRoom.turnCount;
+				if (currentRoom.turns[turnCount] == undefined){
+					currentRoom.turns[turnCount] = {
+						playersShoots: {},
+						touchedPlayers: {}
+					};
+				}
+				
+				currentRoom.turns[turnCount]['playersShoots'][socket.name] = {
 					shootCoords: shootCoords,
 					targetId: targetId
 				};
