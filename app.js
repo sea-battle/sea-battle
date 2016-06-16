@@ -50,7 +50,6 @@ app.get('/signup', function (req, res) {
 	});
 });
 app.post('/wait', function (req, res) {
-	console.log(req.body);
 	var fn = jade.compileFile(__dirname + '/views/wait.jade');
 	var html = fn(req.body);
 	return res.json({
@@ -141,6 +140,7 @@ io.sockets.on('connection', function (socket) {
 	// Stage 2: wait
 	socket.on('wait-set-ready', function () {
 		socket.ready = true;
+		socket.broadcast.emit('update-players-status', socket.name, 'Prêt');
 		if (game.allPlayersAreReady(io.sockets, socket.room) &&
 			game.getPlayersId(io.sockets, socket.room).length > 1) {
 			io.sockets.emit('wait-start-game');
@@ -159,6 +159,7 @@ io.sockets.on('connection', function (socket) {
 	});
 	socket.on('wait-set-unready', function () {
 		socket.ready = false;
+		socket.broadcast.emit('update-players-status', socket.name, 'Attente');
 	});
 
 	// Stage 3: game
@@ -225,8 +226,10 @@ io.sockets.on('connection', function (socket) {
 			game.rooms[socket.room].playerCount--;
 			if (game.rooms[socket.room].playerCount == 0) {
 				delete game.rooms[socket.room];
+			} else {
+				var playersName = game.getPlayersNames(io.sockets, socket.room);
+				socket.broadcast.emit('room-update-players', playersName);
 			}
-			socket.broadcast.emit('rooms-update', game.getRoomsInfos());
 		}
 	});
 });
