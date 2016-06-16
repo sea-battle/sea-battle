@@ -1,23 +1,27 @@
+var openedClass = 'opened';
+
 function initPlayerInfo() {
     var rankingOverlay = document.getElementById('rankings-overlay');
     var statsOverlay = document.getElementById('stats-overlay');
+    var playerInfoToggle = document.getElementById('player-info-toggle');
+    var playerInfo = document.getElementById('player-info');
 
     document.getElementById('rankings-link').addEventListener('click', function(e) {
         e.preventDefault();
-        rankingOverlay.addClass('opened');
+        rankingOverlay.addClass(openedClass);
     });
 
     document.getElementById('close-rankings').addEventListener('click', function() {
-        rankingOverlay.removeClass('opened');
+        rankingOverlay.removeClass(openedClass);
     });
 
     document.getElementById('stats-link').addEventListener('click', function(e) {
         e.preventDefault();
-        statsOverlay.addClass('opened');
+        statsOverlay.addClass(openedClass);
     });
 
     document.getElementById('close-stats').addEventListener('click', function() {
-        statsOverlay.removeClass('opened');
+        statsOverlay.removeClass(openedClass);
     });
 
     document.getElementById('profil-link').addEventListener('click', function(e) {
@@ -25,12 +29,21 @@ function initPlayerInfo() {
         if (confirm('Il vous faut quitter la partie pour modifier vos informations, voulez-vous continuer ?'))
             document.location.href = this.href;
     });
+
+    playerInfoToggle.addEventListener('click', function(e) {
+        if (playerInfoToggle.hasClass(openedClass)) {
+            playerInfoToggle.removeClass(openedClass);
+            playerInfo.removeClass(openedClass);
+        } else {
+            playerInfoToggle.addClass(openedClass);
+            playerInfo.addClass(openedClass);
+        }
+    });
 }
 
 function initChat() {
 	var chat = document.getElementById('chat');
 	var chatToggle = document.getElementById('chat-toggle');
-	var openedClass = 'opened';
 
 	chatToggle.addEventListener('click', function(e) {
 		if (chatToggle.hasClass(openedClass)) {

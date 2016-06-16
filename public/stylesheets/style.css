@@ -219,12 +219,16 @@ a {
 			height: 2em;
 		}
 
-.wait .chat,
-.content.wait,
 .content.game {
     display: inline-block;
     vertical-align: top;
 	height: 100%;
+}
+
+.chat,
+.wait-wrapper {
+	display: inline-block;
+    vertical-align: top;
 }
 
 .switching-content {
@@ -317,10 +321,7 @@ header {
 
 	.chat-toggle {
 		display: none;
-		position: absolute;
 		z-index: 10;
-		top: 15em;
-		right: 1.4em;
 	}
 
 	.chat-toggle .close {
@@ -356,40 +357,35 @@ header {
 	text-align: center;
 }
 
-.rooms .player-info,
-.wait .player-info {
+/* .rooms .player-info,
+.wait .player-info, */
+.player-info {
 	height: auto;
 	display: block;
 	text-align: center;
 	margin-bottom: 3em;
 }
 
-	.rooms .socials,
-	.rooms .options,
-	.wait .socials,
-	.wait .options {
+	.socials,
+	.options {
 		width: 250px;
 	}
 
-	.rooms .player,
-	.wait .player {
+	.player {
 		margin: 0;
 		width: auto;
 	}
 
-		.rooms .player-info p,
-		.wait .player-info p {
+		.player-info p {
 			display: inline-block;
 			vertical-align: middle;
 		}
 
-			.rooms .player-info a,
-			.wait .player-info a {
+			.player-info a {
 				display: inline-block;
 				margin: 0 .5em;
 			}
 
-	.rooms button,
 	.players-list button {
 		margin-left: .3em; 
 		display: inline-block;
@@ -424,8 +420,8 @@ header {
 /* Rooms page
 ========================================================================== */
 
-.rooms input,
-.rooms button {
+.create-room-container input,
+.create-room-container button {
 	display: inline-block;
 }
 
@@ -451,16 +447,25 @@ header {
 ========================================================================== */
 
 .wait .content {
-	width: 75%;
+	width: 100%;
+	max-width: 100%;
 }
 
 	.wait .chat {
 		margin-top: 3em;
+		max-width: 450px;
+		width: 25%;
+		text-align: center;
 	}
 
 		.wait .messages {
 			min-height: 300px;
 		}
+
+	.wait-wrapper {
+		width: 75%;
+		max-width: 75em;
+	}
 
 	.players-total {
 		font-size: 1.5em;
@@ -509,12 +514,6 @@ header {
 	z-index: 10;
 }
 
-.wait .chat,
-.info {
-	width: 25%;
-	text-align: center;
-}
-
 .game .info {
 	max-width: 350px;
 }
@@ -525,19 +524,13 @@ header {
 
 /* Player */
 
+.player-info-toggle,
+.player-info-toggle .close {
+	display: none;
+}
 .player-info {
-	height: 26%;
+/* 	height: 26%; */
 	padding: 1em .5em;
-	/* background-color: green; */
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-flex-direction: column;
-	    -ms-flex-direction: column;
-	        flex-direction: column;
-	-webkit-justify-content: space-between;
-	    -ms-flex-pack: justify;
-	        justify-content: space-between;
 }
 
 	.player-info a {
@@ -547,13 +540,7 @@ header {
 	.socials,
 	.options {
 		display: table;
-		width: 100%;
 	}
-
-		.socials a,
-		.options a {
-			display: table-cell;
-		}
 
 	.player {
 		margin: .5em 0;
@@ -784,6 +771,22 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 }
 
 @media screen and (max-width: 59.95em) { /* < 960px */
+	header {
+		height: 150px;
+	}
+
+	header img {
+		width: 200px;
+	}
+
+	.switching-content {
+		height: 100%;
+	}
+
+	.content {
+		height: calc(100% - 150px);
+	}
+
 	.switching-content,
 	.content.game {
 		width: 100%;
@@ -798,25 +801,21 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 			width: 80%;
 		}
 
-	.wait .content {
+	.wait .content,
+	.wait-wrapper {
 		width: 100%;
 	}
 
 	.wait .chat {
 		display: none;
-		width: 100%;
-	}
-
-	.chat {
 		position: absolute;
 		top: 0;
+		left: 0;
 		width: 100%;
 		height: 100%;
 		z-index: 5;
-	}
-
-	.wait .chat {
 		margin: 0;
+		max-width: 100%;
 	}
 
 	.chat-toggle {
@@ -847,22 +846,18 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 }
 
 @media screen and (max-width: 50em) { /* < 800px */
-	.rooms .player-info p,
-	.wait .player-info p {
-		display: block;
+ 	.socials,
+	.options {
+		width: 190px;
 	}
+}
 
-		.rooms .player-info a,
-		.wait .player-info a {
-			margin: .5em;
-		}
+@media screen and (max-width: 37.5em) { /* < 600px */
 
-		.rooms .socials,
-		.rooms .options,
-		.wait .socials,
-		.wait .options {
-			width: auto;
-		}
+	.toggle {
+		display: inline-block;
+		margin: 1em;
+	}
 
 	.players-list div {
 		width: 100%;
@@ -877,9 +872,63 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 		    text-align: center;
 	   }
 
-	   .players-list .player-username {
-	   		text-align: center;
-	   }
+   .players-list .player-username {
+   		text-align: center;
+   }
+
+   .player-info {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 5;
+		background: rgba(255, 255, 255, 0.9);
+	}
+
+		.player-info-wrapper {
+			width: 100%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+			.player-info p {
+				display: table;
+				margin: 2em 0;
+				width: 100%;
+				max-width: 100%;
+			}
+
+				.player {
+					margin: auto;
+				}
+
+				.player-info a {
+					display: table-cell;
+					margin: 0;
+				}
+
+	.player-info-toggle.opened {
+		position: absolute;
+		top: 1.4em;
+		right: 1.4em;	
+		z-index: 10;
+	}
+
+		.player-info-toggle.opened .open {
+			display: none;
+		}
+
+		.player-info-toggle.opened .close {
+			display: block;
+		}
+
+	.player-info.opened {
+		display: block;
+	}
 }
 
 @media screen and (max-width: 40.625em),
@@ -925,16 +974,4 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 	input {
 		width: 100%;
 	}
-}
-
-.expanded {
-	-webkit-transform: translate3d(0, 0, 0);
-	        transform: translate3d(0, 0, 0);
-	transition: -webkit-transform .5s;
-	transition: transform .5s;
-	transition: transform .5s, -webkit-transform .5s;
-}
-
-.opened {
-	display: block;
 }
