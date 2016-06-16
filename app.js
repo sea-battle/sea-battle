@@ -130,7 +130,7 @@ io.sockets.on('connection', function (socket) {
         });
         socket.broadcast.emit('receive-message', from, message, time, filter);
         var playersName = game.getPlayersNames(io.sockets, socket.room);
-        io.sockets.broadcast.emit('room-update-players', playersName);
+        //io.sockets.broadcast.emit('room-update-players', playersName);
     });
 
     // Stage 2: wait
