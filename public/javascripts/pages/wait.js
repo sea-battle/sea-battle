@@ -21,7 +21,6 @@ socket.on('wait-start-game', function () {
 
 socket.on('room-update-players', function (playersName) {
     var indexToRemove = playersName.indexOf(playerUsername.innerHTML);
-    console.log(indexToRemove);
     playersName.splice(indexToRemove, 1);
 
     var otherPlayersRow = document.getElementsByClassName('other-player');
@@ -52,3 +51,6 @@ socket.on('room-update-players', function (playersName) {
         playersList.appendChild(li);
     });
 });
+
+// to display all player on room joined
+socket.emit('room-update-request');
