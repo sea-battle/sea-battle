@@ -1,4 +1,5 @@
-//var socket = io();
+//TOREMOVE
+document.getElementById('other-players-canvas').style.display = 'none';
 
 const HORIZONTAL = 'h';
 const VERTICAL = 'v';
@@ -195,29 +196,29 @@ socket.on('game-check-grid', function () {
 	canvas.removeEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
 
 	socket.emit('game-set-ready', grid.cells);
-    
-    //TODO add new canvas gameHandlers
-    canvas.addEventListener('click', gameHandlers.battleStage.click);
+
+	//TODO add new canvas gameHandlers
+	canvas.addEventListener('click', gameHandlers.battleStage.click);
 });
 socket.on('game-init-players-grids', function (players) {
+	document.getElementById('boats-container').style.display = 'none';
+	document.getElementById('other-players-canvas').style.display = 'block';
 	players.forEach(function (player) {
 		var otherPlayerCanvas = document.createElement('canvas');
 		var br = document.createElement('br');
+		/*
 		otherPlayerCanvas.setAttribute('width', '100');
 		otherPlayerCanvas.setAttribute('height', '100');
-        otherPlayerCanvas.setAttribute('data-player-id', player.id);
+		*/
+		otherPlayerCanvas.setAttribute('data-player-id', player.id);
 
 		otherPlayersCanvasContainer.appendChild(otherPlayerCanvas);
 		otherPlayersCanvasContainer.appendChild(br);
 
 		var otherPlayerGrid = new Grid(otherPlayerCanvas);
-        otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.click);
-        
-        
+		otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.click);
+
+
 		otherPlayerGrid.renderGrid();
 	});
-});
-
-socket.on('test', function (cells){
-    console.log(cells); 
 });
