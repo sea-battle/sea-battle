@@ -62,6 +62,7 @@ function initRanking() {
 
     rankingToggle.addEventListener('click', function(e) {
         if (rankingToggle.hasClass(openedClass)) {
+            console.log("oucouc");
             rankingToggle.removeClass(openedClass);
             ranking.removeClass(openedClass);
         } else {
