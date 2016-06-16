@@ -55,3 +55,33 @@ function initChat() {
 		}
 	});
 }
+
+function initRanking() {
+    var ranking = document.getElementById('game-ranking');
+    var rankingToggle = document.getElementById('ranking-toggle');
+
+    rankingToggle.addEventListener('click', function(e) {
+        if (rankingToggle.hasClass(openedClass)) {
+            rankingToggle.removeClass(openedClass);
+            ranking.removeClass(openedClass);
+        } else {
+            rankingToggle.addClass(openedClass);
+            ranking.addClass(openedClass);
+        }
+    });
+}
+
+function initAside() {
+    var switchingAside = document.getElementById('switching-aside');
+    var asideToggle = document.getElementById('aside-toggle');
+
+    rankingToggle.addEventListener('click', function(e) {
+        if (asideToggle.hasClass(openedClass)) {
+            asideToggle.removeClass(openedClass);
+            switchingAside.removeClass(openedClass);
+        } else {
+            asideToggle.addClass(openedClass);
+            switchingAside.addClass(openedClass);
+        }
+    });
+}
