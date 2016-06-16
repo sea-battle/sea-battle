@@ -54,6 +54,7 @@ socket.on('room-update-players', function (playersName) {
 
 socket.on('update-players-status', function (playersName, status) {
 	var statusToUpdate = document.getElementById('status-' + playersName);
+	console.log(statusToUpdate);
 	statusToUpdate.innerHTML = status;
 });
 

@@ -87,7 +87,8 @@ mongoose.connect(config.database.location, config.database.options);
 io.sockets.on('connection', function (socket) {
 	// Initialize on connection
 	socket.ready = false;
-	socket.room = '';
+	socket.room = game.defaultRoom;
+	socket.join(game.defaultRoom);
 	socket.shootInfos = {
 		shootCoords: null,
 		targetId: null
@@ -104,6 +105,7 @@ io.sockets.on('connection', function (socket) {
 			name: roomName
 		};
 		socket.room = roomName;
+		socket.leave(game.defaultRoom);
 		socket.join(roomName);
 		socket.broadcast.emit('rooms-update', game.getRoomsInfos());
 		socket.emit('rooms-join', socket.name);
@@ -114,6 +116,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('rooms-join', function (roomName) {
 		socket.room = roomName;
 		game.rooms[roomName].playerCount++;
+		socket.leave(game.defaultRoom);
 		socket.join(roomName);
 		socket.emit('rooms-join', socket.name);
 
@@ -130,11 +133,19 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.emit('receive-message', from, message, time, filter);
 		var playersName = game.getPlayersNames(io.sockets, socket.room);
 		socket.broadcast.emit('room-update-players', playersName);
+		io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
 	});
 
 	socket.on('room-update-request', function () {
 		var playersName = game.getPlayersNames(io.sockets, socket.room);
 		socket.emit('room-update-players', playersName);
+
+		var playersStatus = game.getPlayerStatus(io.sockets, socket.room);
+		playersStatus.forEach(function (status) {
+			if (socket.name != status.name){
+				socket.emit('update-players-status', status.name, status.ready);
+			}
+		});
 	});
 
 	// Stage 2: wait
@@ -150,6 +161,7 @@ io.sockets.on('connection', function (socket) {
 					// Check if player grid is ready
 					io.sockets.emit('game-check-grid');
 					clearInterval(game.rooms[socket.room].timerId);
+					game.rooms[socket.room].timerId = null;
 				} else {
 					io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
 					game.rooms[socket.room].timer--;
@@ -168,19 +180,21 @@ io.sockets.on('connection', function (socket) {
 		socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
 
 		// Shoot timer
-		game.rooms[socket.room].timerId = setInterval(function () {
-			if (game.rooms[socket.room].timer == 0) {
-				// game.rooms[socket.room].timer = game.defaultShootTime;
+		if (game.rooms[socket.room].timerId == null) {
+			game.rooms[socket.room].timerId = setInterval(function () {
+				if (game.rooms[socket.room].timer == 0) {
+					game.rooms[socket.room].timer = game.defaultShootTime;
 
-				game.playShootTurn(io.sockets, socket.room);
-				socket.emit('test', socket.cells);
+					game.playShootTurn(io.sockets, socket.room);
+					socket.emit('test', socket.cells);
 
-				clearInterval(game.rooms[socket.room].timerId);
-			} else {
-				io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
-				game.rooms[socket.room].timer--;
-			}
-		}, 1000);
+					clearInterval(game.rooms[socket.room].timerId);
+				} else {
+					io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
+					game.rooms[socket.room].timer--;
+				}
+			}, 1000);
+		}
 	});
 	socket.on('game-shoot', function (shootCoords, targetId) {
 		socket.shootInfos = {
@@ -210,7 +224,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('disconnect', function () {
-		if (socket.room != '') {
+		if (socket.room != game.defaultRoom) {
 			var from = 'System';
 			var message = socket.name + ' left the game.';
 			var time = game.getMessageTime();
@@ -230,7 +244,11 @@ io.sockets.on('connection', function (socket) {
 				var playersName = game.getPlayersNames(io.sockets, socket.room);
 				socket.broadcast.emit('room-update-players', playersName);
 			}
+		} else {
+			socket.leave(game.defaultRoom);
 		}
+
+		io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
 	});
 });
 

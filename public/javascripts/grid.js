@@ -1,7 +1,8 @@
 function Grid(canvas) {
     var self = this;
     this.canvas = canvas;
-	this.canvas.width = parseInt(getComputedStyle(this.canvas.parentNode).width);
+	this.container = this.canvas.parentNode;
+	this.canvas.width = parseInt(getComputedStyle(this.container).width);
 	this.canvas.height = this.canvas.width;
     this.ctx = this.canvas.getContext('2d');
     this.width = this.canvas.width;

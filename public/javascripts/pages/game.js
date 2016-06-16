@@ -50,11 +50,12 @@ const DEFAULT_BOATS = {
 
 var canvas = document.getElementById('canvas');
 var boatsContainer = document.getElementById('boats-container');
-var canvasContainer = document.getElementById('canvas-wrapper');
 var randomGenerator = document.getElementById('random');
 var boatSelecters = document.getElementsByClassName('boat-selector');
 var timer = document.getElementById('timer');
 var otherPlayersCanvasContainer = document.getElementById('other-players-canvas');
+
+var grids = [];
 
 var previousMouseCoords = undefined;
 // images 
@@ -62,6 +63,7 @@ var boatsSprite = new Image();
 boatsSprite.src = "/images/sprites.png";
 
 var grid = new Grid(canvas);
+grids.push(grid);
 var selectedBoat = null;
 
 var gameHandlers = {
@@ -179,8 +181,10 @@ boatsSprite.onload = function () {
 }
 
 window.addEventListener('resize', function (e) {
-	var newWidth = parseInt(getComputedStyle(canvasContainer).width);
-	grid.rescaleCanvas(newWidth, boatsSprite);
+	grids.forEach(function (g) {
+		var newWidth = parseInt(getComputedStyle(g.container).width);
+		g.rescaleCanvas(newWidth, boatsSprite);
+	});
 });
 
 socket.on('game-timer-update', function (timeRemaining) {
@@ -206,16 +210,13 @@ socket.on('game-init-players-grids', function (players) {
 	players.forEach(function (player) {
 		var otherPlayerCanvas = document.createElement('canvas');
 		var br = document.createElement('br');
-		/*
-		otherPlayerCanvas.setAttribute('width', '100');
-		otherPlayerCanvas.setAttribute('height', '100');
-		*/
 		otherPlayerCanvas.setAttribute('data-player-id', player.id);
 
 		otherPlayersCanvasContainer.appendChild(otherPlayerCanvas);
 		otherPlayersCanvasContainer.appendChild(br);
 
 		var otherPlayerGrid = new Grid(otherPlayerCanvas);
+		grids.push(otherPlayerGrid);
 		otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.click);
 
 
