@@ -95,6 +95,10 @@ module.exports = {
 			});
 
 			// Stage 3: game
+			socket.on('game-init', function (){
+				socket.emit('init', socket.id);
+			});
+			
 			socket.on('game-set-ready', function (cells) {
 				socket.cells = cells;
 				socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
@@ -106,9 +110,8 @@ module.exports = {
 							game.rooms[socket.room].timer = game.defaultShootTime;
 
 							game.playShootTurn(io.sockets, socket.room);
-							//io.sockets.emit('update-after-turn', )
 							var currentRoom = game.rooms[socket.room];
-							console.log(currentRoom.turns[currentRoom.turnCount].touchedPlayers);
+							io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
 							clearInterval(game.rooms[socket.room].timerId);
 						} else {
 							io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
@@ -129,7 +132,8 @@ module.exports = {
 				
 				currentRoom.turns[turnCount]['playersShoots'][socket.name] = {
 					shootCoords: shootCoords,
-					targetId: targetId
+					targetId: targetId,
+					shooterId: socket.id
 				};
 			});
 

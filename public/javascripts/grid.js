@@ -1,5 +1,6 @@
-function Grid(canvas) {
+function Grid(canvas, playerId) {
     var self = this;
+	this.playerId = playerId || null;
     this.canvas = canvas;
 	this.container = this.canvas.parentNode;
 	this.canvas.width = parseInt(getComputedStyle(this.container).width);

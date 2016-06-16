@@ -80,7 +80,7 @@ module.exports = {
 
 			touchedPlayers[socketTurn.targetId].touchedAt.push({
 				coords: socketTurn.shootCoords,
-				by: key
+				by: socketTurn.shooterId
 			});
 		}
 		
