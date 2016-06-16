@@ -1,31 +1,35 @@
 extends inc/head.jade
 
 block content
-	div.wrapper
-		include inc/header.jade
+    div.wrapper
+        include inc/header.jade
 
-		section.content.home
-			p.catch-phrase Jeu 100% gratuit, revivez les sensations épiques de la bataille navale !
+        section.content.home
+            p.catch-phrase Jeu 100% gratuit, revivez les sensations épiques de la bataille navale !
 
-			section.promotion
-				div
-					img(src="images/test1.jpg")
-					p GIF animé montrant l'écran de jeu
-				div
-					img(src="images/test2.jpg")
-					p GIF animé montrant les classements et statistiques
+            section.promotion
+                div
+                    img(src='images/test1.jpg')
+                    p GIF animé montrant l'écran de jeu
+                div
+                    img(src='images/test2.jpg')
+                    p GIF animé montrant les classements et statistiques
 
-			h2 Jouer
-			form#signin
-				p#signin-message
-				input#username(type='text', name='username', placeholder='Pseudonyme', value='johndoe')
-				input#password(type='password', name='password', placeholder='Mot de passe', value='johndoe')
-				button#signin-submit.button-effect(type='submit') Connexion
+            h2 Jouer
 
-			a.link-effect(href='/signup', title='Vers la page de création de compte') Pas de compte ?
+            if username
+                h3 Bonjour #{username}
+            else
+                form#signin
+                    p#signin-message
+                    input#email(type='text', name='email', placeholder='Adresse e-mail', value='john.doe@mail.com')
+                    input#password(type='password', name='password', placeholder='Mot de passe', value='johndoe')
+                    button#signin-submit.button-effect(type='submit') Connexion
 
-			div.push
+                a.link-effect(href='/signup', title='Vers la page de création de compte') Pas de compte ?
 
-	include inc/footer.jade
+            div.push
 
-	script(src='/javascripts/pages/index.js')
+    include inc/footer.jade
+
+    script(src='/javascripts/pages/index.js')

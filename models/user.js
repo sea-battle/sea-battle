@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var passportLocalMongoose = require('passport-local-mongoose');
+passportLocalMongoose = require('passport-local-mongoose');
 var Skin = require('./skin').schema;
 var Game = require('./game').schema;
 
@@ -23,6 +23,8 @@ var User = new Schema({
     games: [Game]
 });
 
-User.plugin(passportLocalMongoose);
+User.plugin(passportLocalMongoose, {
+    usernameField: 'email'
+});
 
 module.exports = mongoose.model('User', User);

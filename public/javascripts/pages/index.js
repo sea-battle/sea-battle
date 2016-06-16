@@ -3,11 +3,11 @@ function proceedSignin() {
 
     event.preventDefault();
 
-    var usernameField = document.getElementById('username'),
+    var emailField = document.getElementById('email'),
         passwordField = document.getElementById('password');
 
     var user = {
-        username: usernameField.value,
+        username: emailField.value,
         password: passwordField.value
     }
 
@@ -20,7 +20,7 @@ function proceedSignin() {
             }
 
             if (this.status === 401) {
-                document.getElementById('signin-message').innerHTML = 'Le mot de passe ou le pseudonyme est incorrect';
+                document.getElementById('signin-message').innerHTML = 'Le mot de passe ou le pseudonyme est incorrect. <br /> Avez-vous confirmé votre inscription ?';
             }
         }
     };

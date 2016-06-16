@@ -11,16 +11,16 @@ function checkUsername() {
         var xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && this.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-
-                if (!response['success']) {
-                    usernameField.classList.add('error');
-                } else {
+            if (xhr.readyState === 4) {
+                if (this.status === 200) {
                     usernameField.classList.remove('error');
+                    usernameMessage.innerHTML = 'Ce pseudonyme est disponible';
                 }
 
-                usernameMessage.innerHTML = response['message'];
+                if (this.status === 409) {
+                    usernameField.classList.add('error');
+                    usernameMessage.innerHTML = 'Ce pseudonyme est déjà utlisé';
+                }
             }
         };
 
@@ -37,7 +37,11 @@ function checkPassword() {
         passwordConfirmationField = document.getElementById('password-confirmation'),
         passwordMessage = document.getElementById('password-message');
 
-    if (passwordField.value !== passwordConfirmationField.value) {
+    if (
+        passwordField.value !== passwordConfirmationField.value &&
+        passwordField.value !== '' &&
+        passwordConfirmationField.value !== ''
+    ) {
         event.target.classList.add('error');
         passwordMessage.innerHTML = 'Les mots de passe ne correspondent pas';
     } else {
@@ -66,11 +70,21 @@ function editEmail() {
         var xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && (this.status === 200 || this.status === 500)) {
-                var response = JSON.parse(xhr.responseText);
-                emailMessage.innerHTML = response['message'];
+            if (xhr.readyState === 4) {
+                if (this.status === 200) {
+                    emailMessage.innerHTML = 'L\'adresse e-mail a été changé avec succès';
+                }
+
+                if (this.status === 500) {
+                    emailMessage.innerHTML = 'L\'adresse e-mail n\'a pas pu être changé';
+                }
+
+                if (this.status === 401) {
+                    window.location = '/';
+                }
             }
         };
+
 
         xhr.open('POST', '/edit-email', true);
         xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
@@ -89,9 +103,18 @@ function editUsername() {
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && this.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            usernameMessage.innerHTML = response['message'];
+        if (xhr.readyState === 4) {
+            if (this.status === 200) {
+                usernameMessage.innerHTML = 'Le pseudonyme a été changé avec succès';
+            }
+
+            if (this.status === 500) {
+                usernameMessage.innerHTML = 'Le pseudonyme n\'a pas pu être changé';
+            }
+
+            if (this.status === 401) {
+                window.location = '/';
+            }
         }
     };
 
@@ -112,6 +135,24 @@ function editPassword() {
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (this.status === 200) {
+                passwordMessage.innerHTML = 'Le mot de passe a été changé avec succès';
+            }
+
+            if (this.status === 500) {
+                passwordMessage.innerHTML = 'Le mot de passe n\'a pas pu être changé';
+            }
+
+            if (this.status === 403) {
+                window.location = 'Le mot de passe actuel est erroné';
+            }
+
+            if (this.status === 401) {
+                window.location = '/';
+            }
+        }
+
         if (xhr.readyState === 4 && (this.status === 200 || this.status === 401)) {
             var response = JSON.parse(xhr.responseText);
             passwordMessage.innerHTML = response['message'];

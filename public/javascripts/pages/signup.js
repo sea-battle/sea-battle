@@ -1,16 +1,17 @@
 function checkEmailAddress() {
     'use strict';
 
-    var signupEmailMessage = document.getElementById(event.target.id + '-message');
+    var emailField = document.getElementById('email'),
+        emailMessage = document.getElementById('email-message');
 
     var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-    if (!regexEmail.test(event.target.value)) {
-        event.target.classList.add('error');
-        signupEmailMessage.innerHTML = 'Entrez une adresse e-mail valide';
+    if (!regexEmail.test(emailField.value)) {
+        emailField.classList.add('error');
+        emailMessage.innerHTML = 'Entrez une adresse e-mail valide';
     } else {
-        event.target.classList.remove('error');
-        signupEmailMessage.innerHTML = '';
+        emailField.classList.remove('error');
+        emailMessage.innerHTML = '';
     }
 }
 
@@ -21,22 +22,22 @@ function checkUsername() {
         usernameMessage = document.getElementById('username-message');
 
     if (usernameField.value === '') {
-        signupUsernameMessage.innerHTML = '';
+        usernameMessage.innerHTML = '';
         return;
     } else {
         var xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && this.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-
-                if (!response['success']) {
-                    usernameField.classList.add('error');
-                } else {
+            if (xhr.readyState === 4) {
+                if (this.status === 200) {
                     usernameField.classList.remove('error');
+                    usernameMessage.innerHTML = 'Ce pseudonyme est disponible';
                 }
 
-                usernameMessage.innerHTML = response['message'];
+                if (this.status === 409) {
+                    usernameField.classList.add('error');
+                    usernameMessage.innerHTML = 'Ce pseudonyme est déjà utlisé';
+                }
             }
         };
 
@@ -53,7 +54,11 @@ function checkPassword() {
         passwordConfirmationField = document.getElementById('password-confirmation'),
         passwordMessage = document.getElementById('password-message');
 
-    if (passwordField.value !== passwordConfirmationField.value) {
+    if (
+        passwordField.value !== passwordConfirmationField.value &&
+        passwordField.value !== '' &&
+        passwordConfirmationField.value !== ''
+    ) {
         event.target.classList.add('error');
         passwordMessage.innerHTML = 'Les mots de passe ne correspondent pas';
     } else {
@@ -69,7 +74,8 @@ function proceedSignup() {
 
     var xhr = new XMLHttpRequest();
 
-    var emailField = document.getElementById('email'),
+    var signupMessage = document.getElementById('signup-message'),
+        emailField = document.getElementById('email'),
         usernameField = document.getElementById('username'),
         passwordField = document.getElementById('password'),
         passwordConfirmationField = document.getElementById('password-confirmation');
@@ -82,9 +88,12 @@ function proceedSignup() {
     }
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && (this.status === 200 || this.status === 403)) {
-            var response = JSON.parse(xhr.responseText);
-            document.getElementById('signup-message').innerHTML = response['message'];
+        if (xhr.readyState === 4) {
+            if (this.status === 200) {
+                signupMessage.innerHTML = 'Un e-mail de confirmation vous a été envoyé';
+            } else if (this.status === 401) {
+                signupMessage.innerHTML = 'Une erreur est survenue lors de l\'inscription';
+            }
         }
     };
 

@@ -1,13 +1,19 @@
-var cookieParser = require('cookie-parser');
-var express = require('express');
-var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    passportLocalMongoose = require('passport-local-mongoose');
-var session = require('express-session');
+const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
+const express = require('express');
+const nodemailer = require('nodemailer');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
 
-var User = require('../models/user');
+const router = express.Router();
 
-var router = express.Router();
+// Load the models
+const User = require('../models/user');
+const EmailVerificationToken = require('../models/emailVerificationToken');
+
+// Load useful protoypes
+require('./helper.js');
 
 // Read cookies
 router.use(cookieParser());
@@ -41,19 +47,67 @@ router.use(passport.initialize());
 
 router.use(passport.session());
 
+// SMTP (Simple Mail Transfer Protocol) Settings
+const smtpConfig = {
+    host: 'smtps.upmc.fr',
+    port: 587,
+    secure: false,
+    auth: {
+        user: '2965253',
+        pass: 'A-mt5x81p0fh6'
+    }
+};
+
+// Create reusable transporter object
+var transporter = nodemailer.createTransport(smtpConfig);
+
+// Define the e-mail sending function
+function sendVerificationEmail(options) {
+    transporter.sendMail(options, function(err, info){
+        if (err){
+            return console.log(err);
+        }
+    });
+}
+
+// Handle e-mail verification tokens
+function generateToken(userId) {
+    var emailVerificationToken = new EmailVerificationToken({
+        key: crypto.randomBytes(16).toString('hex'),
+        userId: userId
+    });
+
+    emailVerificationToken.save(function (err) {
+        if (err) {
+            throw err;
+        }
+    });
+
+    return emailVerificationToken._id
+}
+
+// Format the verification e-mail
+function formatVerificationEmail(tokenId) {
+    return '<table width="100%" border="0" cellspacing="0" cellpadding="0">' +
+        '<tr>' +
+            '<td align="center">' +
+                '<div>' +
+                    '<img src="https://avatars0.githubusercontent.com/u/19774670?v=3&s=200">' +
+                    '<p>Confirmez votre inscription en cliquant sur le lien ci-dessous.</p>' +
+                    '<p><a href="localhost:3000/verify/' + tokenId + '" title="">Confirmez votre inscription</a></p>' +
+                '</div>' +
+            '</td>' +
+        '</tr>' +
+    '</table>';
+}
+
 // Routes: method POST
 router.post('/check-username-availability', function (req, res) {
     User.findOne({ username: req.body.username }, function (err, user) {
         if (user) {
-            res.json({
-                success: false,
-                message: 'Ce pseudonyme est déjà utlisé'
-            });
+            res.status(409).send();
         } else {
-            res.json({
-                success: true,
-                message: 'Ce pseudonyme est disponible'
-            });
+            res.status(200).send();
         }
     });
 });
@@ -63,87 +117,92 @@ router.post('/signup', function (req, res) {
             username: req.body.username,
             email: req.body.email,
             validated: false
-        }),
-        req.body.password, function (err, user) {
+        }), req.body.password, function (err, user) {
             if (err) {
-                res.status(403).json({
-                    success: false,
-                    message: 'Une erreur est survenue lors de l\'inscription'
-                });
+                res.status(403).send();
             }
 
-            passport.authenticate('local')(req, res, function () {
-                res.status(200).json({
-                    success: true,
-                    message: 'Un e-mail de confirmation vous a été envoyé'
-                });
+            // Generate a token and store its identifier
+            var tokenId = generateToken(user._id);
+
+            // Send the verification e-mail
+            sendVerificationEmail({
+            	from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
+                // to: user.email,
+            	to: 'louis.fischer@free.fr',
+            	subject: 'Sea Battle - confirmation de votre inscription',
+            	html: formatVerificationEmail(tokenId)
             });
+
+            res.status(200).send();
         }
     );
 });
 
 router.post('/signin', passport.authenticate('local'), function (req, res) {
-    res.send(req.user)
+    if (req.user.validated) {
+        res.send(req.user)
+    } else {
+        req.session.destroy(function (err) {
+        })
+
+        res.status(401).send();
+    }
 });
 
-router.post('/edit-email', function (req, res) {
+// Routes middleware: make sure the user is authenticated
+function isAuthenticatedEdit(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.status(401).send();
+    }
+}
+
+router.post('/edit-email', isAuthenticatedEdit, function (req, res) {
     User.update({ _id: req.user._id }, { email: req.body.email }, function (err, response) {
         if (err) {
-            res.status(500).json({
-                success: false,
-                message: 'L\'adresse e-mail n\'a pas pu être changé'
-            });
+            res.status(500).send();
         }
 
-        res.status(200).json({
-            success: true,
-            message: 'L\'adresse e-mail a été changé avec succès'
-        });
+        res.status(200).send();
     });
 });
 
-router.post('/edit-username', function (req, res) {
+router.post('/edit-username', isAuthenticatedEdit, function (req, res) {
     User.update({ _id: req.user._id }, { username: req.body.username }, function (err, response) {
         if (err) {
-            res.status(500).json({
-                success: false,
-                message: 'Le pseudonyme n\'a pas pu être changé'
-            });
+            res.status(500).json();
         }
 
-        res.status(200).json({
-            success: true,
-            message: 'Le pseudonyme a été changé avec succès'
-        });
+        res.status(200).send();
     });
 });
 
-router.post('/edit-password', function (req, res, next) {
+router.post('/edit-password', isAuthenticatedEdit, function (req, res, next) {
     // Find a user with an identifier matching the one stored in the session
     User.findById(req.user._id, function (err, user) {
         if (err) {
             next(err);
         }
         // Test authentication with found user and password from form
-        user.authenticate(req.body.oldPassword, function (err, user) {
+        user.authenticate(req.body.oldPassword, function (err, user, passwordErr) {
             if (err) {
-                res.status(401).json({
-                    message: 'Le mot de passe actuel est erroné'
+                res.status(500).send();
+            } else if (passwordErr) {
+                res.status(403).send();
+            } else {
+                // Replace current password with new password
+                user.setPassword(req.body.password, function () {
+                    user.save();
+                    res.status(200).send();
                 });
             }
-
-            // Replace current password with new password
-            user.setPassword(req.body.password, function () {
-                user.save();
-                res.status(200).json({
-                    message: 'Le mot de passe a été changé avec succès'
-                });
-            });
         });
     });
 });
 
-router.post('/delete-user', function (req, res, next) {
+router.post('/delete-user', isAuthenticatedEdit, function (req, res, next) {
     User.remove({ _id: req.user._id }, function (err, response) {
         if (err) {
             return next(err);
@@ -158,14 +217,24 @@ router.post('/delete-user', function (req, res, next) {
 
 // Route middleware: make sure the user is authenticated
 function isAuthenticated(req, res, next) {
+    // Routes the user cannot access if it is signed in
+    const unneededRoutes = new Array(
+        '/signup'
+    );
+
+    // Routes the user cannot access if it is not signed in
+    const protectedRoutes = new Array(
+        '/profile'
+    );
+
     if (req.isAuthenticated()) {
-        if (req.route.path === '/signup' || req.route.path === '/') {
+        if (unneededRoutes.contain(req.route.path)) {
             res.redirect('/rooms');
         } else {
             return next();
         }
     } else {
-        if (req.route.path === '/profile') {
+        if (protectedRoutes.contain(req.route.path)) {
             res.redirect('/');
         } else {
             return next();
@@ -174,7 +243,45 @@ function isAuthenticated(req, res, next) {
 }
 
 // Routes: method GET
-router.get('/', isAuthenticated, function (req, res) {
+router.get('/verify/:tokenId', isAuthenticated, function (req, res) {
+    function _verifyFailed(userId) {
+        // Remove the user from the database if the verification failed
+        User.remove({ _id: userId }, function (err, response) {
+            if (err) {
+                // Handle error
+            }
+        });
+
+        res.render(__dirname + '/../views/verify', {
+            success: false
+        });
+    }
+
+    EmailVerificationToken.findById(req.params.tokenId, function (err, token) {
+        if (err || !token) {
+            _verifyFailed();
+        } else {
+            User.findOneAndUpdate({ _id: token.userId }, { validated: true }, function (err, user) {
+                if (err || !user) {
+                    _verifyFailed(user._id);
+                } else {
+                    EmailVerificationToken.remove({ _id: token._id }, function (err, response) {
+                        if (err) {
+                            // Handle error
+                        }
+                    });
+
+                    res.render(__dirname + '/../views/verify', {
+                        success: true
+                    });
+                }
+            });
+        }
+    });
+});
+
+router.get('/', function (req, res) {
+    res.locals.username = (req.user) ? req.user.username : false;
 	res.render(__dirname + '/../views/index');
 });
 
@@ -183,6 +290,7 @@ router.get('/signup', isAuthenticated, function (req, res) {
 });
 
 router.get('/profile', isAuthenticated, function (req, res) {
+    // res.locals.username = req.user.username;
     res.render(__dirname + '/../views/profile');
 });
 
