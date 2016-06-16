@@ -1,9 +1,43 @@
 section.content.game
-    aside#switching-aside.switching-aside
-        include inc/boats.jade
-        include inc/players-grid.jade
+	aside.game-info
+		button#aside-toggle.toggle.aside-toggle
+			span.open.fa.fa-th.fa-2x(aria-hidden="true")
+			span.close.fa.fa-times.fa-2x(aria-hidden="true")
+		button#ranking-toggle.toggle.ranking-toggle
+			span.open.fa.fa-list-ol.fa-2x(aria-hidden="true")
+			span.close.fa.fa-times.fa-2x(aria-hidden="true")
+		button#chat-toggle.toggle.chat-toggle
+			span.open.fa.fa-comments.fa-2x(aria-hidden="true")
+			span.close.fa.fa-times.fa-2x(aria-hidden="true")
+		include inc/player-info.jade
+		section#game-ranking.game-ranking
+			h2 Classement
+			ul
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+		include inc/chat.jade
+	aside#switching-aside.switching-aside
+		include inc/boats.jade
+		include inc/players-grid.jade
 
-    section#canvas-wrapper.grids-wrapper
-        canvas#canvas
-
-        i#timer
+	section#canvas-wrapper.grids-wrapper
+		div.main-canvas-wrapper
+			canvas#canvas
+		section.turn-info
+			i#timer
