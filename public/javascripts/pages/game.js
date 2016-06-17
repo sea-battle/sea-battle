@@ -250,10 +250,17 @@ socket.on('game-init-players-grids', function (players) {
 });
 
 socket.on('update-after-turn', function (touchedPlayers){
-	console.log(touchedPlayers);
-	/*
 	for (var player in touchedPlayers){
-		var gridTest = findGridByPlayerId(touchedPlayers[player].)
+		var gridTest = findGridByPlayerId(player);
+		touchedPlayers[player].touchedAt.forEach(function (data){
+			gridTest.cells[data.coords.x][data.coords.x].shooted = true;
+			gridTest.cells[data.coords.x][data.coords.x].shootedBy = data.by;
+			gridTest.shootedCoords.push(JSON.parse(JSON.stringify(data.coords)));
+		});
 	}
-	*/
+	
+	grids.forEach(function (g){
+		g.drawShoots();
+	});
+	
 });

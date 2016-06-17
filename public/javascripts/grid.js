@@ -13,6 +13,7 @@ function Grid(canvas, playerId) {
     this.cellsContainingBoats = [];
     this.borderColor = '#000000';
     this.spriteCellDefaultSize = 32;
+	this.shootedCoords = [];
 
     this.getCurrentCellInfos = function (e) {
         var pos = {
@@ -125,7 +126,7 @@ Grid.prototype = {
         this.ctx.fillStyle = "#F00";
         this.ctx.fillRect(this.cellWidth * coords.x + 1, this.cellWidth * coords.y + 1, this.cellWidth - 1, this.cellWidth - 1);
     },
-    clearCell: function (x, y) {
+    clearCell: function (coords) {
         this.ctx.clearRect(this.cellWidth * coords.x + 1, this.cellWidth * coords.y + 1, this.cellWidth - 1, this.cellWidth - 1);
     },
     clearCanvas: function () {
@@ -200,6 +201,14 @@ Grid.prototype = {
             self.drawImg(sprite, drawCoord, deg, 1);
         });
     },
+	drawShoots: function (){
+		var self = this;
+		self.shootedCoords.forEach(function (coords){
+			self.clearCell(coords);
+			self.ctx.fillStyle = '#000';
+			self.ctx.fillRect(self.cellWidth * coords.x + 1, self.cellWidth * coords.y + 1, self.cellWidth - 1, self.cellWidth - 1);
+		});
+	},
     placeBoat: function (boat, coords, spriteY) {
         var coordToChange = boat.orientation == HORIZONTAL ? 'x' : 'y';
         var placeCoord = {

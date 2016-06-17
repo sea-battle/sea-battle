@@ -12,7 +12,7 @@ module.exports = {
 		return count;
 	},
 	defaultPlacementTime: 1,
-	defaultShootTime: 10,
+	defaultShootTime: 7,
 	// return players from player room
 	getPlayersId: function (ioSockets, roomName) {
 		return ioSockets.adapter.rooms[roomName];
@@ -80,7 +80,7 @@ module.exports = {
 
 			touchedPlayers[socketTurn.targetId].touchedAt.push({
 				coords: socketTurn.shootCoords,
-				by: socketTurn.shooterId
+				by: socketTurn.shooterName
 			});
 		}
 		
