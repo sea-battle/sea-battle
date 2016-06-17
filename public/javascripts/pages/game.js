@@ -248,13 +248,12 @@ socket.on('game-init-players-grids', function (players) {
 });
 
 socket.on('update-after-turn', function (touchedPlayers) {
-	console.log(touchedPlayers);
 	for (var player in touchedPlayers) {
-		var gridTest = findGridByPlayerId(player);
+		var currentGrid = findGridByPlayerId(player);
 		touchedPlayers[player].touchedAt.forEach(function (data) {
-			gridTest.cells[data.coords.x][data.coords.x].shooted = true;
-			gridTest.cells[data.coords.x][data.coords.x].shootedBy = data.by;
-			gridTest.shootedCells.push({
+			currentGrid.cells[data.coords.x][data.coords.x].shooted = true;
+			currentGrid.cells[data.coords.x][data.coords.x].shootedBy = data.by;
+			currentGrid.shootedCells.push({
 				coords: JSON.parse(JSON.stringify(data.coords)),
 				touched: data.touched
 			});
