@@ -128,19 +128,17 @@ module.exports = {
 								touchedPlayers: {}
 							};
 						}
-						//console.log('Still looping');
 						io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
 						game.rooms[socket.room].timer--;
 					}
 				}
 
 				// Shoot timer
-				console.log('game.rooms[socket.room].timerId:', game.rooms[socket.room].timerId);
 				if (game.rooms[socket.room].timerId == null) {
 					game.rooms[socket.room].timerId = setInterval(playTurn, 1000);
 				}
 			});
-			socket.on('game-shoot', function (shootCoords, targetId) {
+			socket.on('game-shoot', function (shootCoords) {
 				var currentRoom = game.rooms[socket.room];
 				var turnCount = currentRoom.turnCount;
 				if (currentRoom.turns[turnCount] == undefined) {
@@ -150,10 +148,8 @@ module.exports = {
 					};
 				}
 
-				currentRoom.turns[turnCount]['playersShoots'][socket.name] = {
+				currentRoom.turns[turnCount]['playersShoots'][socket.id] = {
 					shootCoords: shootCoords,
-					targetId: targetId,
-					shooterId: socket.id,
 					shooterName: socket.name
 				};
 			});

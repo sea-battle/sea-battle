@@ -14,7 +14,7 @@ module.exports = {
 		return count;
 	},
 	defaultPlacementTime: 1,
-	defaultShootTime: 5,
+	defaultShootTime: 3,
 	// return players from player room
 	getPlayersId: function (ioSockets, roomName) {
 		return ioSockets.adapter.rooms[roomName];
@@ -38,6 +38,9 @@ module.exports = {
 			names.push(ioSockets.sockets[socketId].name);
 		}
 		return names;
+	},
+	getPlayerCellsById(ioSockets, id) {
+		return this.getPlayerById(ioSockets, id).cells;
 	},
 	getPlayers: function (ioSockets, roomName) {
 		var roomPlayers = this.getPlayersId(ioSockets, roomName);
@@ -64,29 +67,33 @@ module.exports = {
 		return ioSockets.sockets[id];
 	},
 	playShootTurn: function (ioSockets, roomName) {
+
 		var self = this;
 		var lastTurnIndex = this.rooms[roomName].turns.length - 1;
 		if (!utils.isEmpty(this.rooms[roomName].turns[lastTurnIndex]['playersShoots'])) {
 			var lastTurn = this.rooms[roomName].turns[lastTurnIndex]['playersShoots'];
 			var touchedPlayers = {};
-			for (key in lastTurn) {
+			var playersIds = this.getPlayersId(ioSockets, roomName);
+			for (var key in lastTurn) {
 				var socketTurn = lastTurn[key];
-				var targetedSocket = self.getPlayerById(ioSockets, socketTurn.targetId);
-				targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted = true;
-				targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shootedBy.push(key);
+				for (var socketId in playersIds.sockets) {
+					var currentSocketCells = this.getPlayerById(ioSockets, socketId).cells;
+					currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted = true;
+					currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shootedBy.push(key);
 
-				if (touchedPlayers[socketTurn.targetId] == undefined) {
-					touchedPlayers[socketTurn.targetId] = {
-						touchedAt: []
-					};
+					if (touchedPlayers[socketId] == undefined) {
+						touchedPlayers[socketId] = {
+							touchedAt: []
+						};
+					}
+					var touched = currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].containBoat;
+					touchedPlayers[socketId].touchedAt.push({
+						coords: socketTurn.shootCoords,
+						by: socketTurn.shooterName,
+						touched: touched
+					});
+
 				}
-
-				var touched = targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].containBoat;
-				touchedPlayers[socketTurn.targetId].touchedAt.push({
-					coords: socketTurn.shootCoords,
-					by: socketTurn.shooterName,
-					touched: touched
-				});
 			}
 
 			this.rooms[roomName].turns[lastTurnIndex].touchedPlayers = touchedPlayers;
