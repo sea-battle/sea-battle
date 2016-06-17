@@ -92,14 +92,25 @@ function initAside() {
     });
 }
 
-function initSocialModal() {
+function initModals() {
     document.getElementById('close-social').addEventListener('click', function(e) {
         document.getElementById('social-modal').removeClass(openedClass);
     });
-}
 
-function initReplayModal() {
     document.getElementById('close-replay').addEventListener('click', function(e) {
         document.getElementById('replay-modal').removeClass(openedClass);
     });
+}
+
+function initWait() {
+    initPlayerInfo();
+    initChat();
+}
+
+function initGame() {
+    initPlayerInfo();
+    initChat();
+    initRanking();
+    initAside();
+    initModals();
 }
