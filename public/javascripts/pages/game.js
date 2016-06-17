@@ -77,6 +77,14 @@ function findGridByPlayerId(playerId) {
 	return null;
 }
 
+function cloneTargetedGridToShooter() {
+	var g = findGridByPlayerId(targetId);
+	shooterGrid.cells = JSON.parse(JSON.stringify(g.cells));
+	shooterGrid.shootedCells = JSON.parse(JSON.stringify(g.shootedCells));
+	shooterGrid.renderGrid();
+	shooterGrid.drawShoots();
+}
+
 var selectedBoat = null;
 var targetId = null;
 var gameHandlers = {
@@ -178,11 +186,7 @@ var gameHandlers = {
 		otherPlayersGrid: {
 			click: function (e) {
 				targetId = this.getAttribute('data-player-id');
-				var g = findGridByPlayerId(targetId);
-				shooterGrid.cells = JSON.parse(JSON.stringify(g.cells));
-				shooterGrid.shootedCells = JSON.parse(JSON.stringify(g.shootedCells));
-				shooterGrid.renderGrid();
-				shooterGrid.drawShoots();
+				cloneTargetedGridToShooter();
 			}
 		},
 		shooterGrid: {
@@ -270,4 +274,6 @@ socket.on('update-after-turn', function (touchedPlayers) {
 	grids.forEach(function (g) {
 		g.drawShoots(boatsSprite);
 	});
+	
+	cloneTargetedGridToShooter();
 });

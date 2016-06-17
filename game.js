@@ -1,3 +1,5 @@
+var utils = require('./utils');
+
 module.exports = {
 	defaultRoom: '/',
 	rooms: {},
@@ -12,7 +14,7 @@ module.exports = {
 		return count;
 	},
 	defaultPlacementTime: 1,
-	defaultShootTime: 20,
+	defaultShootTime: 1,
 	// return players from player room
 	getPlayersId: function (ioSockets, roomName) {
 		return ioSockets.adapter.rooms[roomName];
@@ -64,29 +66,31 @@ module.exports = {
 	playShootTurn: function (ioSockets, roomName) {
 		var self = this;
 		var lastTurnIndex = this.rooms[roomName].turns.length - 1;
-		var lastTurn = this.rooms[roomName].turns[lastTurnIndex]['playersShoots'];
-		var touchedPlayers = {};
-		for (key in lastTurn) {
-			var socketTurn = lastTurn[key];
-			var targetedSocket = self.getPlayerById(ioSockets, socketTurn.targetId);
-			targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted = true;
-			targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shootedBy.push(key);
+		if (!utils.isEmpty(this.rooms[roomName].turns[lastTurnIndex]['playersShoots'])) {
+			var lastTurn = this.rooms[roomName].turns[lastTurnIndex]['playersShoots'];
+			var touchedPlayers = {};
+			for (key in lastTurn) {
+				var socketTurn = lastTurn[key];
+				var targetedSocket = self.getPlayerById(ioSockets, socketTurn.targetId);
+				targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted = true;
+				targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shootedBy.push(key);
 
-			if (touchedPlayers[socketTurn.targetId] == undefined) {
-				touchedPlayers[socketTurn.targetId] = {
-					touchedAt: []
-				};
+				if (touchedPlayers[socketTurn.targetId] == undefined) {
+					touchedPlayers[socketTurn.targetId] = {
+						touchedAt: []
+					};
+				}
+
+				var touched = targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].containBoat;
+				touchedPlayers[socketTurn.targetId].touchedAt.push({
+					coords: socketTurn.shootCoords,
+					by: socketTurn.shooterName,
+					touched: touched
+				});
 			}
 
-			var touched = targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].containBoat;
-			touchedPlayers[socketTurn.targetId].touchedAt.push({
-				coords: socketTurn.shootCoords,
-				by: socketTurn.shooterName,
-				touched: touched
-			});
+			this.rooms[roomName].turns[lastTurnIndex].touchedPlayers = touchedPlayers;
 		}
-		
-		this.rooms[roomName].turns[lastTurnIndex].touchedPlayers = touchedPlayers;
 	},
 	getMessageTime: function () {
 		var d = new Date();

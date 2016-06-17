@@ -1,3 +1,5 @@
+var utils = require('./utils');
+
 module.exports = {
 	start: function (io, game) {
 		io.sockets.on('connection', function (socket) {
@@ -108,15 +110,26 @@ module.exports = {
 					if (game.rooms[socket.room].timer == 0) {
 						game.playShootTurn(io.sockets, socket.room);
 						var currentRoom = game.rooms[socket.room];
-						io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
 
+						if (!utils.isEmpty(currentRoom.turns[currentRoom.turnCount].touchedPlayers)) {
+							io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
+						}
 						if (game.rooms[socket.room].gameover) {
 							clearInterval(game.rooms[socket.room].timerId);
 						}
-						
+
 						currentRoom.turnCount++;
 						game.rooms[socket.room].timer = game.defaultShootTime;
 					} else {
+						var currentRoom = game.rooms[socket.room];
+						var turnCount = currentRoom.turnCount;
+						if (currentRoom.turns[turnCount] == undefined) {
+							currentRoom.turns[turnCount] = {
+								playersShoots: {},
+								touchedPlayers: {}
+							};
+						}
+						console.log('Still looping');
 						io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
 						game.rooms[socket.room].timer--;
 					}
@@ -133,13 +146,6 @@ module.exports = {
 			socket.on('game-shoot', function (shootCoords, targetId) {
 				var currentRoom = game.rooms[socket.room];
 				var turnCount = currentRoom.turnCount;
-				if (currentRoom.turns[turnCount] == undefined) {
-					currentRoom.turns[turnCount] = {
-						playersShoots: {},
-						touchedPlayers: {}
-					};
-				}
-
 				currentRoom.turns[turnCount]['playersShoots'][socket.name] = {
 					shootCoords: shootCoords,
 					targetId: targetId,
