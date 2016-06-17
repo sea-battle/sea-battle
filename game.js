@@ -67,7 +67,6 @@ module.exports = {
 		return ioSockets.sockets[id];
 	},
 	playShootTurn: function (ioSockets, roomName) {
-
 		var self = this;
 		var lastTurnIndex = this.rooms[roomName].turns.length - 1;
 		if (!utils.isEmpty(this.rooms[roomName].turns[lastTurnIndex]['playersShoots'])) {

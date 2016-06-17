@@ -37,4 +37,10 @@ router.get('/game', function (req, res) {
 	});
 });
 
+router.get('/test', function (req, res) {
+	res.render(__dirname + '/../views/test', {
+		bodyClass: 'test'
+	});
+});
+
 module.exports = router;

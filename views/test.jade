@@ -1,0 +1,12 @@
+extends inc/head.jade
+
+block title
+	title test
+block content
+	h1 Test page
+	div(width="100", height="100")
+		canvas#canvas-test
+	
+	script(src='/javascripts/grid.js')
+	script(src='/javascripts/prototype.js')
+	script(src='/javascripts/test.js')
