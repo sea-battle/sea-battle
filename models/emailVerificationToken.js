@@ -5,7 +5,7 @@ var EmailVerificationTokens = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: 3600 * 24 * 365
+        // expires: 3600 * 24 * 365
     },
     key: String,
     userId: {

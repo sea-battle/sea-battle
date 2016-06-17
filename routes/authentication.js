@@ -12,9 +12,6 @@ const router = express.Router();
 const User = require('../models/user');
 const EmailVerificationToken = require('../models/emailVerificationToken');
 
-// Load useful protoypes
-require('./helper.js');
-
 // Read cookies
 router.use(cookieParser());
 
@@ -101,6 +98,28 @@ function formatVerificationEmail(tokenId) {
     '</table>';
 }
 
+// Routes middlewares: make sure the user is authenticated
+var isAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        if (req.xhr) {
+            res.status(401).send();
+        } else {
+            res.redirect('/');
+        }
+    }
+}
+
+// Route middleware: make sure the user is not authenticated
+isNotAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        res.redirect('/rooms');
+    } else {
+        return next();
+    }
+}
+
 // Routes: method POST
 router.post('/check-username-availability', function (req, res) {
     User.findOne({ username: req.body.username }, function (err, user) {
@@ -150,16 +169,7 @@ router.post('/signin', passport.authenticate('local'), function (req, res) {
     }
 });
 
-// Routes middleware: make sure the user is authenticated
-function isAuthenticatedEdit(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        res.status(401).send();
-    }
-}
-
-router.post('/edit-email', isAuthenticatedEdit, function (req, res) {
+router.post('/edit-email', isAuthenticated, function (req, res) {
     User.update({ _id: req.user._id }, { email: req.body.email }, function (err, response) {
         if (err) {
             res.status(500).send();
@@ -169,7 +179,7 @@ router.post('/edit-email', isAuthenticatedEdit, function (req, res) {
     });
 });
 
-router.post('/edit-username', isAuthenticatedEdit, function (req, res) {
+router.post('/edit-username', isAuthenticated, function (req, res) {
     User.update({ _id: req.user._id }, { username: req.body.username }, function (err, response) {
         if (err) {
             res.status(500).json();
@@ -179,7 +189,7 @@ router.post('/edit-username', isAuthenticatedEdit, function (req, res) {
     });
 });
 
-router.post('/edit-password', isAuthenticatedEdit, function (req, res, next) {
+router.post('/edit-password', isAuthenticated, function (req, res, next) {
     // Find a user with an identifier matching the one stored in the session
     User.findById(req.user._id, function (err, user) {
         if (err) {
@@ -202,7 +212,7 @@ router.post('/edit-password', isAuthenticatedEdit, function (req, res, next) {
     });
 });
 
-router.post('/delete-user', isAuthenticatedEdit, function (req, res, next) {
+router.post('/delete-user', isAuthenticated, function (req, res, next) {
     User.remove({ _id: req.user._id }, function (err, response) {
         if (err) {
             return next(err);
@@ -215,56 +225,38 @@ router.post('/delete-user', isAuthenticatedEdit, function (req, res, next) {
     });
 });
 
-// Route middleware: make sure the user is authenticated
-function isAuthenticated(req, res, next) {
-    // Routes the user cannot access if it is signed in
-    const unneededRoutes = new Array(
-        '/signup'
-    );
-
-    // Routes the user cannot access if it is not signed in
-    const protectedRoutes = new Array(
-        '/profile'
-    );
-
-    if (req.isAuthenticated()) {
-        if (unneededRoutes.contain(req.route.path)) {
-            res.redirect('/rooms');
-        } else {
-            return next();
-        }
-    } else {
-        if (protectedRoutes.contain(req.route.path)) {
-            res.redirect('/');
-        } else {
-            return next();
-        }
-    }
-}
-
 // Routes: method GET
-router.get('/verify/:tokenId', isAuthenticated, function (req, res) {
-    function _verifyFailed(userId) {
-        // Remove the user from the database if the verification failed
-        User.remove({ _id: userId }, function (err, response) {
-            if (err) {
-                // Handle error
-            }
-        });
+router.get('/verify/:tokenId', isNotAuthenticated, function (req, res) {
+    var _verifyFailed = function (userId = false) {
+        if (userId) {
+            // Remove the user from the database if the verification failed
+            User.remove({ _id: userId }, function (err, response) {
+                if (err) {
+                    // Handle error
+                }
+            });
+        }
 
         res.render(__dirname + '/../views/verify', {
             success: false
         });
-    }
+    };
 
+    // Find a token matching the token identifier passed in parameter in the URL
     EmailVerificationToken.findById(req.params.tokenId, function (err, token) {
-        if (err || !token) {
+        if (err) {
             _verifyFailed();
-        } else {
+        }
+
+        if (token) {
+            // Find a user matching the user identifier from the token and set "validated" to true
             User.findOneAndUpdate({ _id: token.userId }, { validated: true }, function (err, user) {
-                if (err || !user) {
+                if (err) {
                     _verifyFailed(user._id);
-                } else {
+                }
+
+                if (user) {
+                    // Remove the token
                     EmailVerificationToken.remove({ _id: token._id }, function (err, response) {
                         if (err) {
                             // Handle error
@@ -285,12 +277,11 @@ router.get('/', function (req, res) {
 	res.render(__dirname + '/../views/index');
 });
 
-router.get('/signup', isAuthenticated, function (req, res) {
+router.get('/signup', isNotAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/signup');
 });
 
 router.get('/profile', isAuthenticated, function (req, res) {
-    // res.locals.username = req.user.username;
     res.render(__dirname + '/../views/profile');
 });
 

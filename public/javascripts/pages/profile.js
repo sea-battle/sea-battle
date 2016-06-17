@@ -26,6 +26,7 @@ function checkUsername() {
 
         xhr.open('POST', '/check-username-availability', true);
         xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
         xhr.send(JSON.stringify({ username: usernameField.value }));
     }
 }
@@ -88,6 +89,7 @@ function editEmail() {
 
         xhr.open('POST', '/edit-email', true);
         xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
         xhr.send(JSON.stringify({ email: emailField.value }));
     }
 }
@@ -120,6 +122,7 @@ function editUsername() {
 
     xhr.open('POST', '/edit-username', true);
     xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
     xhr.send(JSON.stringify({ username: usernameField.value }));
 }
 
@@ -145,22 +148,18 @@ function editPassword() {
             }
 
             if (this.status === 403) {
-                window.location = 'Le mot de passe actuel est erroné';
+                passwordMessage.innerHTML = 'Le mot de passe actuel est erroné';
             }
 
             if (this.status === 401) {
                 window.location = '/';
             }
         }
-
-        if (xhr.readyState === 4 && (this.status === 200 || this.status === 401)) {
-            var response = JSON.parse(xhr.responseText);
-            passwordMessage.innerHTML = response['message'];
-        }
     };
 
     xhr.open('POST', '/edit-password', true);
     xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
     xhr.send(JSON.stringify({
         oldPassword: oldPasswordField.value,
         password: passwordField.value
@@ -182,6 +181,7 @@ function deleteUser() {
 
     xhr.open('POST', '/delete-user', true);
     xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
     xhr.send();
 }
 
