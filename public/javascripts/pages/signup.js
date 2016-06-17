@@ -84,7 +84,7 @@ function proceedSignup() {
         email: emailField.value,
         username: usernameField.value,
         password: passwordField.value,
-        password_confirmation: passwordConfirmationField.value
+        passwordConfirmation: passwordConfirmationField.value
     }
 
     xhr.onreadystatechange = function () {
@@ -111,9 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
         passwordConfirmationField = document.getElementById('password-confirmation'),
         signupSubmit = document.getElementById('signup-submit');
 
-    emailField.addEventListener('blur', checkEmailAddress, false);
+    // emailField.addEventListener('blur', checkEmailAddress, false);
     usernameField.addEventListener('keyup', checkUsername, false);
     passwordField.addEventListener('keyup', checkPassword, false);
     passwordConfirmationField.addEventListener('keyup', checkPassword, false);
-    signupSubmit.addEventListener('click', proceedSignup, false);
+    // signupSubmit.addEventListener('click', proceedSignup, false);
 }, false);
