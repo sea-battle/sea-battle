@@ -42,11 +42,11 @@ createRoomButton.addEventListener('click', function (e) {
     var name = roomName.value;
     if (name != '') {
         socket.emit('rooms-create', name);
+        if(roomName.hasClass('empty')) roomName.removeClass('empty');
         roomName.value = '';
     } else {
         roomName.focus();
-        //TODO
-        //roomName.addClass = voir class avec clement
+         if(!roomName.hasClass('empty')) roomName.addClass('empty');
     }
 });
 
