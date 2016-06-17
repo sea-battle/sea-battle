@@ -62,7 +62,6 @@ function initRanking() {
 
     rankingToggle.addEventListener('click', function(e) {
         if (rankingToggle.hasClass(openedClass)) {
-            console.log("oucouc");
             rankingToggle.removeClass(openedClass);
             ranking.removeClass(openedClass);
         } else {
@@ -84,5 +83,11 @@ function initAside() {
             asideToggle.addClass(openedClass);
             switchingAside.addClass(openedClass);
         }
+    });
+}
+
+function initSocialModal() {
+    document.getElementById('close-social').addEventListener('click', function(e) {
+        document.getElementById('social-modal').removeClass(openedClass);
     });
 }

@@ -1,13 +1,14 @@
 section.content.game
 	section#social-modal.social-modal
 		span#close-social.close-social.fa.fa-times.fa-2x(aria-hidden="true")
-		h2 Vous avez pris du galon !
-		p Partagez votre nouvelle promotion sur les réseaux
-		p.socials
-			a(href='http://www.facebook.com/share.php?u=http://seabattle.io' title='Partager sur Facebook' target='_blank')
-				span.fa.fa-facebook-official(aria-hidden='true')
-			a(href='https://twitter.com/intent/tweet?text=Sur Sea Battle, je suis #{username}, un #{grade} avec #{points} points, venez m\'affronter !&amp;url=seabattle.io', title='Partager sur Twitter', target='_blank')
-				span.fa.fa-twitter(aria-hidden='true')
+		div.modal-content
+			h2 Vous avez pris du galon !
+			p Partagez votre nouvelle promotion sur les réseaux
+			p.socials
+				a(href='http://www.facebook.com/share.php?u=http://seabattle.io' title='Partager sur Facebook' target='_blank')
+					span.fa.fa-facebook-official(aria-hidden='true')
+				a(href='https://twitter.com/intent/tweet?text=Sur Sea Battle, je suis #{username}, un #{grade} avec #{points} points, venez m\'affronter !&amp;url=seabattle.io', title='Partager sur Twitter', target='_blank')
+					span.fa.fa-twitter(aria-hidden='true')
 	aside.game-info
 		button#aside-toggle.toggle.aside-toggle
 			span.open.fa.fa-th.fa-2x(aria-hidden="true")
