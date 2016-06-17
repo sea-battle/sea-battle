@@ -175,12 +175,14 @@ var gameHandlers = {
 	},
 	battleStage: {
 		otherPlayersGrid: {
-			click: function (e) {
-			}
+			click: function (e) {}
 		},
 		shooterGrid: {
 			click: function (e) {
 				socket.emit('game-shoot', e.gridInfo.coords);
+			},
+			mousemove: function (e){
+				console.log(e.gridInfo);
 			}
 		}
 	}
@@ -236,24 +238,32 @@ socket.on('game-init-players-grids', function (players) {
 		var otherPlayerGrid = new Grid(otherPlayerCanvas, player.id);
 		grids.push(otherPlayerGrid);
 		otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.otherPlayersGrid.click);
+		//TOREMOVE
+		otherPlayerCanvas.addEventListener('mousemove', gameHandlers.battleStage.shooterGrid.mousemove);
 	});
 
 	// grid shooter
 	var shooterCanvas = document.createElement('canvas');
 	fireCanvasContainer.appendChild(shooterCanvas);
 	fireCanvasContainer.removeClass('hidden');
-	shooterGrid = new Grid(shooterCanvas);
+	shooterGrid = new Grid(shooterCanvas, 'shooter');
 	grids.push(shooterGrid);
 	shooterCanvas.addEventListener('click', gameHandlers.battleStage.shooterGrid.click);
+	shooterCanvas.addEventListener('mousemove', gameHandlers.battleStage.shooterGrid.mousemove);
 });
 
 socket.on('update-after-turn', function (touchedPlayers) {
+	var shooter = findGridByPlayerId('shooter');
 	for (var player in touchedPlayers) {
 		var currentGrid = findGridByPlayerId(player);
 		touchedPlayers[player].touchedAt.forEach(function (data) {
 			currentGrid.cells[data.coords.x][data.coords.x].shooted = true;
 			currentGrid.cells[data.coords.x][data.coords.x].shootedBy = data.by;
 			currentGrid.shootedCells.push({
+				coords: JSON.parse(JSON.stringify(data.coords)),
+				touched: data.touched
+			});
+			shooter.shootedCells.push({
 				coords: JSON.parse(JSON.stringify(data.coords)),
 				touched: data.touched
 			});

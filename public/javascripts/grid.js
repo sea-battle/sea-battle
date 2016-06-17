@@ -30,6 +30,7 @@ function Grid(canvas, playerId) {
 
 	this.init();
 	this.renderGrid();
+	this.drawCoords();
 }
 
 Grid.prototype = {
@@ -225,6 +226,23 @@ Grid.prototype = {
 				self.ctx.fillRect(self.cellWidth * coords.x + 1, self.cellWidth * coords.y + 1, self.cellWidth - 1, self.cellWidth - 1);
 			}
 		});
+	},
+	drawCoords: function () {
+		this.ctx.fillStyle = "#000";
+		this.ctx.textAlign = 'center';
+		this.ctx.textBaseline = "bottom";
+		for (var n = 1; n < this.iterations; n++) {
+			var position = this.cellWidth * n;
+			var text = position + '';
+			var halfTextWidth = this.ctx.measureText(text).width / 2;
+			var halfCellWidth = this.cellWidth / 2;
+			var x = (this.cellWidth * position) + halfCellWidth - halfTextWidth;
+			var y = 0;
+			console.log('x:', x);
+			console.log('y:', y);
+			console.log(text);
+			this.ctx.fillText(text, x, y);
+		}
 	},
 	placeBoat: function (boat, coords, spriteY) {
 		var coordToChange = boat.orientation == HORIZONTAL ? 'x' : 'y';

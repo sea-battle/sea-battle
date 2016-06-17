@@ -12,9 +12,11 @@ module.exports = {
 				targetId: null
 			};
 			socket.name = socket.id;
+			socket.points = 0;
 
 			// Stage 1: rooms
 			socket.on('rooms-create', function (roomName) {
+				socket.points = 0;
 				game.rooms[roomName] = {
 					timer: game.defaultPlacementTime,
 					timerId: null,
@@ -36,6 +38,7 @@ module.exports = {
 				socket.emit('rooms-update', game.getRoomsInfos());
 			});
 			socket.on('rooms-join', function (roomName) {
+				socket.points = 0;
 				socket.room = roomName;
 				game.rooms[roomName].playerCount++;
 				socket.leave(game.defaultRoom);
