@@ -599,10 +599,6 @@ header {
 	text-align: center;
 }
 
-.fire-canvas {
-	display: none;
-}
-
 /* Player info */
 
 .player-info-toggle,
