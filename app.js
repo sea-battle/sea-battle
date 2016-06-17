@@ -1,21 +1,25 @@
 var app = require('express')(),
 	bodyParser = require('body-parser'),
 	express = require('express'),
-	jade = require('jade'), // TOREMOVE when two routes will be removed
 	mongoose = require('mongoose'),
 	morgan = require('morgan'),
 	server = require('http').createServer(app),
 	io = require('socket.io').listen(server);
 
-// Load local requirements
+// Define local requirements
 var config = require('./config'),
 	game = require('./game'),
 	socket = require('./socket');
 
-// Load routes
-var routesMain = require('./routes/main'),
-	routesAuthentication = require('./routes/authentication'),
-	routesGame = require('./routes/game');
+// Load all routes and middlewares required for authentication
+var	routesAuthentication = require('./routes/authentication');
+app.use('/', routesAuthentication);
+
+var	routesGame = require('./routes/game'),
+    routesMain = require('./routes/main');
+
+app.use('/', routesGame);
+app.use('/', routesMain);
 
 // Load stylesheets, JavaScript files, images and fonts
 app.use(express.static(__dirname + '/public'));

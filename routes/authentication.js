@@ -310,18 +310,20 @@ router.get('/verify/:tokenId', isNotAuthenticated, function (req, res) {
 
 router.get('/', function (req, res) {
     res.locals.username = (req.user) ? req.user.username : false;
-	res.render(__dirname + '/../views/index');
+    res.render(__dirname + '/../views/index', {
+		bodyClass: 'home'
+	});
 });
 
 router.get('/signup', isNotAuthenticated, function (req, res) {
-	res.render(__dirname + '/views/signup', {
+	res.render(__dirname + '/../views/signup', {
 		bodyClass: 'signup',
         success: null
 	});
 });
 
-router.get('/profile', function (req, res) {
-	res.render(__dirname + '/views/profile', {
+router.get('/profile', isAuthenticated, function (req, res) {
+	res.render(__dirname + '/../views/profile', {
 		bodyClass: 'profile'
 	});
 });

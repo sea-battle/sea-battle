@@ -86,7 +86,6 @@ function editEmail() {
             }
         };
 
-
         xhr.open('POST', '/edit-email', true);
         xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
         xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
