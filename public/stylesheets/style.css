@@ -240,7 +240,6 @@ a {
 	width: 20%;
 	background-color: #bce784;
 	max-width: 300px;
-	padding: .5em;
 }
 
 .toggle-aside {
@@ -400,7 +399,7 @@ header {
 	.rooms-list div,
 	.players-list div {
 		display: inline-block;
-		vertical-align: top;
+		vertical-align: middle;
 	}
 
 	.room-info,
@@ -414,7 +413,7 @@ header {
 			display: inline-block;
 			width: 50%;
 			vertical-align: middle;
-			padding: 0 1.4em;
+			padding: 0 .5em;
 		}
 
 		.room-name,
@@ -442,7 +441,7 @@ header {
 }
 
 .room-name {
-	font-size: 2.5em;
+	font-size: 1.5em;
 }
 
 .rooms-list button {
@@ -729,15 +728,15 @@ header {
 /* Players grids sidebar
 ========================================================================== */
 
-.players-grids div {
-	border: 1px solid;
-	margin-bottom: .5em;
+.players-grids {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.players-grids div:after {
-	content: "";
-	display: block;
-	padding-bottom: 100%;
+.players-grids canvas {
+	margin: .5em;
 }
 
 /* Overlays
@@ -1108,4 +1107,8 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 	input {
 		width: 100%;
 	}
+}
+
+.hidden {
+	display: none;
 }

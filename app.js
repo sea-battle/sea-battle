@@ -33,10 +33,6 @@ app.use(bodyParser.urlencoded({
 // Set templating engine
 app.set('view engine', 'jade');
 
-app.use('/', routesAuthentication);
-app.use('/', routesGame);
-app.use('/', routesMain);
-
 // TOREMOVE both
 app.get('/profile', function (req, res) {
 	res.render(__dirname + '/views/profile', {
@@ -48,6 +44,12 @@ app.get('/signup', function (req, res) {
 		bodyClass: 'signup'
 	});
 });
+
+app.use('/', routesAuthentication);
+app.use('/', routesGame);
+app.use('/', routesMain);
+
+
 
 mongoose.connect(config.database.location, config.database.options);
 socket.start(io, game);

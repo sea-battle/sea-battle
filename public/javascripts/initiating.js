@@ -26,7 +26,13 @@ function initPlayerInfo() {
 
     document.getElementById('profil-link').addEventListener('click', function(e) {
         e.preventDefault();
-        if (confirm('Il vous faut quitter la partie pour modifier vos informations, voulez-vous continuer ?'))
+        console.log("coucou");
+        if (
+            (document.body.hasClass('wait') || document.body.hasClass('game'))
+            && confirm('Il vous faut quitter la partie pour accéder à votre profil, voulez-vous continuer ?')
+        )
+            document.location.href = this.href;
+        else
             document.location.href = this.href;
     });
 

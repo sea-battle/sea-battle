@@ -2,8 +2,12 @@ extends inc/head.jade
 
 block title
 	title Manage your account
+block styles
+	link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
 
 block content
+	include inc/overlays.jade
+
 	div.wrapper
 		include inc/header.jade
 
@@ -40,3 +44,8 @@ block content
 		div.push
 
 	include inc/footer.jade
+
+	script(src='/javascripts/prototype.js')
+	script(src='/javascripts/initiating.js')
+	script.
+		initPlayerInfo();
