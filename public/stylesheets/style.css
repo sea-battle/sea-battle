@@ -661,7 +661,7 @@ header {
 			font-size: 1.5em;
 		}
 
-.social-modal {
+.modal {
 	display: none;
 	position: absolute;
 	top: 50%;
@@ -674,7 +674,11 @@ header {
 	box-shadow: 2px 2px 5px 0 #656565;
 }
 
-	.close-social {
+.modal.opened {
+	display: block;
+}
+
+	.modal .closer {
 		position: absolute;
 		top: .4em;
 		right: .5em;
@@ -706,6 +710,10 @@ header {
 				display: table-cell;
 				padding: .2em;
 			}
+
+		.modal-content button:last-child {
+			margin-top: 4em;
+		}
 
 /* Main grids
 ========================================================================== */

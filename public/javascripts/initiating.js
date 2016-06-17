@@ -91,3 +91,9 @@ function initSocialModal() {
         document.getElementById('social-modal').removeClass(openedClass);
     });
 }
+
+function initReplayModal() {
+    document.getElementById('close-replay').addEventListener('click', function(e) {
+        document.getElementById('replay-modal').removeClass(openedClass);
+    });
+}
