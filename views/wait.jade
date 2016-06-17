@@ -1,14 +1,25 @@
-include inc/header.jade
-aside.info
-	include inc/chat.jade
-section.content.wait
-	include inc/player-info.jade
-	h1 Nom de la salle
-	p.players-total x joueur(s)
-	ul#players-list.players-list
-		li
-			div
-				p.player-username Pseudo
-				p.player-ranking Image Grade X pts
-			button#set-ready.button-effect Prêt
-				i#ready-status
+
+div.wrapper
+	include inc/header.jade
+
+	section.content.wait
+		include inc/chat.jade
+		div.wait-wrapper
+			button#chat-toggle.toggle.chat-toggle
+				span.open.fa.fa-comments.fa-2x(aria-hidden="true")
+				span.close.fa.fa-times.fa-2x(aria-hidden="true")
+				span#new-messages-count.new-messages-count(data-count="0")
+			include inc/player-info.jade
+			h1 Nom de la salle
+			p.players-total x joueur(s)
+			ul#players-list.players-list
+				li
+					div
+						p#player-username.player-username #{name}
+						p.player-ranking Image Grade X pts
+					button#set-ready.button-effect Prêt
+						i#ready-status.ready-status
+
+		div.push
+
+include inc/footer.jade

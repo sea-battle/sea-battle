@@ -2,39 +2,50 @@ extends inc/head.jade
 
 block title
     title Manage your account
+block styles
+    link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
 
 block content
+    include inc/overlays.jade
+
     div.wrapper
         include inc/header.jade
 
         section.content.manage-account
-            h1 Paramètres du compte
+            include inc/player-info.jade
 
-            h2 Modifiez votre email
-            form
-                input#email(type='text', name='email', placeholder='Adresse e-mail')
-                p#email-message
-                button#email-submit.button-effect(type='submit') Modifier
+            section.content.manage-account
+                h1 Paramètres du compte
 
-            h2 Modifiez votre pseudonyme
-            form
-                input#username(type='text', name='username', placeholder='Pseudonyme')
-                p#username-message
-                button#username-submit.button-effect(type='submit') Modifier
+                h2 Modifiez votre email
+                form
+                    input#email(type='text', name='email', placeholder='Adresse e-mail')
+                    p#email-message
+                    button#email-submit.button-effect(type='submit') Modifier
 
-            h2 Modifiez votre mot de passe
-            form
-                input#old-password(type='password', name='old_password', placeholder='Mot de passe actuel')
-                input#password(type='password', name='password', placeholder='Nouveau mot de passe')
-                input#password-confirmation(type='password', name='password_confirmation', placeholder='Confirmez le nouveau mot de passe')
-                p#password-message
-                button#password-submit.button-effect(type='submit') Modifier
+                h2 Modifiez votre pseudonyme
+                form
+                    input#username(type='text', name='username', placeholder='Pseudonyme')
+                    p#username-message
+                    button#username-submit.button-effect(type='submit') Modifier
 
-            h2 Supprimez votre compte
-            button#delete-user.delete-account.button-effect Supprimer
+                h2 Modifiez votre mot de passe
+                form
+                    input#old-password(type='password', name='old_password', placeholder='Mot de passe actuel')
+                    input#password(type='password', name='password', placeholder='Nouveau mot de passe')
+                    input#password-confirmation(type='password', name='password_confirmation', placeholder='Confirmez le nouveau mot de passe')
+                    p#password-message
+                    button#password-submit.button-effect(type='submit') Modifier
 
-        div.push
+                h2 Supprimez votre compte
+                button#delete-user.delete-account.button-effect Supprimer
 
-    include inc/footer.jade
+            div.push
 
-    script(src='/javascripts/pages/profile.js')
+        include inc/footer.jade
+
+        script(src='/javascripts/pages/profile.js')
+        script(src='/javascripts/prototype.js')
+        script(src='/javascripts/initiating.js')
+        script.
+            initPlayerInfo();

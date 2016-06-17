@@ -33,8 +33,8 @@ function addRoom(roomName, playerCount) {
     roomsContainer.appendChild(newLi);
 }
 
-socket.on('rooms-join', function () {
-    ajax.get('/wait', handlers);
+socket.on('rooms-join', function (name) {
+    ajax.post('/wait', handlers, 'name=' + name);
 });
 
 
@@ -42,11 +42,11 @@ createRoomButton.addEventListener('click', function (e) {
     var name = roomName.value;
     if (name != '') {
         socket.emit('rooms-create', name);
+        if(roomName.hasClass('empty')) roomName.removeClass('empty');
         roomName.value = '';
     } else {
         roomName.focus();
-        //TODO
-        //roomName.addClass = voir class avec clement
+         if(!roomName.hasClass('empty')) roomName.addClass('empty');
     }
 });
 
@@ -58,7 +58,6 @@ socket.on('rooms-update', function (rooms) {
         addRoom(room.name, room.playerCount);
     });
 });
-
 window.addEventListener('hashchange', function (e) {
     e.preventDefault();
 });

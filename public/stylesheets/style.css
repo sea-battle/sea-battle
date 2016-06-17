@@ -70,6 +70,12 @@ button {
 	padding: .7em 1.3em;
 }
 
+.toggle {
+	border: none;
+	padding: 0;
+	background-color: transparent;
+}
+
 /* Forms */
 
 input {
@@ -213,23 +219,27 @@ a {
 			height: 2em;
 		}
 
-.info,
-.content.wait,
 .content.game {
     display: inline-block;
     vertical-align: top;
 	height: 100%;
 }
 
+.chat,
+.wait-wrapper {
+	display: inline-block;
+    vertical-align: top;
+}
+
 .switching-content {
     width: 100%;
+    height: 100%;
 }
 
 .switching-aside {
 	width: 20%;
-	background-color: orange;
+	background-color: #bce784;
 	max-width: 300px;
-	padding: .5em;
 }
 
 .toggle-aside {
@@ -311,8 +321,11 @@ header {
 
 	.chat-toggle {
 		display: none;
-		position: absolute;
 		z-index: 10;
+	}
+
+	.chat-toggle .close {
+		display: none;
 	}
 
 	.chat li {
@@ -326,13 +339,37 @@ header {
 		color: #F3F3F3;
 	}
 
-	.chat li:hover {
+	.chat li:hover,
+	.chat li.active {
 		background-color: #348AA7;
 	}
 
 	.chat input {
 		width: 90%;
 		margin-bottom: .5em;
+	}
+
+	.messages {
+		overflow-y: scroll;
+		max-height: 300px;
+	}
+
+	.new-messages-count {
+		margin-left: .2em;
+	}
+
+	.new-messages {
+		animation: blink 7s infinite;
+	}
+
+	@keyframes blink {
+		50% {
+			background-color: #2392b8;
+		}
+
+		100% {
+			background-color: #5DD39E;
+		}
 	}
 
 /* Rooms & wait pages
@@ -343,54 +380,44 @@ header {
 	text-align: center;
 }
 
-.rooms .player-info,
-.wait .player-info {
+/* .rooms .player-info,
+.wait .player-info, */
+.player-info {
 	height: auto;
 	display: block;
 	text-align: center;
 	margin-bottom: 3em;
 }
 
-	.rooms .socials,
-	.rooms .options,
-	.wait .socials,
-	.wait .options {
+	.socials,
+	.options {
 		width: 250px;
 	}
 
-	.rooms .player,
-	.wait .player {
+	.player {
 		margin: 0;
 		width: auto;
 	}
 
-		.rooms .player-info p,
-		.wait .player-info p {
+		.player-info p {
 			display: inline-block;
 			vertical-align: middle;
 		}
 
-			.rooms .player-info a,
-			.wait .player-info a {
+			.player-info a {
 				display: inline-block;
 				margin: 0 .5em;
 			}
 
-	.rooms button,
 	.players-list button {
 		margin-left: .3em;
 		display: inline-block;
 	}
 
-	.rooms-list button,
-	.players-list button {
-		padding: 1.4em 1.3em;
-	}
-
 	.rooms-list div,
 	.players-list div {
 		display: inline-block;
-		vertical-align: top;
+		vertical-align: middle;
 	}
 
 	.room-info,
@@ -404,21 +431,42 @@ header {
 			display: inline-block;
 			width: 50%;
 			vertical-align: middle;
-			padding: 0 2em;
+			padding: 0 .5em;
 		}
 
 		.room-name,
 		.players-list .player-username {
 			text-align: left;
-			font-size: 2.5em;
+			word-wrap: break-word;
 		}
 
 /* Rooms page
 ========================================================================== */
 
-.rooms input,
-.rooms button {
+.create-room-container input,
+.create-room-container button {
 	display: inline-block;
+}
+
+.create-room-container input.empty:focus {
+	animation: anim-empty 0.3s forwards;
+}
+
+@keyframes anim-empty {
+	0% {
+		box-shadow: 0 0 0 0;
+		transform: rotate(-1deg);
+	}
+
+	50% {
+		box-shadow: 0 0 5px 2.5px #eca29b;
+		transform: rotate(1deg);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0;
+		transform: rotate(0deg);
+	}
 }
 
 .rooms-count {
@@ -431,28 +479,50 @@ header {
 	line-height: 2.5em;
 }
 
+.room-name {
+	font-size: 1.5em;
+}
+
+.rooms-list button {
+	display: inline-block;
+	padding: 1.4em 1.3em;
+}
+
 /* Wait page
 ========================================================================== */
 
 .wait .content {
-	width: 75%;
+	width: 100%;
+	max-width: 100%;
 }
 
-	.wait aside {
-		padding: 1.5em 0;
-	}
-
 	.wait .chat {
-		margin-top: 1.5em;
+		margin-top: 3em;
+		max-width: 450px;
+		width: 25%;
+		text-align: center;
 	}
 
 		.wait .messages {
 			min-height: 300px;
 		}
 
+	.wait-wrapper {
+		width: 75%;
+		max-width: 75em;
+	}
+
 	.players-total {
 		font-size: 1.5em;
 		margin-bottom: 1.5em;
+	}
+
+	.players-list .player-username {
+		font-size: 1.5em;
+	}
+
+	.players-list button {
+		padding: .4em 1.3em;
 	}
 
 /* Game
@@ -461,7 +531,6 @@ header {
 .content.game {
 	width: 100%;
 	height: 100%;
-	background-color: red;
 	padding: 0;
 }
 
@@ -478,45 +547,85 @@ header {
 
 }
 
-/* Info Sidebar
-========================================================================== */
-
-.toggle-info {
-	display: none;
-	position: absolute;
-	top: 2%;
-	right: 2%;
-	z-index: 10;
+.game .switching-content {
+	height: 100%;
 }
 
-.info {
+.game .content {
+	max-width: 100%;
+}
+
+.game-info,
+.switching-aside,
+.grids-wrapper {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.game-info {
 	width: 25%;
+	max-width: 350px;
+	height: 100%;
+}
+
+.grids-wrapper {
+	width: 55%;
+	height: 100%;
+	padding: 4em 1em 1em 1em;
+}
+
+.game .player-info {
+	margin: 0;
+	height: 25%;
+	background-color: #e1e1e1;
+}
+
+	.game .player-info p {
+		display: table;
+		width: 100%;
+	}
+
+	.game .player-info a {
+		display: table-cell;
+		text-align: center;
+	}
+
+.game .socials,
+.game .options {
+	width: auto;
+}
+
+.game .chat {
+	width: 100%;
+	height: 40%;
+	position: relative;
+}
+
+	.game .chat li {
+		height: 2.125em;
+		line-height: 2.125em;
+	}
+
+	.game .send-container {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		text-align: center;
+	}
+
+.boats-container {
 	text-align: center;
 }
 
-.game .info {
-	max-width: 350px;
+/* Player info */
+
+.player-info-toggle,
+.player-info-toggle .close {
+	display: none;
 }
-
-	.info section {
-		overflow: hidden;
-	}
-
-/* Player */
-
 .player-info {
-	height: 26%;
+	height: 25%;
 	padding: 1em .5em;
-	/* background-color: green; */
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-flex-direction: column;
-	    -ms-flex-direction: column;
-	        flex-direction: column;
-	-webkit-justify-content: space-between;
-	    -ms-flex-pack: justify;
-	        justify-content: space-between;
 }
 
 	.player-info a {
@@ -526,13 +635,7 @@ header {
 	.socials,
 	.options {
 		display: table;
-		width: 100%;
 	}
-
-		.socials a,
-		.options a {
-			display: table-cell;
-		}
 
 	.player {
 		margin: .5em 0;
@@ -552,12 +655,24 @@ header {
 			font-style: italic;
 		}
 
+.aside-toggle,
+.aside-toggle .close {
+	display: none;
+}
+
 /* Ranking */
 
+.ranking-toggle,
+.ranking-toggle .close {
+	display: none;
+	position: absolute;
+}
+
 .game-ranking {
-	background-color: yellow;
 	word-wrap: break-word;
-	height: 40%;
+	height: 35%;
+	padding: 1em .5em;
+	text-align: center;
 }
 
 	.game-ranking ul {
@@ -580,13 +695,79 @@ header {
 			font-size: 1.5em;
 		}
 
+.modal {
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fff;
+	width: 80%;
+	height: 80%;
+	z-index: 10;
+	box-shadow: 2px 2px 5px 0 #656565;
+}
+
+.modal.opened {
+	display: block;
+}
+
+	.modal .closer {
+		position: absolute;
+		top: .4em;
+		right: .5em;
+	}
+
+	.modal-content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		text-align: center;
+	}
+
+		.modal-content h2 {
+			font-size: 2em;
+		}
+
+		.modal-content p {
+			font-size: 1.2em;
+		}
+
+		.modal-content .socials {
+			display: table;
+			width: 100%;
+			font-size: 5em;
+		}
+
+			.modal-content .socials a {
+				display: table-cell;
+				padding: .2em;
+			}
+
+		.modal-content button:last-child {
+			margin-top: 4em;
+		}
+
+.main-canvas-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+	margin: 0 auto;
+	height: 100%;
+	text-align: center;
+}
+
+
+.main-canvas-wrapper .fire-canvas,
+.main-canvas-wrapper .visual-canvas {
+
+}
+
 /* Main grids
 ========================================================================== */
-
-.grids-wrapper {
-	width: 80%;
-	background-color: pink;
-}
 
 .switching-aside,
 .players-grids,
@@ -599,16 +780,16 @@ header {
 /* Players grids sidebar
 ========================================================================== */
 
-.players-grids div {
-	border: 1px solid;
-	margin-bottom: .5em;
+.players-grids {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.players-grids div:after {
-	content: "";
-	display: block;
-	padding-bottom: 100%;
-}
+	.players-grids canvas {
+		padding: .5em;
+	}
 
 /* Overlays
 ========================================================================== */
@@ -664,6 +845,11 @@ header {
 
 	}
 
+.rankings-overlay.opened,
+.stats-overlay.opened {
+	display: block;
+}
+
 /* Rankings overlay
 ========================================================================== */
 
@@ -716,87 +902,132 @@ footer {
 
 @media screen and (min-width: 87.5em),
 screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
-	.content.game {
-		width: 100%;
-		max-width: 100%;
-		position: absolute;
+	.game .content {
+		/* position: absolute; */
 		text-align: left;
 	}
 }
 
 @media screen and (max-width: 59.95em),
 screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
-	.toggle-info {
-		display: inline;
-	}
-
-	.info {
+	.switching-aside {
+		display: none;
+		width: 100%;
+		max-width: 100%;
 		position: absolute;
 		top: 0;
 		left: 0;
-		z-index: 5;
-		width: 100%;
-		max-width: 100%;
-		-webkit-transform: translate3d(-100%, 0, 0);
-		        transform: translate3d(-100%, 0, 0);
-		transition: -webkit-transform .5s;
-		transition: transform .5s;
-		transition: transform .5s, -webkit-transform .5s;
-		-webkit-backface-visibility: hidden;
-		        backface-visibility: hidden;
-	}
-
-		.socials,
-		.options,
-		.game-ranking ul {
-			max-width: 350px;
-			margin: auto;
-		}
-
-	.wait .content {
-		width: 100%;
 	}
 }
 
 @media screen and (max-height: 47.95em) { /* < 768px height */
-	.info {
-		height: auto;
-	}
+
 }
 
 @media screen and (max-width: 59.95em) { /* < 960px */
+	header {
+		height: 150px;
+	}
+
+		header img {
+			width: 200px;
+		}
+
+	.switching-content {
+		height: 100%;
+	}
+
+	.content {
+		height: calc(100% - 150px);
+		position: static;
+	}
+
 	.switching-content,
 	.content.game {
 		width: 100%;
 	}
 
-		.players-grids,
-		.switching-aside {
-			width: 20%;
+		.game-info {
+			width: 35%;
 		}
 
 		.grids-wrapper {
-			width: 80%;
+			width: 65%;
 		}
-}
 
-@media screen and (max-width: 50em) { /* < 800px */
-	.rooms .player-info p,
-	.wait .player-info p {
+	.wait .content,
+	.wait-wrapper {
+		width: 100%;
+	}
+
+	.wait .chat {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 5;
+		margin: 0;
+		max-width: 100%;
+	}
+
+	.wait .chat-toggle {
+		display: inline-block;
+	}
+
+	.chat-toggle.opened {
+		top: 5.4em;
+	}
+
+		.chat-toggle.opened .open {
+			display: none;
+		}
+
+		.chat-toggle.opened .close {
+			display: block;
+		}
+
+	.chat.opened {
 		display: block;
 	}
 
-		.rooms .player-info a,
-		.wait .player-info a {
-			margin: .5em;
-		}
+	.send-container {
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+	}
 
-		.rooms .socials,
-		.rooms .options,
-		.wait .socials,
-		.wait .options {
-			width: auto;
-		}
+	.aside-toggle {
+		display: block;
+		position: absolute;
+		top: 1.5em;
+		right: 1.5em;
+		z-index: 10;
+	}
+
+	.aside-toggle.opened .close {
+		display: block;
+	}
+
+	.aside-toggle.opened .open {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 50em) { /* < 800px */
+ 	.socials,
+	.options {
+		width: 190px;
+	}
+}
+
+@media screen and (max-width: 37.5em) { /* < 600px */
+
+	.toggle {
+		display: inline-block;
+		margin: 1em;
+	}
 
 	.players-list div {
 		width: 100%;
@@ -811,42 +1042,111 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 		    text-align: center;
 	   }
 
-	   .players-list .player-username {
-	   		text-align: center;
-	   }
+   .players-list .player-username {
+   		text-align: center;
+   }
+
+   .player-info {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 5;
+		background: rgba(255, 255, 255, 0.9);
+	}
+
+		.player-info-wrapper {
+			width: 100%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+			.player-info p {
+				display: table;
+				margin: 2em 0;
+				width: 100%;
+				max-width: 100%;
+			}
+
+				.player {
+					margin: auto;
+				}
+
+				.player-info a {
+					display: table-cell;
+					margin: 0;
+				}
+
+	.player-info-toggle.opened {
+		position: absolute;
+		top: 1.4em;
+		right: 1.4em;
+		z-index: 10;
+	}
+
+		.player-info-toggle.opened .open {
+			display: none;
+		}
+
+		.player-info-toggle.opened .close {
+			display: block;
+		}
+
+	.player-info.opened {
+		display: block;
+	}
 }
 
 @media screen and (max-width: 40.625em),
 screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
-	.toggle-grids {
-		display: inline;
+	.game .chat-toggle,
+	.game .player-info-toggle,
+	.ranking-toggle {
+		display: block;
 	}
 
-	.players-grids,
-	.switching-aside {
+	.game-info,
+	.grids-wrapper {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+		text-align: center;
+	}
+
+	.grids-wrapper {
+		padding: 1em;
+	}
+
+	.game-info .toggle {
+		display: inline-block;
+		position: static;
+		padding: 1.8em;
+		margin: 0;
+	}
+
+	.game .chat,
+	.game .game-ranking,
+	.game .player-info {
+		display: none;
 		position: absolute;
 		top: 0;
 		left: 0;
 		z-index: 5;
+		height: 100%;
 		width: 100%;
-		max-width: 100%;
-		-webkit-transform: translate3d(-100%, 0, 0);
-		        transform: translate3d(-100%, 0, 0);
-		transition: -webkit-transform .5s;
-		transition: transform .5s;
-		transition: transform .5s, -webkit-transform .5s;
-		-webkit-backface-visibility: hidden;
-		        backface-visibility: hidden;
 	}
 
-		.players-grids div {
-			display: inline-block;
-			width: 200px;
-			margin: 1em;
-		}
-
-	.grids-wrapper {
+	.game .player-info-wrapper {
+		position: absolute;
 		width: 100%;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 }
 
@@ -861,14 +1161,6 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 	}
 }
 
-.expanded {
-	-webkit-transform: translate3d(0, 0, 0);
-	        transform: translate3d(0, 0, 0);
-	transition: -webkit-transform .5s;
-	transition: transform .5s;
-	transition: transform .5s, -webkit-transform .5s;
-}
-
-.opened {
-	display: block;
+.hidden {
+	display: none;
 }

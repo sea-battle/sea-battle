@@ -3,6 +3,7 @@ var playerMessage = document.getElementById('player-message');
 var messagesContainer = document.getElementById('messages');
 var filters = document.getElementsByClassName('filters');
 var newMessagesCount = document.getElementById('new-messages-count');
+var playersTab = document.getElementById('players-messages');
 
 function sendMessage() {
     var message = playerMessage.value;
@@ -45,6 +46,7 @@ for (var i = 0; i < filters.length; i++) {
             this.id == 'players-messages') {
             newMessagesCount.setAttribute('data-count', '0');
             newMessagesCount.innerHTML = '';
+            if(playersTab.hasClass('new-messages')) playersTab.removeClass('new-messages');
         }
 
         socket.emit('chat-filter', this.id);
@@ -75,6 +77,7 @@ socket.on('receive-message', function (playerName, message, time, filter) {
         count++;
         newMessagesCount.setAttribute('data-count', count);
         newMessagesCount.innerHTML = count;
+        if(!playersTab.hasClass('new-messages')) playersTab.addClass('new-messages');
     }
 });
 

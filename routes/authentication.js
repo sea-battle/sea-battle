@@ -313,14 +313,17 @@ router.get('/', function (req, res) {
 	res.render(__dirname + '/../views/index');
 });
 
-router.get('/signup', isNotAuthenticated, function (req, res) {
-    res.render(__dirname + '/../views/signup', {
+app.get('/signup', isNotAuthenticated, function (req, res) {
+	res.render(__dirname + '/views/signup', {
+		bodyClass: 'signup',
         success: null
-    });
+	});
 });
 
-router.get('/profile', isAuthenticated, function (req, res) {
-    res.render(__dirname + '/../views/profile');
+app.get('/profile', function (req, res) {
+	res.render(__dirname + '/views/profile', {
+		bodyClass: 'profile'
+	});
 });
 
 router.get('/signout', function (req, res) {

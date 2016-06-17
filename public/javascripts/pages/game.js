@@ -1,5 +1,3 @@
-//var socket = io();
-
 const HORIZONTAL = 'h';
 const VERTICAL = 'v';
 const SPRITE = {
@@ -47,22 +45,48 @@ const DEFAULT_BOATS = {
 	}
 };
 
-var canvas = document.getElementById('canvas');
+var playerCanvas = document.getElementById('player-canvas');
 var boatsContainer = document.getElementById('boats-container');
-var canvasContainer = document.getElementById('canvas-wrapper');
+var canvasWrapper = document.getElementById('canvas-wrapper');
 var randomGenerator = document.getElementById('random');
 var boatSelecters = document.getElementsByClassName('boat-selector');
 var timer = document.getElementById('timer');
 var otherPlayersCanvasContainer = document.getElementById('other-players-canvas');
+var fireCanvasContainer = document.getElementById('fire-canvas');
+
+var grids = [];
+var shooterGrid;
 
 var previousMouseCoords = undefined;
 // images 
 var boatsSprite = new Image();
+var grid;
 boatsSprite.src = "/images/sprites.png";
+socket.emit('game-init');
+socket.on('init', function (playerId) {
+	grid = new Grid(playerCanvas, playerId);
+	grids.push(grid);
+});
 
-var grid = new Grid(canvas);
+function findGridByPlayerId(playerId) {
+	for (var i = 0; i < grids.length; i++) {
+		if (grids[i].playerId == playerId) {
+			return grids[i];
+		}
+	}
+	return null;
+}
+
+function cloneTargetedGridToShooter() {
+	var g = findGridByPlayerId(targetId);
+	shooterGrid.cells = JSON.parse(JSON.stringify(g.cells));
+	shooterGrid.shootedCells = JSON.parse(JSON.stringify(g.shootedCells));
+	shooterGrid.renderGrid();
+	shooterGrid.drawShoots();
+}
+
 var selectedBoat = null;
-
+var targetId = null;
 var gameHandlers = {
 	placementStage: {
 		click: function (e) {
@@ -159,17 +183,25 @@ var gameHandlers = {
 		}
 	},
 	battleStage: {
-		click: function (e) {
-			socket.emit('game-shoot', e.gridInfo.coords, this.getAttribute('data-player-id'));
+		otherPlayersGrid: {
+			click: function (e) {
+				targetId = this.getAttribute('data-player-id');
+				cloneTargetedGridToShooter();
+			}
+		},
+		shooterGrid: {
+			click: function (e) {
+				socket.emit('game-shoot', e.gridInfo.coords, targetId);
+			}
 		}
 	}
 };
 
 boatsSprite.onload = function () {
 	// PLACEMENT STAGE
-	canvas.addEventListener('mousemove', gameHandlers.placementStage.mousemove);
-	canvas.addEventListener('click', gameHandlers.placementStage.click);
-	canvas.addEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
+	playerCanvas.addEventListener('mousemove', gameHandlers.placementStage.mousemove);
+	playerCanvas.addEventListener('click', gameHandlers.placementStage.click);
+	playerCanvas.addEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
 
 	for (var i = 0; i < boatSelecters.length; i++) {
 		boatSelecters[i].addEventListener('click', gameHandlers.placementStage.selectBoat);
@@ -178,8 +210,10 @@ boatsSprite.onload = function () {
 }
 
 window.addEventListener('resize', function (e) {
-	var newWidth = parseInt(getComputedStyle(canvasContainer).width);
-	grid.rescaleCanvas(newWidth, boatsSprite);
+	grids.forEach(function (g) {
+		var newWidth = parseInt(getComputedStyle(g.container).width);
+		g.rescaleCanvas(newWidth, boatsSprite);
+	});
 });
 
 socket.on('game-timer-update', function (timeRemaining) {
@@ -190,34 +224,58 @@ socket.on('game-check-grid', function () {
 		gameHandlers.placementStage.random();
 		grid.drawPlacedBoats(boatsSprite);
 	}
-	canvas.removeEventListener('click', gameHandlers.placementStage.click);
-	canvas.removeEventListener('mousemove', gameHandlers.placementStage.mousemove);
-	canvas.removeEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
+	playerCanvas.removeEventListener('click', gameHandlers.placementStage.click);
+	playerCanvas.removeEventListener('mousemove', gameHandlers.placementStage.mousemove);
+	playerCanvas.removeEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
 
 	socket.emit('game-set-ready', grid.cells);
-    
-    //TODO add new canvas gameHandlers
-    canvas.addEventListener('click', gameHandlers.battleStage.click);
+
+	//TODO add new canvas gameHandlers
+	//playerCanvas.addEventListener('click', gameHandlers.battleStage.click);
 });
 socket.on('game-init-players-grids', function (players) {
+	document.getElementById('boats-container').addClass('hidden')
+	document.getElementById('other-players-canvas').removeClass('hidden');
 	players.forEach(function (player) {
 		var otherPlayerCanvas = document.createElement('canvas');
 		var br = document.createElement('br');
-		otherPlayerCanvas.setAttribute('width', '100');
-		otherPlayerCanvas.setAttribute('height', '100');
-        otherPlayerCanvas.setAttribute('data-player-id', player.id);
+		otherPlayerCanvas.setAttribute('data-player-id', player.id);
 
 		otherPlayersCanvasContainer.appendChild(otherPlayerCanvas);
 		otherPlayersCanvasContainer.appendChild(br);
 
-		var otherPlayerGrid = new Grid(otherPlayerCanvas);
-        otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.click);
-        
-        
-		otherPlayerGrid.renderGrid();
+		var otherPlayerGrid = new Grid(otherPlayerCanvas, player.id);
+		grids.push(otherPlayerGrid);
+		otherPlayerCanvas.addEventListener('click', gameHandlers.battleStage.otherPlayersGrid.click);
 	});
+
+	// grid shooter
+	var shooterCanvas = document.createElement('canvas');
+	fireCanvasContainer.appendChild(shooterCanvas);
+	fireCanvasContainer.removeClass('hidden');
+	shooterGrid = new Grid(shooterCanvas);
+	grids.push(shooterGrid);
+	shooterCanvas.addEventListener('click', gameHandlers.battleStage.shooterGrid.click);
 });
 
-socket.on('test', function (cells){
-    console.log(cells); 
+socket.on('update-after-turn', function (touchedPlayers) {
+	console.log(touchedPlayers);
+	for (var player in touchedPlayers) {
+		var gridTest = findGridByPlayerId(player);
+		console.log('player:', player);
+		touchedPlayers[player].touchedAt.forEach(function (data) {
+			gridTest.cells[data.coords.x][data.coords.x].shooted = true;
+			gridTest.cells[data.coords.x][data.coords.x].shootedBy = data.by;
+			gridTest.shootedCells.push({
+				coords: JSON.parse(JSON.stringify(data.coords)),
+				touched: data.touched
+			});
+		});
+	}
+
+	grids.forEach(function (g) {
+		g.drawShoots(boatsSprite);
+	});
+	
+	cloneTargetedGridToShooter();
 });

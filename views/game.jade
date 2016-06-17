@@ -1,8 +1,62 @@
 section.content.game
-    aside#switching-aside.switching-aside
-        include inc/boats.jade
+	section#social-modal.modal.social-modal
+		span#close-social.closer.close-social.fa.fa-times.fa-2x(aria-hidden="true")
+		div.modal-content
+			h2 Vous avez pris du galon !
+			p Partagez votre nouvelle promotion sur les réseaux
+			p.socials
+				a(href='http://www.facebook.com/share.php?u=http://seabattle.io' title='Partager sur Facebook' target='_blank')
+					span.fa.fa-facebook-official(aria-hidden='true')
+				a(href='https://twitter.com/intent/tweet?text=Sur Sea Battle, je suis #{username}, un #{grade} avec #{points} points, venez m\'affronter !&amp;url=seabattle.io', title='Partager sur Twitter', target='_blank')
+					span.fa.fa-twitter(aria-hidden='true')
+	section#replay-modal.modal.replay-modal
+		span#close-replay.closer.close-replay.fa.fa-times.fa-2x(aria-hidden="true")
+		div.modal-content
+			h2 Voulez-vous rejouer ?
+			button.button-effect Rejouer
+			button.button-effect Quitter
+	aside.game-info
+		button#aside-toggle.toggle.aside-toggle
+			span.open.fa.fa-th.fa-2x(aria-hidden="true")
+			span.close.fa.fa-times.fa-2x(aria-hidden="true")
+		button#ranking-toggle.toggle.ranking-toggle
+			span.open.fa.fa-list-ol.fa-2x(aria-hidden="true")
+			span.close.fa.fa-times.fa-2x(aria-hidden="true")
+		button#chat-toggle.toggle.chat-toggle
+			span.open.fa.fa-comments.fa-2x(aria-hidden="true")
+			span.close.fa.fa-times.fa-2x(aria-hidden="true")
+			span#new-messages-count.new-messages-count(data-count="0")
+		include inc/player-info.jade
+		section#game-ranking.game-ranking
+			h2 Classement
+			ul
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+				li
+					p Pseudo
+					p Points
+		include inc/chat.jade
+	aside#switching-aside.switching-aside
+		include inc/boats.jade
+		section#other-players-canvas.players-grids.hidden
 
-    section#canvas-wrapper.grids-wrapper
-        canvas#canvas(width='500', height='500')
-
-        i#timer
+	section#canvas-wrapper.grids-wrapper
+		div.main-canvas-wrapper
+			section#fire-canvas.fire-canvas.hidden
+			section#visual-canvas.visual-canvas
+				canvas#player-canvas.player-canvas
+				section.turn-info
+					i#timer

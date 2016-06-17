@@ -7,69 +7,36 @@ block styles
 
 block content
 
-    section#rankings-overlay.rankings-overlay
-        span#close-rankings.close-rankings.fa.fa-times.fa-2x(aria-hidden="true")
-        h2 Classements
-        ul.rankings-tabs
-            li#general-ranking-tab Général
-            li#month-ranking-tab Flottant
-        include inc/ranking.jade
-
-    section#stats-overlay.stats-overlay
-        span#close-stats.close-stats.fa.fa-times.fa-2x(aria-hidden="true")
-        h2 Statistiques
-        ul.stats-tabs
-            li#general-stats-tab Général
-            li#month-stats-tab Flottant
-            li#score-stats-tab Score
-        include inc/stats.jade
+    include inc/overlays.jade
 
     section#switching-content.switching-content
-        include inc/header.jade
+        div.wrapper
+            include inc/header.jade
 
-        section.content
-            include inc/player-info.jade
+            section.content
+                include inc/player-info.jade
 
-            h1 Salles de jeu
+                h1 Salles de jeu
 
-            h2 Créez votre propre salle
-            input#room-name(type='text', placeholder='Nom de la salle') 
-            button#create-room.button-effect Créer une salle
-        
-            h2 Rejoignez une salle
+                h2 Créez votre propre salle
+                div.create-room-container
+                    input#room-name(type='text', placeholder='Nom de la salle') 
+                    button#create-room.button-effect Créer une salle
+            
+                h2 Rejoignez une salle
 
-            p.rooms-count x salles disponibles (Sinon "Pas de salle disponible")
-            ul#rooms.rooms-list
+                p.rooms-count x salles disponibles (Sinon "Pas de salle disponible")
+                ul#rooms.rooms-list
+
+                div.push
+
+        include inc/footer.jade
 
     script(src='/socket.io/socket.io.js')
     script(src='/javascripts/prototype.js')
     script(src='/javascripts/ajax.js')
     script(src='/javascripts/navigation.js')
     script(src='/javascripts/pages/rooms.js')
+    script(src='/javascripts/initiating.js')
     script.
-        var rankingOverlay = document.getElementById('rankings-overlay');
-        var statsOverlay = document.getElementById('stats-overlay');
-
-        document.getElementById('rankings-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            rankingOverlay.addClass('opened');
-        });
-
-        document.getElementById('close-rankings').addEventListener('click', function() {
-            rankingOverlay.removeClass('opened');
-        });
-
-        document.getElementById('stats-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            statsOverlay.addClass('opened');
-        });
-
-        document.getElementById('close-stats').addEventListener('click', function() {
-            statsOverlay.removeClass('opened');
-        });
-
-        document.getElementById('profil-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            if (confirm('Il vous faut quitter la partie pour modifier vos informations, voulez-vous continuer ?'))
-                document.location.href = this.href;
-        });
+        initPlayerInfo();
