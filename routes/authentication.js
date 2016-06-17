@@ -132,6 +132,8 @@ router.post('/check-username-availability', function (req, res) {
 });
 
 router.post('/signup', function (req, res) {
+    console.log(req);
+
     var _checkEmailAddress = function(email) {
         var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
@@ -182,7 +184,7 @@ router.post('/signup', function (req, res) {
                     res.status(201);
 
                     if (req.xhr) {
-                        res.send();
+                        res.json({ success: true });
                     } else {
                         res.render(__dirname + '/../views/signup', {
                             success: true
