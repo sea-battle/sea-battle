@@ -77,16 +77,7 @@ function findGridByPlayerId(playerId) {
 	return null;
 }
 
-function cloneTargetedGridToShooter() {
-	var g = findGridByPlayerId(targetId);
-	shooterGrid.cells = JSON.parse(JSON.stringify(g.cells));
-	shooterGrid.shootedCells = JSON.parse(JSON.stringify(g.shootedCells));
-	shooterGrid.renderGrid();
-	shooterGrid.drawShoots();
-}
-
 var selectedBoat = null;
-var targetId = null;
 var gameHandlers = {
 	placementStage: {
 		click: function (e) {
@@ -185,13 +176,11 @@ var gameHandlers = {
 	battleStage: {
 		otherPlayersGrid: {
 			click: function (e) {
-				targetId = this.getAttribute('data-player-id');
-				cloneTargetedGridToShooter();
 			}
 		},
 		shooterGrid: {
 			click: function (e) {
-				socket.emit('game-shoot', e.gridInfo.coords, targetId);
+				socket.emit('game-shoot', e.gridInfo.coords);
 			}
 		}
 	}
@@ -259,14 +248,12 @@ socket.on('game-init-players-grids', function (players) {
 });
 
 socket.on('update-after-turn', function (touchedPlayers) {
-	console.log(touchedPlayers);
 	for (var player in touchedPlayers) {
-		var gridTest = findGridByPlayerId(player);
-		console.log('player:', player);
+		var currentGrid = findGridByPlayerId(player);
 		touchedPlayers[player].touchedAt.forEach(function (data) {
-			gridTest.cells[data.coords.x][data.coords.x].shooted = true;
-			gridTest.cells[data.coords.x][data.coords.x].shootedBy = data.by;
-			gridTest.shootedCells.push({
+			currentGrid.cells[data.coords.x][data.coords.x].shooted = true;
+			currentGrid.cells[data.coords.x][data.coords.x].shootedBy = data.by;
+			currentGrid.shootedCells.push({
 				coords: JSON.parse(JSON.stringify(data.coords)),
 				touched: data.touched
 			});
@@ -276,6 +263,4 @@ socket.on('update-after-turn', function (touchedPlayers) {
 	grids.forEach(function (g) {
 		g.drawShoots(boatsSprite);
 	});
-	
-	cloneTargetedGridToShooter();
 });
