@@ -354,6 +354,24 @@ header {
 		max-height: 300px;
 	}
 
+	.new-messages-count {
+		margin-left: .2em;
+	}
+
+	.new-messages {
+		animation: blink 7s infinite;
+	}
+
+	@keyframes blink {
+		50% {
+			background-color: #2392b8;
+		}
+
+		100% {
+			background-color: #5DD39E;
+		}
+	}
+
 /* Rooms & wait pages
 ========================================================================== */
 
