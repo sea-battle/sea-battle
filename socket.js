@@ -112,6 +112,7 @@ module.exports = {
 							game.playShootTurn(io.sockets, socket.room);
 							var currentRoom = game.rooms[socket.room];
 							io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
+							currentRoom.turnCount ++;
 							clearInterval(game.rooms[socket.room].timerId);
 						} else {
 							io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
@@ -133,7 +134,8 @@ module.exports = {
 				currentRoom.turns[turnCount]['playersShoots'][socket.name] = {
 					shootCoords: shootCoords,
 					targetId: targetId,
-					shooterId: socket.id
+					shooterId: socket.id,
+					shooterName: socket.name
 				};
 			});
 
