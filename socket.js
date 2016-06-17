@@ -110,7 +110,6 @@ module.exports = {
 					if (game.rooms[socket.room].timer == 0) {
 						game.playShootTurn(io.sockets, socket.room);
 						var currentRoom = game.rooms[socket.room];
-
 						if (!utils.isEmpty(currentRoom.turns[currentRoom.turnCount].touchedPlayers)) {
 							io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
 						}
@@ -129,7 +128,7 @@ module.exports = {
 								touchedPlayers: {}
 							};
 						}
-						console.log('Still looping');
+						//console.log('Still looping');
 						io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
 						game.rooms[socket.room].timer--;
 					}
@@ -137,10 +136,7 @@ module.exports = {
 
 				// Shoot timer
 				if (game.rooms[socket.room].timerId == null) {
-					//do {
 					game.rooms[socket.room].timerId = setInterval(playTurn, 1000);
-
-					//} while (!game.rooms[socket.room].gameover);
 				}
 			});
 			socket.on('game-shoot', function (shootCoords, targetId) {

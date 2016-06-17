@@ -46,11 +46,3 @@ Array.prototype.remove = function (value) {
 		}
 	}
 };
-
-Object.prototype.isEmpty = function () {
-	for (var prop in this) {
-		if (this.hasOwnProperty(prop))
-			return false;
-	}
-	return true && JSON.stringify(this) === JSON.stringify({});
-}

@@ -4,7 +4,6 @@ module.exports = {
 			if (obj.hasOwnProperty(prop))
 				return false;
 		}
-
-		return true && JSON.stringify(obj) === JSON.stringify({});
+		return true;
 	}
 }

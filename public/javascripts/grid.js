@@ -205,7 +205,7 @@ Grid.prototype = {
 		var self = this;
 		self.shootedCells.forEach(function (cell) {
 			var coords = cell.coords;
-			self.clearCell(coords);
+			//self.clearCell(coords);
 			if (self.cells[coords.x][coords.y].containBoat) {
 				var deg = self.cells[coords.x][coords.y].boatOrientation == HORIZONTAL ? -90 : 0;
 				var drawCoord = {
