@@ -1,0 +1,26 @@
+extends inc/head.jade
+
+block content
+    div.wrapper
+        include inc/header.jade
+
+        section.content.verify
+            if success
+                p.verify-message Votre inscription a été confirmé avec succès.
+            else
+                p.verify-message Le lien de vérification est invalide ou une erreur est survenue lors de la confirmation de votre inscription. Créer à nouveau votre compte.
+
+            p Vous allez être redirigé automatiquement. Si vous ne souhaitez pas attendre, cliquez sur le lien ci-dessous.
+
+            if success
+                a.link-effect(href='/signup', title='Vers la page de connexion') Se connecter
+                script.
+                    setTimeout(function () { window.location.href = '/'; }, 3000);
+            else
+                a.link-effect(href='/signup', title='Vers la page de création de compte') Créer un compte
+                script.
+                    setTimeout(function () { window.location.href = '/signup'; }, 3000);
+
+            div.push
+
+    include inc/footer.jade

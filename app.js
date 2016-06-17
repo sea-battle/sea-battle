@@ -1,4 +1,3 @@
-// Modules requirements
 var app = require('express')(),
 	bodyParser = require('body-parser'),
 	express = require('express'),
@@ -8,12 +7,12 @@ var app = require('express')(),
 	server = require('http').createServer(app),
 	io = require('socket.io').listen(server);
 
-// Local requirements
+// Load local requirements
 var config = require('./config'),
 	game = require('./game'),
 	socket = require('./socket');
 
-// Routes requirements
+// Load routes
 var routesMain = require('./routes/main'),
 	routesAuthentication = require('./routes/authentication'),
 	routesGame = require('./routes/game');
@@ -33,25 +32,7 @@ app.use(bodyParser.urlencoded({
 // Set templating engine
 app.set('view engine', 'jade');
 
-// TOREMOVE both
-app.get('/profile', function (req, res) {
-	res.render(__dirname + '/views/profile', {
-		bodyClass: 'profile'
-	});
-});
-app.get('/signup', function (req, res) {
-	res.render(__dirname + '/views/signup', {
-		bodyClass: 'signup'
-	});
-});
-
-app.use('/', routesAuthentication);
-app.use('/', routesGame);
-app.use('/', routesMain);
-
-
-
 mongoose.connect(config.database.location, config.database.options);
 socket.start(io, game);
 
-server.listen(3000, '0.0.0.0');
+server.listen(3000);

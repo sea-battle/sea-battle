@@ -6,7 +6,7 @@ block title
 block content
     div.wrapper
         include inc/header.jade
-        
+
         section.content.signup
             h1 Créez votre compte
 
@@ -15,20 +15,32 @@ block content
                 li De faire partie des classements,
                 li De consulter vos statistiques de jeu,
                 li Et surtout de jouer sans limites !
-            
-            form#signup(method="post", action="/signup")
-                input#signup-email(type='email', name='email' value='john.doe@mail.com', placeholder='E-mail')
-                p#signup-email-message
-                input#signup-username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
-                p#signup-username-message
-                input#signup-password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
-                p#signup-password-message
-                input#signup-password-confirmation(type='password', name='password_confirmation' value="johndoe", placeholder='Confirmez le mot de passe')
-                p#signup-password-confirmation-message
-                button#signup-submit.button-effect(type='submit') Créer
+
+            form#signup(method='post', action='/signup')
+                if success == true
+                    p#signup-message Un e-mail de confirmation vous a été envoyé.
+                else if success == false
+                    p#signup-message.error L'inscription a échoué. Merci de réessayer.
+                    input#email(type='text', name='email' value='john.doe@mail.com', placeholder='Adresse e-mail')
+                    p#email-message
+                    input#username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
+                    p#username-message
+                    input#password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
+                    input#password-confirmation(type='password', name='passwordConfirmation' value="johndoe", placeholder='Confirmez le mot de passe')
+                    p#password-message
+                    button#signup-submit.button-effect(type='submit') Créer
+                else
+                    input#email(type='text', name='email' value='john.doe@mail.com', placeholder='Adresse e-mail')
+                    p#email-message
+                    input#username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
+                    p#username-message
+                    input#password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
+                    input#password-confirmation(type='password', name='passwordConfirmation' value="johndoe", placeholder='Confirmez le mot de passe')
+                    p#password-message
+                    button#signup-submit.button-effect(type='submit') Créer
 
             div.push
 
     include inc/footer.jade
 
-    script(src='/javascripts/pages/create-account.js')
+    script(src='/javascripts/pages/signup.js')
