@@ -410,7 +410,7 @@ header {
 			}
 
 	.players-list button {
-		margin-left: .3em; 
+		margin-left: .3em;
 		display: inline-block;
 	}
 
@@ -544,7 +544,7 @@ header {
 
 
 .placed {
-    
+
 }
 
 .game .switching-content {
@@ -639,7 +639,7 @@ header {
 
 	.player {
 		margin: .5em 0;
-		word-wrap: break-word;	
+		word-wrap: break-word;
 	}
 
 		.player span {
@@ -761,7 +761,7 @@ header {
 }
 
 
-.main-canvas-wrapper .fire-canvas, 
+.main-canvas-wrapper .fire-canvas,
 .main-canvas-wrapper .visual-canvas {
 
 }
@@ -908,7 +908,7 @@ screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
 	}
 }
 
-@media screen and (max-width: 59.95em), 
+@media screen and (max-width: 59.95em),
 screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 	.switching-aside {
 		display: none;
@@ -1084,7 +1084,7 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 	.player-info-toggle.opened {
 		position: absolute;
 		top: 1.4em;
-		right: 1.4em;	
+		right: 1.4em;
 		z-index: 10;
 	}
 

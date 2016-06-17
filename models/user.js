@@ -1,20 +1,30 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var passportLocalMongoose = require('passport-local-mongoose');
+passportLocalMongoose = require('passport-local-mongoose');
 var Skin = require('./skin').schema;
 var Game = require('./game').schema;
 
 var User = new Schema({
-    username: String,
-    password: String,
-    email: String,
+    username: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    validated:  {
+        type: Boolean,
+        required: true
+    },
     skins: Skin,
-    validated : Boolean,
     ip: String,
-    games: [Game],
+    games: [Game]
 });
 
-User.plugin(passportLocalMongoose);
+User.plugin(passportLocalMongoose, {
+    usernameField: 'email'
+});
 
 module.exports = mongoose.model('User', User);
