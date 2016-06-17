@@ -28,7 +28,7 @@ router.get('/game', function (req, res) {
 		scriptsSrc: [
             '/javascripts/grid.js',
             '/javascripts/boat.js',
-            '/javascripts/pages/game.js',
+            '/javascripts/pages/game.js'
         ],
 		title: 'Let\'s shoot'
 	});

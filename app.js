@@ -54,4 +54,4 @@ app.use('/', routesMain);
 mongoose.connect(config.database.location, config.database.options);
 socket.start(io, game);
 
-server.listen(3000);
+server.listen(3000, '0.0.0.0');

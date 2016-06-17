@@ -135,6 +135,7 @@ module.exports = {
 				}
 
 				// Shoot timer
+				console.log('game.rooms[socket.room].timerId:', game.rooms[socket.room].timerId);
 				if (game.rooms[socket.room].timerId == null) {
 					game.rooms[socket.room].timerId = setInterval(playTurn, 1000);
 				}
@@ -142,6 +143,13 @@ module.exports = {
 			socket.on('game-shoot', function (shootCoords, targetId) {
 				var currentRoom = game.rooms[socket.room];
 				var turnCount = currentRoom.turnCount;
+				if (currentRoom.turns[turnCount] == undefined) {
+					currentRoom.turns[turnCount] = {
+						playersShoots: {},
+						touchedPlayers: {}
+					};
+				}
+
 				currentRoom.turns[turnCount]['playersShoots'][socket.name] = {
 					shootCoords: shootCoords,
 					targetId: targetId,
