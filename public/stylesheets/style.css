@@ -430,6 +430,27 @@ header {
 	display: inline-block;
 }
 
+.create-room-container input.empty:focus {
+	animation: anim-empty 0.3s forwards;
+}
+
+@keyframes anim-empty {
+	0% {
+		box-shadow: 0 0 0 0;
+		transform: rotate(-1deg);
+	}
+
+	50% {
+		box-shadow: 0 0 5px 2.5px #eca29b;
+		transform: rotate(1deg);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0;
+		transform: rotate(0deg);
+	}
+}
+
 .rooms-count {
 	margin-bottom: 1em;
 }
@@ -578,8 +599,8 @@ header {
 	text-align: center;
 }
 
-.main-canvas-wrapper {
-
+.fire-canvas {
+	display: none;
 }
 
 /* Player info */
