@@ -749,6 +749,23 @@ header {
 			margin-top: 4em;
 		}
 
+.main-canvas-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+	margin: 0 auto;
+	height: 100%;
+	text-align: center;
+}
+
+
+.main-canvas-wrapper .fire-canvas, 
+.main-canvas-wrapper .visual-canvas {
+
+}
+
 /* Main grids
 ========================================================================== */
 
@@ -770,9 +787,9 @@ header {
 	align-items: center;
 }
 
-.players-grids canvas {
-	margin: .5em;
-}
+	.players-grids canvas {
+		padding: .5em;
+	}
 
 /* Overlays
 ========================================================================== */
@@ -886,7 +903,7 @@ footer {
 @media screen and (min-width: 87.5em),
 screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
 	.game .content {
-		position: absolute;
+		/* position: absolute; */
 		text-align: left;
 	}
 }
