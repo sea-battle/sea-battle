@@ -21,7 +21,8 @@ module.exports = {
 					name: roomName,
 					gameStarted: false,
 					turnCount: 0,
-					turns: []
+					turns: [],
+					gameover: false
 				};
 				socket.room = roomName;
 				socket.leave(game.defaultRoom);
@@ -95,42 +96,50 @@ module.exports = {
 			});
 
 			// Stage 3: game
-			socket.on('game-init', function (){
+			socket.on('game-init', function () {
 				socket.emit('init', socket.id);
 			});
-			
+
 			socket.on('game-set-ready', function (cells) {
 				socket.cells = cells;
 				socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
 
+				function playTurn() {
+					if (game.rooms[socket.room].timer == 0) {
+						game.playShootTurn(io.sockets, socket.room);
+						var currentRoom = game.rooms[socket.room];
+						io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
+
+						if (game.rooms[socket.room].gameover) {
+							clearInterval(game.rooms[socket.room].timerId);
+						}
+						
+						currentRoom.turnCount++;
+						game.rooms[socket.room].timer = game.defaultShootTime;
+					} else {
+						io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
+						game.rooms[socket.room].timer--;
+					}
+				}
+
 				// Shoot timer
 				if (game.rooms[socket.room].timerId == null) {
-					game.rooms[socket.room].timerId = setInterval(function () {
-						if (game.rooms[socket.room].timer == 0) {
-							game.rooms[socket.room].timer = game.defaultShootTime;
+					//do {
+					game.rooms[socket.room].timerId = setInterval(playTurn, 1000);
 
-							game.playShootTurn(io.sockets, socket.room);
-							var currentRoom = game.rooms[socket.room];
-							io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
-							currentRoom.turnCount ++;
-							clearInterval(game.rooms[socket.room].timerId);
-						} else {
-							io.sockets.emit('game-timer-update', game.rooms[socket.room].timer);
-							game.rooms[socket.room].timer--;
-						}
-					}, 1000);
+					//} while (!game.rooms[socket.room].gameover);
 				}
 			});
 			socket.on('game-shoot', function (shootCoords, targetId) {
 				var currentRoom = game.rooms[socket.room];
 				var turnCount = currentRoom.turnCount;
-				if (currentRoom.turns[turnCount] == undefined){
+				if (currentRoom.turns[turnCount] == undefined) {
 					currentRoom.turns[turnCount] = {
 						playersShoots: {},
 						touchedPlayers: {}
 					};
 				}
-				
+
 				currentRoom.turns[turnCount]['playersShoots'][socket.name] = {
 					shootCoords: shootCoords,
 					targetId: targetId,

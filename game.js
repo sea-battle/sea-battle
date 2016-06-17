@@ -12,7 +12,7 @@ module.exports = {
 		return count;
 	},
 	defaultPlacementTime: 1,
-	defaultShootTime: 7,
+	defaultShootTime: 20,
 	// return players from player room
 	getPlayersId: function (ioSockets, roomName) {
 		return ioSockets.adapter.rooms[roomName];
@@ -78,9 +78,11 @@ module.exports = {
 				};
 			}
 
+			var touched = targetedSocket.cells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].containBoat;
 			touchedPlayers[socketTurn.targetId].touchedAt.push({
 				coords: socketTurn.shootCoords,
-				by: socketTurn.shooterName
+				by: socketTurn.shooterName,
+				touched: touched
 			});
 		}
 		

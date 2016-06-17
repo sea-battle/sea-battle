@@ -1,6 +1,3 @@
-//TOREMOVE
-document.getElementById('other-players-canvas').style.display = 'none';
-
 const HORIZONTAL = 'h';
 const VERTICAL = 'v';
 const SPRITE = {
@@ -55,8 +52,10 @@ var randomGenerator = document.getElementById('random');
 var boatSelecters = document.getElementsByClassName('boat-selector');
 var timer = document.getElementById('timer');
 var otherPlayersCanvasContainer = document.getElementById('other-players-canvas');
+var fireCanvasContainer = document.getElementById('fire-canvas');
 
 var grids = [];
+var shooterGrid;
 
 var previousMouseCoords = undefined;
 // images 
@@ -71,7 +70,7 @@ socket.on('init', function (playerId) {
 
 function findGridByPlayerId(playerId) {
 	for (var i = 0; i < grids.length; i++) {
-		if (grids[i].playerId == playerId){
+		if (grids[i].playerId == playerId) {
 			return grids[i];
 		}
 	}
@@ -179,6 +178,11 @@ var gameHandlers = {
 		otherPlayersGrid: {
 			click: function (e) {
 				targetId = this.getAttribute('data-player-id');
+				var g = findGridByPlayerId(targetId);
+				shooterGrid.cells = JSON.parse(JSON.stringify(g.cells));
+				shooterGrid.shootedCells = JSON.parse(JSON.stringify(g.shootedCells));
+				shooterGrid.renderGrid();
+				shooterGrid.drawShoots();
 			}
 		},
 		shooterGrid: {
@@ -226,8 +230,8 @@ socket.on('game-check-grid', function () {
 	//playerCanvas.addEventListener('click', gameHandlers.battleStage.click);
 });
 socket.on('game-init-players-grids', function (players) {
-	document.getElementById('boats-container').style.display = 'none';
-	document.getElementById('other-players-canvas').style.display = 'block';
+	document.getElementById('boats-container').addClass('hidden')
+	document.getElementById('other-players-canvas').removeClass('hidden');
 	players.forEach(function (player) {
 		var otherPlayerCanvas = document.createElement('canvas');
 		var br = document.createElement('br');
@@ -243,24 +247,27 @@ socket.on('game-init-players-grids', function (players) {
 
 	// grid shooter
 	var shooterCanvas = document.createElement('canvas');
-	canvasWrapper.appendChild(shooterCanvas);
-	var shooterGrid = new Grid(shooterCanvas);
+	fireCanvasContainer.appendChild(shooterCanvas);
+	fireCanvasContainer.removeClass('hidden');
+	shooterGrid = new Grid(shooterCanvas);
 	grids.push(shooterGrid);
 	shooterCanvas.addEventListener('click', gameHandlers.battleStage.shooterGrid.click);
 });
 
-socket.on('update-after-turn', function (touchedPlayers){
-	for (var player in touchedPlayers){
+socket.on('update-after-turn', function (touchedPlayers) {
+	for (var player in touchedPlayers) {
 		var gridTest = findGridByPlayerId(player);
-		touchedPlayers[player].touchedAt.forEach(function (data){
+		touchedPlayers[player].touchedAt.forEach(function (data) {
 			gridTest.cells[data.coords.x][data.coords.x].shooted = true;
 			gridTest.cells[data.coords.x][data.coords.x].shootedBy = data.by;
-			gridTest.shootedCoords.push(JSON.parse(JSON.stringify(data.coords)));
+			gridTest.shootedCells.push({
+				coords: JSON.parse(JSON.stringify(data.coords)),
+				touched: data.touched
+			});
 		});
 	}
-	
-	grids.forEach(function (g){
-		g.drawShoots();
+
+	grids.forEach(function (g) {
+		g.drawShoots(boatsSprite);
 	});
-	
 });
