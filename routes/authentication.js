@@ -313,14 +313,14 @@ router.get('/', function (req, res) {
 	res.render(__dirname + '/../views/index');
 });
 
-app.get('/signup', isNotAuthenticated, function (req, res) {
+router.get('/signup', isNotAuthenticated, function (req, res) {
 	res.render(__dirname + '/views/signup', {
 		bodyClass: 'signup',
         success: null
 	});
 });
 
-app.get('/profile', function (req, res) {
+router.get('/profile', function (req, res) {
 	res.render(__dirname + '/views/profile', {
 		bodyClass: 'profile'
 	});
