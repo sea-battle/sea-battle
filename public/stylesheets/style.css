@@ -125,25 +125,19 @@ a {
 	height: 2px;
 	background: #525174;
 	content: '';
-	transition: -webkit-transform 0.3s;
 	transition: transform 0.3s;
-	transition: transform 0.3s, -webkit-transform 0.3s;
-	-webkit-transform: scale(0.85);
 	transform: scale(0.85);
 }
 
 .link-effect::after {
 	opacity: 0;
-	transition: top 0.3s, opacity 0.3s, -webkit-transform 0.3s;
 	transition: top 0.3s, opacity 0.3s, transform 0.3s;
-	transition: top 0.3s, opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
 }
 
 .link-effect:hover::before,
 .link-effect:hover::after,
 .link-effect:focus::before,
 .link-effect:focus::after {
-	-webkit-transform: scale(1);
 	transform: scale(1);
 }
 
@@ -175,11 +169,8 @@ a {
 	background: #348aa7;
 	z-index: -1;
 	opacity: 0;
-	-webkit-transform: scale3d(0.7, 1, 1);
 	transform: scale3d(0.7, 1, 1);
-	transition: opacity 0.4s, -webkit-transform 0.4s;
 	transition: transform 0.4s, opacity 0.4s;
-	transition: transform 0.4s, opacity 0.4s, -webkit-transform 0.4s;
 	transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
 }
 
@@ -195,7 +186,6 @@ a {
 
 .button-effect:hover::before {
 	opacity: 1;
-	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
 }
 
@@ -571,7 +561,7 @@ header {
 .grids-wrapper {
 	width: 55%;
 	height: 100%;
-	padding: 4em 1em 1em 1em;
+	padding: .5em;
 }
 
 .game .player-info {
@@ -677,15 +667,12 @@ header {
 
 	.game-ranking ul {
 		min-height: 85%;
-		display: -webkit-flex;
 		display: -ms-flexbox;
 		display: flex;
-		-webkit-flex-direction: column;
-		    -ms-flex-direction: column;
-		        flex-direction: column;
-		-webkit-justify-content: space-around;
-		    -ms-flex-pack: distribute;
-		        justify-content: space-around;
+		-ms-flex-direction: column;
+		    flex-direction: column;
+		-ms-flex-pack: distribute;
+		    justify-content: space-around;
 	}
 
 		.game-ranking p {
@@ -750,21 +737,45 @@ header {
 		}
 
 .main-canvas-wrapper {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	align-content: center;
-	margin: 0 auto;
 	height: 100%;
 	text-align: center;
 }
 
-
-.main-canvas-wrapper .fire-canvas,
-.main-canvas-wrapper .visual-canvas {
-
+.timer {
+	height: 4%;
+	font-size: 1.5em;
 }
+
+.fire-canvas {
+	height: 53%;
+	padding-bottom: .5em;
+	width: 100%;
+	text-align: center;
+}
+
+	.fire-canvas canvas {
+		height: 100%;
+	}
+
+.visual-canvas {
+	width: 100%;
+	height: 43%;
+}
+
+	.player-canvas-wrapper,
+	.visual-canvas section {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.player-canvas-wrapper {
+		height: 100%;
+		width: 100%;
+	}
+
+		.player-canvas-wrapper canvas {
+			height: 100%;	
+		}
 
 /* Main grids
 ========================================================================== */
@@ -781,10 +792,14 @@ header {
 ========================================================================== */
 
 .players-grids {
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
+	-ms-flex-direction: column;
+	    flex-direction: column;
+	-ms-flex-pack: justify;
+	    justify-content: space-between;
+	-ms-flex-align: center;
+	    align-items: center;
 }
 
 	.players-grids canvas {
@@ -901,7 +916,7 @@ footer {
 ========================================================================== */
 
 @media screen and (min-width: 87.5em),
-screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
+screen and (max-height: 47.90em) { /* > 1400px OR < 768px height */
 	.game .content {
 		/* position: absolute; */
 		text-align: left;
@@ -909,7 +924,7 @@ screen and (max-height: 47.95em) { /* > 1400px OR < 768px height */
 }
 
 @media screen and (max-width: 59.95em),
-screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
+screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 	.switching-aside {
 		display: none;
 		width: 100%;
@@ -918,9 +933,13 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 		top: 0;
 		left: 0;
 	}
+
+	.grids-wrapper {
+		padding: 4em .5em .5em .5em;
+	}
 }
 
-@media screen and (max-height: 47.95em) { /* < 768px height */
+@media screen and (max-height: 47.90em) { /* < 768px height */
 
 }
 
@@ -1102,7 +1121,7 @@ screen and (max-height: 47.95em) { /* < 960px width OR < 768px height */
 }
 
 @media screen and (max-width: 40.625em),
-screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
+screen and (max-height: 47.90em) { /* < 650px width OR < 768px height */
 	.game .chat-toggle,
 	.game .player-info-toggle,
 	.ranking-toggle {
@@ -1113,7 +1132,8 @@ screen and (max-height: 47.95em) { /* < 650px width OR < 768px height */
 	.grids-wrapper {
 		display: block;
 		width: 100%;
-		max-width: 100%;
+		max-width: 25em;
+		margin: auto;
 		height: auto;
 		text-align: center;
 	}

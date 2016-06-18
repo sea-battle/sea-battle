@@ -264,7 +264,7 @@ router.post('/delete-user', isAuthenticated, function (req, res, next) {
 });
 
 // Routes: method GET
-router.get('/verify/:tokenId', isNotAuthenticated, function (req, res) {
+/*router.get('/verify/:tokenId', isNotAuthenticated, function (req, res) {
     var _verifyFailed = function (userId = false) {
         if (userId) {
             // Remove the user from the database if the verification failed
@@ -308,7 +308,7 @@ router.get('/verify/:tokenId', isNotAuthenticated, function (req, res) {
             });
         }
     });
-});
+});*/
 
 router.get('/', function (req, res) {
     res.locals.username = (req.user) ? req.user.username : false;
