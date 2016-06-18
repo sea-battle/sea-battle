@@ -231,17 +231,19 @@ Grid.prototype = {
 		this.ctx.fillStyle = "#000";
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = "bottom";
-		for (var n = 1; n < this.iterations; n++) {
+        this.ctx.font="20px Arial";
+        console.log('this.iterations:', this.iterations);
+		for (var n = 0; n < this.iterations; n++) {
 			var position = this.cellWidth * n;
-			var text = position + '';
+			var text = n + '';
 			var halfTextWidth = this.ctx.measureText(text).width / 2;
 			var halfCellWidth = this.cellWidth / 2;
-			var x = (this.cellWidth * position) + halfCellWidth - halfTextWidth;
-			var y = 0;
-			console.log('x:', x);
-			console.log('y:', y);
-			console.log(text);
+			var x = position + halfCellWidth - halfTextWidth;
+			var y = 20;
 			this.ctx.fillText(text, x, y);
+            y = x + 15; // font height
+			x = 0 + halfTextWidth;
+            this.ctx.fillText(text, x, y);
 		}
 	},
 	placeBoat: function (boat, coords, spriteY) {
