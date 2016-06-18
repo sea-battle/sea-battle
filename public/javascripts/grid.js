@@ -30,7 +30,7 @@ function Grid(canvas, playerId) {
 
 	this.init();
 	this.renderGrid();
-	this.drawCoords();
+	//this.drawCoords();
 }
 
 Grid.prototype = {
