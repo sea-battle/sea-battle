@@ -53,6 +53,7 @@ var boatSelecters = document.getElementsByClassName('boat-selector');
 var timer = document.getElementById('timer');
 var otherPlayersCanvasContainer = document.getElementById('other-players-canvas');
 var fireCanvasContainer = document.getElementById('fire-canvas');
+var rankList = document.getElementById('rank-list');
 
 var grids = [];
 var shooterGrid;
@@ -63,9 +64,24 @@ var boatsSprite = new Image();
 var grid;
 boatsSprite.src = "/images/sprites.png";
 socket.emit('game-init');
-socket.on('init', function (playerId) {
+socket.on('init', function (playerId, playersInfos) {
 	grid = new Grid(playerCanvas, playerId);
 	grids.push(grid);
+
+	console.log(playersInfos);
+	playersInfos.forEach(function (infos) {
+		var newLi = document.createElement('li');
+		var pPseudo = document.createElement('p');
+		var pPoints = document.createElement('p');
+
+		pPseudo.innerHTML = infos.name;
+		pPoints.id = infos.id + '-points';
+		pPoints.innerHTML = infos.points;
+
+		newLi.appendChild(pPseudo);
+		newLi.appendChild(pPoints);
+		rankList.appendChild(newLi);
+	});
 });
 
 function findGridByPlayerId(playerId) {
@@ -76,6 +92,7 @@ function findGridByPlayerId(playerId) {
 	}
 	return null;
 }
+
 function cloneTargetedGridToShooter(targetId) {
 	var g = findGridByPlayerId(targetId);
 	grid.cells = JSON.parse(JSON.stringify(g.cells));
@@ -190,7 +207,7 @@ var gameHandlers = {
 			click: function (e) {
 				socket.emit('game-shoot', e.gridInfo.coords);
 			},
-			mousemove: function (e){
+			mousemove: function (e) {
 				console.log(e.gridInfo);
 			}
 		}
@@ -261,10 +278,9 @@ socket.on('game-init-players-grids', function (players) {
 	shooterGrid = new Grid(shooterCanvas, 'shooter');
 	grids.push(shooterGrid);
 	shooterCanvas.addEventListener('click', gameHandlers.battleStage.shooterGrid.click);
-	shooterCanvas.addEventListener('mousemove', gameHandlers.battleStage.shooterGrid.mousemove);
 });
 
-socket.on('update-after-turn', function (touchedPlayers) {
+socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
 	for (var player in touchedPlayers) {
 		var currentGrid = findGridByPlayerId(player);
 		touchedPlayers[player].touchedAt.forEach(function (data) {
@@ -283,5 +299,11 @@ socket.on('update-after-turn', function (touchedPlayers) {
 
 	grids.forEach(function (g) {
 		g.drawShoots(boatsSprite);
+	});
+
+
+	// Points update
+	playersInfos.forEach(function (infos) {
+		document.getElementById(infos.id + '-points').innerHTML = infos.points;
 	});
 });

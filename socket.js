@@ -102,19 +102,19 @@ module.exports = {
 
             // Stage 3: game
             socket.on('game-init', function () {
-                socket.emit('init', socket.id);
+                socket.emit('init', socket.id, game.getPlayersInfos(io.sockets, socket.room));
             });
 
             socket.on('game-set-ready', function (cells) {
                 socket.cells = cells;
-                socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
+                socket.emit('game-init-players-grids', game.getPlayersInfos(io.sockets, socket.room));
 
                 function playTurn() {
                     if (game.rooms[socket.room].timer == 0) {
                         game.playShootTurn(io.sockets, socket.room);
                         var currentRoom = game.rooms[socket.room];
                         if (!utils.isEmpty(currentRoom.turns[currentRoom.turnCount].touchedPlayers)) {
-                            io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
+                            io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers, game.getPlayersInfos(io.sockets, socket.room));
                         }
                         if (game.rooms[socket.room].gameover) {
                             clearInterval(game.rooms[socket.room].timerId);

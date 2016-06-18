@@ -50,16 +50,15 @@ module.exports = {
 		}
 		return players;
 	},
-	getOtherPlayersInfos: function (ioSockets, socket) {
-		var roomPlayers = this.getPlayersId(ioSockets, socket.room);
+	getPlayersInfos: function (ioSockets, socketRoom) {
+		var roomPlayers = this.getPlayersId(ioSockets, socketRoom);
 		var players = [];
 		for (socketId in roomPlayers.sockets) {
-			if (socket.id != socketId) {
 				players.push({
 					name: ioSockets.sockets[socketId].name,
-					id: ioSockets.sockets[socketId].id
+					id: ioSockets.sockets[socketId].id,
+					points: ioSockets.sockets[socketId].points
 				});
-			}
 		}
 		return players;
 	},
@@ -87,6 +86,11 @@ module.exports = {
 							};
 						}
 						var touched = currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].containBoat;
+						if (touched){
+							var shooterPlayer = self.getPlayerById(ioSockets, key);
+							shooterPlayer.points++;
+						}
+						
 						touchedPlayers[socketId].touchedAt.push({
 							coords: socketTurn.shootCoords,
 							by: socketTurn.shooterName,
