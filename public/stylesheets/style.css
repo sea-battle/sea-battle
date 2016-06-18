@@ -753,9 +753,9 @@ header {
 	text-align: center;
 }
 
-	.fire-canvas canvas {
-		height: 100%;
-	}
+/* 	.fire-canvas canvas {
+	height: 390px;
+} */
 
 .visual-canvas {
 	width: 100%;
@@ -773,9 +773,9 @@ header {
 		width: 100%;
 	}
 
-		.player-canvas-wrapper canvas {
-			height: 100%;	
-		}
+/* 		.player-canvas-wrapper canvas {
+	height: 360px;
+} */
 
 /* Main grids
 ========================================================================== */
