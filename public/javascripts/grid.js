@@ -3,8 +3,8 @@ function Grid(canvas, playerId) {
 	this.playerId = playerId || null;
 	this.canvas = canvas;
 	this.container = this.canvas.parentNode;
-	this.canvas.width = parseInt(getComputedStyle(this.container).width);
-	this.canvas.height = this.canvas.width;
+	this.canvas.height = parseInt(getComputedStyle(this.container).height);
+	this.canvas.width = this.canvas.height;
 	this.ctx = this.canvas.getContext('2d');
 	this.width = this.canvas.width;
 	this.iterations = 10;

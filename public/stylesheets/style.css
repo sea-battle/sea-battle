@@ -753,10 +753,6 @@ header {
 	text-align: center;
 }
 
-/* 	.fire-canvas canvas {
-	height: 390px;
-} */
-
 .visual-canvas {
 	width: 100%;
 	height: 43%;
@@ -772,10 +768,6 @@ header {
 		height: 100%;
 		width: 100%;
 	}
-
-/* 		.player-canvas-wrapper canvas {
-	height: 360px;
-} */
 
 /* Main grids
 ========================================================================== */
@@ -802,8 +794,9 @@ header {
 	    align-items: center;
 }
 
-	.players-grids canvas {
-		padding: .5em;
+	.players-grids div {
+		width: 90%;
+		margin: .5em auto;
 	}
 
 /* Overlays

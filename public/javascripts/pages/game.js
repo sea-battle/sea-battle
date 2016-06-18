@@ -228,12 +228,15 @@ socket.on('game-init-players-grids', function (players) {
 	document.getElementById('boats-container').addClass('hidden')
 	document.getElementById('other-players-canvas').removeClass('hidden');
 	players.forEach(function (player) {
+		var div = document.createElement('div');
 		var otherPlayerCanvas = document.createElement('canvas');
-		var br = document.createElement('br');
+		//var br = document.createElement('br');
 		otherPlayerCanvas.setAttribute('data-player-id', player.id);
 
-		otherPlayersCanvasContainer.appendChild(otherPlayerCanvas);
-		otherPlayersCanvasContainer.appendChild(br);
+		div.appendChild(otherPlayerCanvas);
+		otherPlayersCanvasContainer.appendChild(div);
+
+		//otherPlayersCanvasContainer.appendChild(br);
 
 		var otherPlayerGrid = new Grid(otherPlayerCanvas, player.id);
 		grids.push(otherPlayerGrid);
