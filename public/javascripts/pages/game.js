@@ -170,7 +170,6 @@ var gameHandlers = {
 				socket.emit('game-shoot', e.gridInfo.coords);
 			},
 			mousemove: function (e) {
-				console.log(e.gridInfo);
 			}
 		}
 	}

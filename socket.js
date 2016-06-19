@@ -13,14 +13,18 @@ module.exports = {
 			};
 			socket.name = socket.id;
 			socket.points = 0;
+			socket.grade = 'Elite';
+			socket.globalPoints = 9999;
+			socket.img = '/images/test1.jpg';
 
 			// Stage 1: rooms
-			socket.on('rooms-init-socket-infos', function (){				
+			socket.on('rooms-init-socket-infos', function () {
 				socket.emit('init-socket-infos', {
 					name: socket.name,
-					grade: 'Elite',
-					points: 9999,
-					img: '/images/test1.jpg'
+					grade: socket.grade,
+					globalPoints: socket.globalPoints,
+					img: socket.img,
+					id: socket.id
 				});
 			});
 			socket.on('rooms-create', function (roomName) {
@@ -64,19 +68,29 @@ module.exports = {
 					time: time
 				});
 				socket.broadcast.emit('receive-message', from, message, time, filter);
-				var playersName = game.getPlayersNames(io.sockets, socket.room);
-				socket.broadcast.emit('room-update-players', playersName);
+				socket.broadcast.emit('room-update', {
+					players: game.getPlayersInfos(io.sockets, socket.room),
+					room: {
+						playerCount: game.rooms[socket.room].playerCount,
+						name: roomName
+					}
+				});
 				io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
 			});
 
 			socket.on('room-update-request', function () {
-				var playersName = game.getPlayersNames(io.sockets, socket.room);
-				socket.emit('room-update-players', playersName);
+				socket.emit('room-update', {
+					players: game.getPlayersInfos(io.sockets, socket.room),
+					room: {
+						playerCount: game.rooms[socket.room].playerCount,
+						name: socket.room
+					}
+				});
 
 				var playersStatus = game.getPlayerStatus(io.sockets, socket.room);
 				playersStatus.forEach(function (status) {
-					if (socket.name != status.name) {
-						socket.emit('update-players-status', status.name, status.ready);
+					if (socket.id != status.id) {
+						socket.emit('update-players-status', status.id, status.ready);
 					}
 				});
 			});
@@ -84,7 +98,7 @@ module.exports = {
 			// Stage 2: wait
 			socket.on('wait-set-ready', function () {
 				socket.ready = true;
-				socket.broadcast.emit('update-players-status', socket.name, 'Prêt');
+				socket.broadcast.emit('update-players-status', socket.id, 'Prêt');
 				if (game.allPlayersAreReady(io.sockets, socket.room) &&
 					game.getPlayersId(io.sockets, socket.room).length > 1) {
 					io.sockets.emit('wait-start-game');
@@ -105,7 +119,7 @@ module.exports = {
 			});
 			socket.on('wait-set-unready', function () {
 				socket.ready = false;
-				socket.broadcast.emit('update-players-status', socket.name, 'Attente');
+				socket.broadcast.emit('update-players-status', socket.id, 'Attente');
 			});
 
 			// Stage 3: game
@@ -200,8 +214,6 @@ module.exports = {
 					socket.broadcast.emit('receive-message', from, message, time, filter);
 					socket.leave(socket.room);
 					game.rooms[socket.room].playerCount--;
-
-					console.log('game.rooms[socket.room].playerCount:', game.rooms[socket.room].playerCount);
 					if (game.rooms[socket.room].playerCount == 0) {
 						if (game.rooms[socket.room].timerId != null) {
 							clearInterval(game.rooms[socket.room].timerId);
@@ -211,11 +223,15 @@ module.exports = {
 						if (game.rooms[socket.room].timerId != null) {
 							clearInterval(game.rooms[socket.room].timerId);
 						}
-						// set the only one missing as winner and bring him back to wait room
-					} else {
-						var playersName = game.getPlayersNames(io.sockets, socket.room);
-						socket.broadcast.emit('room-update-players', playersName);
+						//TODO set the only one missing as winner and bring him back to wait room
 					}
+					socket.broadcast.emit('room-update', {
+						players: game.getPlayersInfos(io.sockets, socket.room),
+						room: {
+							playerCount: game.rooms[socket.room].playerCount,
+							name: socket.room
+						}
+					});
 
 				} else {
 					socket.leave(game.defaultRoom);

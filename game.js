@@ -57,12 +57,13 @@ module.exports = {
 			players.push({
 				name: ioSockets.sockets[socketId].name,
 				id: ioSockets.sockets[socketId].id,
-				points: ioSockets.sockets[socketId].points
+				points: ioSockets.sockets[socketId].points,
+				globalPoints: ioSockets.sockets[socketId].globalPoints,
+				grade: ioSockets.sockets[socketId].grade,
+				img: ioSockets.sockets[socketId].img
 			});
 		}
-		console.log(players);
 		if (sort){
-			console.log('here');
 			players.sort(utils.sortingBy[sort]);
 		}
 		
@@ -152,7 +153,7 @@ module.exports = {
 		var players = [];
 		for (socketId in roomPlayers.sockets) {
 			players.push({
-				name: ioSockets.sockets[socketId].name,
+				id: ioSockets.sockets[socketId].id,
 				ready: ioSockets.sockets[socketId].ready ? 'Prêt' : 'Attente'
 			});
 		}

@@ -1,9 +1,8 @@
 var socket = io();
 var playerInfos;
-var roomName = document.getElementById('room-name');
 var createRoomButton = document.getElementById('create-room');
 var roomsContainer = document.getElementById('rooms');
-
+var roomNameInput = document.getElementById('room-name-input');
 function joinHandler(e) {
 	socket.emit('rooms-join', this.getAttribute('data-room'));
 }
@@ -39,14 +38,14 @@ function fillPlayersInfos(page) {
 	var grade = document.getElementById('player-grade');
 
 	pseudo.innerHTML = playerInfos.name;
-	grade.innerHTML = playerInfos.grade + ' - ' + playerInfos.points +'pts';
+	grade.innerHTML = playerInfos.grade + ' - ' + playerInfos.globalPoints +'pts';
 
 	if (page) {
 		if (page == 'wait') {
 			document.getElementById('room-player-grade-img').setAttribute('src', playerInfos.img);
 			document.getElementById('room-player-username').innerHTML = playerInfos.name;
 			document.getElementById('room-player-grade').innerHTML = playerInfos.grade + ' - ';
-			document.getElementById('room-player-points').innerHTML = playerInfos.points + 'pts';
+			document.getElementById('room-player-points').innerHTML = playerInfos.globalPoints + 'pts';
 		}
 	}
 }
@@ -55,7 +54,6 @@ function fillPlayersInfos(page) {
 socket.emit('rooms-init-socket-infos');
 
 socket.on('init-socket-infos', function (infos) {
-	console.log(infos);
 	playerInfos = infos;
 });
 
@@ -65,14 +63,14 @@ socket.on('rooms-join', function (name) {
 
 
 createRoomButton.addEventListener('click', function (e) {
-	var name = roomName.value;
+	var name = roomNameInput.value;
 	if (name != '') {
 		socket.emit('rooms-create', name);
-		if (roomName.hasClass('empty')) roomName.removeClass('empty');
-		roomName.value = '';
+		if (roomNameInput.hasClass('empty')) roomNameInput.removeClass('empty');
+		roomNameInput.value = '';
 	} else {
-		roomName.focus();
-		if (!roomName.hasClass('empty')) roomName.addClass('empty');
+		roomNameInput.focus();
+		if (!roomNameInput.hasClass('empty')) roomNameInput.addClass('empty');
 	}
 });
 
