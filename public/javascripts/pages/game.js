@@ -1,49 +1,5 @@
 const HORIZONTAL = 'h';
 const VERTICAL = 'v';
-const SPRITE = {
-	tp: {
-		y: 0
-	},
-	sm: {
-		y: 5
-	},
-	dt: {
-		y: 2
-	},
-	cr: {
-		y: 8
-	},
-	ca: {
-		y: 12
-	}
-};
-const DEFAULT_BOATS = {
-	tp: {
-		name: 'Torpedo',
-		size: 2,
-		id: 'tp'
-	},
-	sm: {
-		name: 'Submarine',
-		size: 3,
-		id: 'sm'
-	},
-	dt: {
-		name: 'Destroyer',
-		size: 3,
-		id: 'dt'
-	},
-	cr: {
-		name: 'Cruiser',
-		size: 4,
-		id: 'cr'
-	},
-	ca: {
-		name: 'Carrier',
-		size: 5,
-		id: 'ca'
-	}
-};
 
 var playerCanvas = document.getElementById('player-canvas');
 var boatsContainer = document.getElementById('boats-container');
@@ -111,7 +67,7 @@ var gameHandlers = {
 					var boatSelector = document.getElementById(selectedBoat.id);
 					boatSelector.setAttribute('data-placed', 'true');
 					boatSelector.setAttribute('class', 'boat-selector placed');
-					grid.placeBoat(selectedBoat, e.gridInfo.coords, SPRITE[selectedBoat.id].y);
+					grid.placeBoat(selectedBoat, e.gridInfo.coords);
 					selectedBoat = null;
 					grid.clearCanvas();
 					grid.renderGrid();
@@ -123,14 +79,14 @@ var gameHandlers = {
 					var boatOrientation = e.gridInfo.cell.boatOrientation;
 					grid.removePlacedBoat(boatId);
 
-					var removedBoat = JSON.parse(JSON.stringify(DEFAULT_BOATS[boatId]));
+					var removedBoat = grid.getDefaultBoats(boatId);
 					selectedBoat = new Boat(removedBoat.name, removedBoat.size, boatOrientation, removedBoat.id);
 					document.getElementById(boatId).setAttribute('class', 'boat-selector');
 
 					grid.clearCanvas();
 					grid.renderGrid();
 					grid.drawPlacedBoats(boatsSprite);
-					grid.drawPreviewBoat(boatsSprite, selectedBoat, SPRITE[selectedBoat.id].y, e.gridInfo, .5);
+					grid.drawPreviewBoat(boatsSprite, selectedBoat, e.gridInfo, .5);
 				}
 			}
 		},
@@ -153,7 +109,7 @@ var gameHandlers = {
 						grid.clearCanvas();
 						grid.renderGrid();
 						grid.drawPlacedBoats(boatsSprite);
-						grid.drawPreviewBoat(boatsSprite, selectedBoat, SPRITE[selectedBoat.id].y, e.gridInfo, alpha);
+						grid.drawPreviewBoat(boatsSprite, selectedBoat, e.gridInfo, alpha);
 					}
 					previousMouseCoords = grid.getMouseCoord(pos);
 				}
@@ -168,7 +124,7 @@ var gameHandlers = {
 				grid.clearCanvas();
 				grid.renderGrid();
 				grid.drawPlacedBoats(boatsSprite);
-				grid.drawPreviewBoat(boatsSprite, selectedBoat, SPRITE[selectedBoat.id].y, e.gridInfo, alpha);
+				grid.drawPreviewBoat(boatsSprite, selectedBoat, e.gridInfo, alpha);
 			}
 		},
 		selectBoat: function (e) {
@@ -184,7 +140,7 @@ var gameHandlers = {
 			}
 		},
 		random: function (e) {
-			grid.randomBoatsPosition(JSON.parse(JSON.stringify(DEFAULT_BOATS)));
+			grid.randomBoatsPosition();
 			grid.drawPlacedBoats(boatsSprite);
 			selectedBoat = null;
 
