@@ -15,8 +15,12 @@ div.wrapper
 			ul#players-list.players-list
 				li
 					div
-						p#player-username.player-username #{name}
-						p.player-ranking Image Grade X pts
+						p#room-player-username.player-username
+						p.player-ranking 
+							span
+								img#room-player-grade-img(src='', alt='Grade')
+							span#room-player-grade
+							span#room-player-points
 					button#set-ready.button-effect Prêt
 						i#ready-status.ready-status
 

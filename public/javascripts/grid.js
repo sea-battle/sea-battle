@@ -276,18 +276,18 @@ Grid.prototype = {
 		this.ctx.fillStyle = "#000";
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = "bottom";
-		this.ctx.font = "20px Arial";
-		console.log('this.iterations:', this.iterations);
+		var px = parseInt(this.cellWidth / 3);
+		this.ctx.font = px + "px Arial";
 		for (var n = 0; n < this.iterations; n++) {
 			var position = this.cellWidth * n;
 			var text = n + '';
 			var halfTextWidth = this.ctx.measureText(text).width / 2;
 			var halfCellWidth = this.cellWidth / 2;
 			var x = position + halfCellWidth - halfTextWidth;
-			var y = 20;
+			var y = px;
 			this.ctx.fillText(text, x, y);
-			y = x + 15; // font height
-			x = 0 + halfTextWidth;
+			y = x + px; // font height
+			x = halfTextWidth;
 			this.ctx.fillText(text, x, y);
 		}
 	},
@@ -370,7 +370,7 @@ Grid.prototype = {
 					self.placeBoat(randomBoat, {
 						x: x,
 						y: y
-					}, SPRITE[randomBoat.id].y);
+					}, this.SPRITE[randomBoat.id].y);
 				}
 			}
 

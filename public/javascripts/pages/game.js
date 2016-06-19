@@ -1,3 +1,4 @@
+fillPlayersInfos();
 const HORIZONTAL = 'h';
 const VERTICAL = 'v';
 
@@ -24,8 +25,22 @@ socket.on('init', function (playerId, playersInfos) {
 	grid = new Grid(playerCanvas, playerId);
 	grids.push(grid);
 
-	console.log(playersInfos);
-	playersInfos.forEach(function (infos) {
+	manageRankList(playersInfos);
+});
+
+function findGridByPlayerId(playerId) {
+	for (var i = 0; i < grids.length; i++) {
+		if (grids[i].playerId == playerId) {
+			return grids[i];
+		}
+	}
+	return null;
+}
+
+function manageRankList(playersInfos) {
+	rankList.removeChildren();
+	for (var i = playersInfos.length - 1; i >= 0; i--) {
+		var infos = playersInfos[i];
 		var newLi = document.createElement('li');
 		var pPseudo = document.createElement('p');
 		var pPoints = document.createElement('p');
@@ -37,16 +52,7 @@ socket.on('init', function (playerId, playersInfos) {
 		newLi.appendChild(pPseudo);
 		newLi.appendChild(pPoints);
 		rankList.appendChild(newLi);
-	});
-});
-
-function findGridByPlayerId(playerId) {
-	for (var i = 0; i < grids.length; i++) {
-		if (grids[i].playerId == playerId) {
-			return grids[i];
-		}
 	}
-	return null;
 }
 
 function cloneTargetedGridToShooter(targetId) {
@@ -256,10 +262,6 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
 	grids.forEach(function (g) {
 		g.drawShoots(boatsSprite);
 	});
-
-
-	// Points update
-	playersInfos.forEach(function (infos) {
-		document.getElementById(infos.id + '-points').innerHTML = infos.points;
-	});
+	console.log(playersInfos);
+	manageRankList(playersInfos);
 });

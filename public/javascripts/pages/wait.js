@@ -1,8 +1,9 @@
+fillPlayersInfos('wait');
 var playerIsReady = false;
 var setReadyButton = document.getElementById('set-ready');
 var readyStatus = document.getElementById('ready-status');
 var playersList = document.getElementById('players-list');
-var playerUsername = document.getElementById('player-username');
+var playerUsername = document.getElementById('room-player-username');
 
 setReadyButton.addEventListener('click', function (e) {
 	playerIsReady = !playerIsReady;

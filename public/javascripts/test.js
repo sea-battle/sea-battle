@@ -101,10 +101,10 @@ var gameHandlers = {
 		},
 		shooterGrid: {
 			click: function (e) {
-				socket.emit('game-shoot', e.gridInfo.coords);
+				console.log(e.gridInfo);
 			},
 			mousemove: function (e) {
-				console.log(e.gridInfo);
+				console.log(e);
 			}
 		}
 	}
@@ -119,8 +119,9 @@ boatsSprite.onload = function () {
 
 	var canvasTest = document.getElementById('canvas-test');
 	grid = new Grid(canvasTest, 'test');
-
-	canvasTest.addEventListener('mousemove', gameHandlers.placementStage.mousemove);
-	canvasTest.addEventListener('click', gameHandlers.placementStage.click);
-	canvasTest.addEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
+	grid.randomBoatsPosition();
+	grid.drawPlacedBoats(boatsSprite);
+	
+	
+	canvasTest.addEventListener('click', gameHandlers.battleStage.shooterGrid.click);
 }

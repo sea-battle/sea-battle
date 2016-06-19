@@ -1177,3 +1177,9 @@ screen and (max-height: 47.90em) { /* < 650px width OR < 768px height */
 .hidden {
 	display: none;
 }
+
+/*TOREMOVE for tests*/
+#test-canvas-container{
+	width: 500px;
+	height: 500px;
+}

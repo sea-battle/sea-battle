@@ -8,9 +8,9 @@ router.get('/rooms', function (req, res) {
 	});
 });
 
-router.post('/wait', function (req, res) {
+router.get('/wait', function (req, res) {
 	var fn = jade.compileFile(__dirname + '/../views/wait.jade');
-	var html = fn(req.body);
+	var html = fn();
 	return res.json({
 		bodyClass: 'wait',
 		html: html,
