@@ -46,7 +46,8 @@ Grid.prototype = {
 					boatSize: null,
 					boatOrientation: null,
 					shooted: false,
-					shootedBy: []
+					shootedBy: [],
+					boatPart: null
 				});
 			}
 		}
@@ -258,6 +259,7 @@ Grid.prototype = {
 			this.cells[placeCoord.x][placeCoord.y].boatId = boat.id;
 			this.cells[placeCoord.x][placeCoord.y].boatSize = boat.size;
 			this.cells[placeCoord.x][placeCoord.y].boatOrientation = boat.orientation;
+			this.cells[placeCoord.x][placeCoord.y].boatPart = i;
 			this.cellsContainingBoats.push({
 				spriteY: spriteY + i,
 				orientation: boat.orientation,
