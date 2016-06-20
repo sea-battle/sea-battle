@@ -39,16 +39,23 @@ function findGridByPlayerId(playerId) {
 
 function manageRankList(playersInfos) {
     rankList.removeChildren();
-    for (var i = playersInfos.length - 1; i >= 0; i--) {
+    var position = 1;
+    for (var i = playersInfos.length - 1; i >= 0; i--, position++) {
         var infos = playersInfos[i];
         var newLi = document.createElement('li');
+        var pPosition = document.createElement('p');
         var pPseudo = document.createElement('p');
         var pPoints = document.createElement('p');
 
+        pPosition.className = 'rank-position';
+        pPosition.innerHTML = position;
+        pPseudo.className = 'rank-username';
         pPseudo.innerHTML = infos.name;
+        pPoints.className = 'rank-points';
         pPoints.id = infos.id + '-points';
         pPoints.innerHTML = infos.points;
 
+        newLi.appendChild(pPosition);
         newLi.appendChild(pPseudo);
         newLi.appendChild(pPoints);
         rankList.appendChild(newLi);
@@ -225,15 +232,21 @@ socket.on('game-init-players-grids', function (players) {
     document.getElementById('boats-container').addClass('hidden')
     document.getElementById('other-players-canvas').removeClass('hidden');
     players.forEach(function (player) {
+
         var div = document.createElement('div');
+        var playerName = document.createElement('p');
+        var canvasWrapper = document.createElement('div');
         var otherPlayerCanvas = document.createElement('canvas');
-        //var br = document.createElement('br');
+
+        playerName.className = 'player-username';
+        playerName.innerHTML = player.name;
+        canvasWrapper.className = 'canvas-wrapper';
         otherPlayerCanvas.setAttribute('data-player-id', player.id);
 
-        div.appendChild(otherPlayerCanvas);
+        div.appendChild(playerName);
+        canvasWrapper.appendChild(otherPlayerCanvas);
+        div.appendChild(canvasWrapper);
         otherPlayersCanvasContainer.appendChild(div);
-
-        //otherPlayersCanvasContainer.appendChild(br);
 
         var otherPlayerGrid = new Grid(otherPlayerCanvas, player.id);
         grids.push(otherPlayerGrid);
