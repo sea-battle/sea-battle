@@ -122,7 +122,7 @@ var _checkPassword = function(password, passwordConfirmation) {
     return (password === passwordConfirmation) ? true : false;
 };
 
-router.post('/signup', function (req, res) {
+var checkCredentials = function (req, res, next) {
     User.findOne({
         $or: [
             { username: req.body.username },
@@ -144,35 +144,39 @@ router.post('/signup', function (req, res) {
                 error: 'bad_format'
             });
         } else {
-            User.register(new User({
-                    username: req.body.username,
-                    email: req.body.email,
-                    validated: false
-                }), req.body.password, function (err, user) {
-                    if (err) {
-                        res.status(500);
-                    }
-
-                    // Generate a token and store its identifier
-                    var tokenId = generateToken(user._id);
-
-                    // Send the verification e-mail
-                    sendVerificationEmail({
-                    	from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
-                        to: user.email,
-                    	// to: 'louis.fischer@free.fr',
-                    	subject: 'Sea Battle - confirmation de votre inscription',
-                    	html: formatVerificationEmail(tokenId)
-                    });
-
-                    res.status(201);
-                    res.render(__dirname + '/../views/signup', {
-                        success: true
-                    });
-                }
-            );
+            next();
         }
     });
+};
+
+router.post('/signup', checkCredentials, function (req, res) {
+    User.register(new User({
+            username: req.body.username,
+            email: req.body.email,
+            validated: false
+        }), req.body.password, function (err, user) {
+            if (err) {
+                res.status(500);
+            }
+
+            // Generate a token and store its identifier
+            var tokenId = generateToken(user._id);
+
+            // Send the verification e-mail
+            sendVerificationEmail({
+            	from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
+                to: user.email,
+            	// to: 'louis.fischer@free.fr',
+            	subject: 'Sea Battle - confirmation de votre inscription',
+            	html: formatVerificationEmail(tokenId)
+            });
+
+            res.status(201);
+            res.render(__dirname + '/../views/signup', {
+                success: true
+            });
+        }
+    );
 });
 
 router.post('/signin', passport.authenticate('local', {
