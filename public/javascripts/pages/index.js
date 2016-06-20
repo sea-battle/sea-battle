@@ -1,7 +1,7 @@
-function proceedSignin() {
+function proceedSignin(e) {
     'use strict';
 
-    event.preventDefault();
+    e.preventDefault();
 
     var emailField = document.getElementById('email'),
         passwordField = document.getElementById('password');
@@ -27,6 +27,7 @@ function proceedSignin() {
 
     xhr.open('POST', '/signin', true);
     xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
     xhr.send(JSON.stringify(user));
 }
 

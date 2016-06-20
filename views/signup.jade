@@ -18,18 +18,14 @@ block content
 
             form#signup(method='post', action='/signup')
                 if success == true
-                    p#signup-message.form-main-message Un e-mail de confirmation vous a été envoyé.
-                else if success == false
-                    p#signup-message.form-main-message.error L'inscription a échoué. Merci de réessayer.
-                    input#email(type='text', name='email' value='john.doe@mail.com', placeholder='Adresse e-mail')
-                    p#email-message.form-message
-                    input#username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
-                    p#username-message.form-message
-                    input#password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
-                    input#password-confirmation(type='password', name='passwordConfirmation' value="johndoe", placeholder='Confirmez le mot de passe')
-                    p#password-message.form-message
-                    button#signup-submit.button-effect(type='submit') Créer
+                    p#signup-message Votre compte a été créé. Un e-mail de confirmation vous a été envoyé.
                 else
+                    if error == 'user_exists'
+                        p#signup-message L'adresse e-mail ou le nom d'utilisateur que vous avez entré est déjà pris.
+                    else if error == 'bad_format'
+                        p#signup-message Vérifiez que l'adresse e-mail est une adresse e-mail valide et que les deux mots de passe correspondent.
+                    else
+                        p#signup-message
                     input#email(type='text', name='email' value='john.doe@mail.com', placeholder='Adresse e-mail')
                     p#email-message.form-message
                     input#username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
@@ -42,5 +38,6 @@ block content
             div.push
 
     include inc/footer.jade
-
+    
+    script(src='/javascripts/pages/common.js')
     script(src='/javascripts/pages/signup.js')
