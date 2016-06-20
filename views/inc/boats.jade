@@ -1,7 +1,22 @@
-aside#boats-container.boats-container
-	button.boat-selector#tp(data-boat-size='2', data-placed='false') Torpedo
-	button.boat-selector#sm(data-boat-size='3', data-placed='false') Submarine
-	button.boat-selector#dt(data-boat-size='3', data-placed='false') Destroyer
-	button.boat-selector#cr(data-boat-size='4', data-placed='false') Cruiser
-	button.boat-selector#ca(data-boat-size='5', data-placed='false') Carrier
+section#boats-container.boats-container
+	div.boat-wrapper
+		p.boat-name Torpilleur
+		p 2 cases
+		img.boat-selector#tp(src='../images/torpedo.png', alt='Torpedo', data-boat-size='2', data-placed='false')
+	div.boat-wrapper
+		p.boat-name Sous-marin
+		p 3 cases
+		img.boat-selector#sm(src='../images/submarine.png', alt='Submarine', data-boat-size='3', data-placed='false')
+	div.boat-wrapper
+		p.boat-name Contre-torpilleurs
+		p 3 cases
+		img.boat-selector#dt(src='../images/destroyer.png', alt='Destroyer', data-boat-size='3', data-placed='false')
+	div.boat-wrapper
+		p.boat-name Croiseur
+		p 4 cases
+		img.boat-selector#cr(src='../images/cruiser.png', alt='Cruiser', data-boat-size='4', data-placed='false')
+	div.boat-wrapper
+		p.boat-name Porte-avions
+		p 5 cases
+		img.boat-selector#ca(src='../images/carrier.png', alt='Carrier', data-boat-size='5', data-placed='false')
 	button#random Random

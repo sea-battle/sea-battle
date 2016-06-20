@@ -21,7 +21,7 @@ block content
                 h3 Bonjour #{username}
             else
                 form#signin
-                    p#signin-message
+                    p#signin-message.form-main-message
                     input#email(type='text', name='email', placeholder='Adresse e-mail', value='john.doe@mail.com' autofocus)
                     input#password(type='password', name='password', placeholder='Mot de passe', value='johndoe')
                     button#signin-submit.button-effect(type='submit') Connexion
