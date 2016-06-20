@@ -29,7 +29,6 @@ router.get('/game', function (req, res) {
 		bodyClass: 'game',
 		html: html,
 		scriptsSrc: [
-            '/javascripts/grid.js',
             '/javascripts/boat.js',
             '/javascripts/pages/game.js'
         ],

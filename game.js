@@ -13,7 +13,7 @@ module.exports = {
 		}
 		return count;
 	},
-	defaultPlacementTime: 999999,
+	defaultPlacementTime: 1,
 	defaultShootTime: 3,
 	// return players from player room
 	getPlayersId: function (ioSockets, roomName) {
