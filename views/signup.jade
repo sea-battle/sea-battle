@@ -21,11 +21,11 @@ block content
                     p#signup-message Votre compte a été créé. Un e-mail de confirmation vous a été envoyé.
                 else
                     if error == 'user_exists'
-                        p#signup-message L'adresse e-mail ou le nom d'utilisateur que vous avez entré est déjà pris.
+                        p#signup-message.form-main-message L'adresse e-mail ou le nom d'utilisateur que vous avez entré est déjà pris.
                     else if error == 'bad_format'
-                        p#signup-message Vérifiez que l'adresse e-mail est une adresse e-mail valide et que les deux mots de passe correspondent.
+                        p#signup-message.form-main-message Vérifiez que l'adresse e-mail est une adresse e-mail valide et que les deux mots de passe correspondent.
                     else
-                        p#signup-message
+                        p#signup-message.form-main-message
                     input#email(type='text', name='email' value='john.doe@mail.com', placeholder='Adresse e-mail')
                     p#email-message.form-message
                     input#username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
