@@ -705,6 +705,7 @@ header {
 
 		.player-username {
 			font-size: 1.2em;
+			word-wrap: break-word;
 		}
 
 		.player-points {
@@ -725,10 +726,6 @@ header {
 	transform: translate(-50%, -50%);
 }
 
-.game .player-username {
-	font-size: 1.2em;
-}
-
 /* Ranking */
 
 .ranking-toggle,
@@ -742,6 +739,7 @@ header {
 	height: 35%;
 	padding: 1em .5em;
 	text-align: center;
+	overflow-y: scroll;
 }
 
 	.game-ranking ul {
@@ -754,12 +752,24 @@ header {
 		    justify-content: space-around;
 	}
 
-		.game-ranking p {
-			display: inline-block;
-			vertical-align: middle;
-			width: 50%;
-			font-size: 1.2em;
+		.game-ranking li:nth-child(odd) {
+			background-color: lightgrey;
 		}
+
+			.game-ranking p {
+				display: inline-block;
+				vertical-align: middle;
+				font-size: 1.2em;
+			}
+
+			.rank-position,
+			.rank-points {
+				width: 20%;
+			}
+
+			.rank-username {
+				width: 60%;
+			}
 
 .modal {
 	display: none;
@@ -867,13 +877,12 @@ header {
 	display: flex;
 	-ms-flex-direction: column;
 	    flex-direction: column;
-	-ms-flex-pack: justify;
-	    justify-content: space-around;
 	-ms-flex-align: center;
 	    align-items: center;
+	overflow-y: scroll;
 }
 
-	.players-grids div {
+	.players-grids > div {
 		width: 90%;
 		margin: .5em auto;
 		text-align: center;

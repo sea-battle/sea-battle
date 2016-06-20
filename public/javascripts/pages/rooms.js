@@ -1,5 +1,4 @@
 var socket = io();
-var playerInfos;
 var createRoomButton = document.getElementById('create-room');
 var roomsContainer = document.getElementById('rooms');
 var roomNameInput = document.getElementById('room-name-input');
@@ -50,11 +49,13 @@ function fillPlayersInfos(page) {
 	}
 }
 
+socket.on('connect', function (){
+    socket.emit('init-socket', playerInfos);
+});
+socket.emit('rooms-init-socket-id');
 
-socket.emit('rooms-init-socket-infos');
-
-socket.on('init-socket-infos', function (infos) {
-	playerInfos = infos;
+socket.on('init-socket-id', function (id) {
+	playerInfos.id = id;
 });
 
 socket.on('rooms-join', function (name) {
