@@ -112,17 +112,17 @@ router.post('/check-username-availability', function (req, res) {
     });
 });
 
+var _checkEmailAddress = function(email) {
+    var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+    return (regexEmail.test(email)) ? true : false;
+};
+
+var _checkPassword = function(password, passwordConfirmation) {
+    return (password === passwordConfirmation) ? true : false;
+};
+
 router.post('/signup', function (req, res) {
-    var _checkEmailAddress = function(email) {
-        var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-
-        return (regexEmail.test(email)) ? true : false;
-    };
-
-    var _checkPassword = function(password, passwordConfirmation) {
-        return (password === passwordConfirmation) ? true : false;
-    }
-
     User.findOne({
         $or: [
             { username: req.body.username },
@@ -175,14 +175,18 @@ router.post('/signup', function (req, res) {
     });
 });
 
-router.post('/signin', passport.authenticate('local'), function (req, res) {
+router.post('/signin', passport.authenticate('local', {
+    successRedirect: '/rooms',
+    failureRedirect: '/'
+}), function (req, res) {
     if (req.user.validated) {
-        res.send(req.user)
+        res.status(200);
     } else {
         req.session.destroy(function (err) {
-        })
+            // Handle error
+        });
 
-        res.status(401).send();
+        res.status(401);
     }
 });
 
@@ -289,11 +293,10 @@ router.get('/verify/:tokenId', routesMiddlewares.isNotAuthenticated, function (r
     });
 });
 
-router.get('/', function (req, res) {
+router.get('/', routesMiddlewares.isNotAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/index', {
-		bodyClass: 'home',
-        username: (req.user) ? req.user.username : false
-	});
+		bodyClass: 'home'
+    });
 });
 
 router.get('/signup', routesMiddlewares.isNotAuthenticated, function (req, res) {

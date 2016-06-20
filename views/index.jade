@@ -20,10 +20,10 @@ block content
             if username
                 h3 Bonjour #{username}
             else
-                form#signin
-                    p#signin-message.form-main-message
-                    input#email(type='text', name='email', placeholder='Adresse e-mail', value='john.doe@mail.com' autofocus)
-                    input#password(type='password', name='password', placeholder='Mot de passe', value='johndoe')
+                form#signin(method='post' action='/signin')
+                    p#signin-message.form-main-message #{message}
+                    input#email(type='text', name='username', placeholder='Adresse e-mail', value='louis.fischer@free.fr' autofocus)
+                    input#password(type='password', name='password', placeholder='Mot de passe', value='louis')
                     button#signin-submit.button-effect(type='submit') Connexion
 
                 a.link-effect(href='/signup', title='Vers la page de création de compte') Pas de compte ?

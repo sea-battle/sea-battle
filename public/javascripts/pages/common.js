@@ -48,7 +48,7 @@ function checkUsername() {
     }
 }
 
-function checkPassword() {
+function checkPassword(e) {
     'use strict';
 
     var passwordField = document.getElementById('password'),
@@ -60,10 +60,10 @@ function checkPassword() {
         passwordField.value !== '' &&
         passwordConfirmationField.value !== ''
     ) {
-        event.target.classList.add('error');
+        e.target.classList.add('error');
         passwordMessage.innerHTML = 'Les mots de passe ne correspondent pas';
     } else {
-        event.target.classList.remove('error');
+        e.target.classList.remove('error');
         passwordMessage.innerHTML = '';
     }
 }
