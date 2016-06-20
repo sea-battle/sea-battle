@@ -18,6 +18,15 @@ var User = new Schema({
         type: Boolean,
         required: true
     },
+    rank: {
+        type: String,
+        default: 'Matelot'
+    },
+    rankIcon: {
+        type: String,
+        default: 'matelot.png'
+    },
+    pointsCount: Number,
     skins: Skin,
     ip: String,
     games: [Game]

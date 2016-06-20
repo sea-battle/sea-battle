@@ -114,17 +114,17 @@ router.post('/check-username-availability', function (req, res) {
     });
 });
 
-router.post('/signup', function (req, res) {
-    var _checkEmailAddress = function (email) {
-        var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+var _checkEmailAddress = function(email) {
+    var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-        return (regexEmail.test(email)) ? true : false;
-    };
+    return (regexEmail.test(email)) ? true : false;
+};
 
-    var _checkPassword = function (password, passwordConfirmation) {
-        return (password === passwordConfirmation) ? true : false;
-    }
+var _checkPassword = function(password, passwordConfirmation) {
+    return (password === passwordConfirmation) ? true : false;
+};
 
+var checkCredentials = function (req, res, next) {
     User.findOne({
         $or: [
             {
@@ -150,43 +150,53 @@ router.post('/signup', function (req, res) {
                 error: 'bad_format'
             });
         } else {
-            User.register(new User({
-                username: req.body.username,
-                email: req.body.email,
-                validated: false
-            }), req.body.password, function (err, user) {
-                if (err) {
-                    res.status(500);
-                }
-
-                // Generate a token and store its identifier
-                var tokenId = generateToken(user._id);
-
-                // Send the verification e-mail
-                sendVerificationEmail({
-                    from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
-                    to: user.email,
-                    // to: 'louis.fischer@free.fr',
-                    subject: 'Sea Battle - confirmation de votre inscription',
-                    html: formatVerificationEmail(tokenId)
-                });
-
-                res.status(201);
-                res.render(__dirname + '/../views/signup', {
-                    success: true
-                });
-            });
+            next();
         }
     });
+};
+
+router.post('/signup', checkCredentials, function (req, res) {
+    User.register(new User({
+            username: req.body.username,
+            email: req.body.email,
+            validated: false
+        }), req.body.password, function (err, user) {
+            if (err) {
+                res.status(500);
+            }
+
+            // Generate a token and store its identifier
+            var tokenId = generateToken(user._id);
+
+            // Send the verification e-mail
+            sendVerificationEmail({
+            	from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
+                to: user.email,
+            	// to: 'louis.fischer@free.fr',
+            	subject: 'Sea Battle - confirmation de votre inscription',
+            	html: formatVerificationEmail(tokenId)
+            });
+
+            res.status(201);
+            res.render(__dirname + '/../views/signup', {
+                success: true
+            });
+        }
+    );
 });
 
-router.post('/signin', passport.authenticate('local'), function (req, res) {
+router.post('/signin', passport.authenticate('local', {
+    successRedirect: '/rooms',
+    failureRedirect: '/'
+}), function (req, res) {
     if (req.user.validated) {
-        res.send(req.user);
+        res.status(200);
     } else {
-        req.session.destroy(function (err) {})
+        req.session.destroy(function (err) {
+            // Handle error
+        });
 
-        res.status(401).send();
+        res.status(401);
     }
 });
 
@@ -311,10 +321,9 @@ router.get('/verify/:tokenId', routesMiddlewares.isNotAuthenticated, function (r
     });
 });
 
-router.get('/', function (req, res) {
+router.get('/', routesMiddlewares.isNotAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/index', {
-        bodyClass: 'home',
-        username: (req.user) ? req.user.username : false
+		bodyClass: 'home'
     });
 });
 
