@@ -132,8 +132,6 @@ router.post('/check-username-availability', function (req, res) {
 });
 
 router.post('/signup', function (req, res) {
-    console.log(req);
-
     var _checkEmailAddress = function(email) {
         var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
@@ -154,10 +152,15 @@ router.post('/signup', function (req, res) {
             // Handle error
         }
 
-        if (user || !_checkEmailAddress(req.body.email) || !_checkPassword(req.body.password, req.body.passwordConfirmation)) {
+        if (user) {
+            res.status(409);
+            res.render(__dirname + '/../views/signup', {
+                error: 'user_exists'
+            });
+        } else if (!_checkEmailAddress(req.body.email) || !_checkPassword(req.body.password, req.body.passwordConfirmation)) {
             res.status(400);
             res.render(__dirname + '/../views/signup', {
-                success: false
+                error: 'bad_format'
             });
         } else {
             User.register(new User({
@@ -166,7 +169,7 @@ router.post('/signup', function (req, res) {
                     validated: false
                 }), req.body.password, function (err, user) {
                     if (err) {
-                        res.status().send();
+                        res.status(500);
                     }
 
                     // Generate a token and store its identifier
@@ -182,14 +185,9 @@ router.post('/signup', function (req, res) {
                     });
 
                     res.status(201);
-
-                    if (req.xhr) {
-                        res.json({ success: true });
-                    } else {
-                        res.render(__dirname + '/../views/signup', {
-                            success: true
-                        });
-                    }
+                    res.render(__dirname + '/../views/signup', {
+                        success: true
+                    });
                 }
             );
         }
@@ -311,9 +309,9 @@ router.get('/verify/:tokenId', isNotAuthenticated, function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    res.locals.username = (req.user) ? req.user.username : false;
     res.render(__dirname + '/../views/index', {
-		bodyClass: 'home'
+		bodyClass: 'home',
+        username: (req.user) ? req.user.username : false
 	});
 });
 
@@ -325,8 +323,10 @@ router.get('/signup', isNotAuthenticated, function (req, res) {
 });
 
 router.get('/profile', isAuthenticated, function (req, res) {
+    res.locals.username = (req.user) ? req.user.username : false;
 	res.render(__dirname + '/../views/profile', {
-		bodyClass: 'profile'
+		bodyClass: 'profile',
+        username: (req.user) ? req.user.username : false
 	});
 });
 

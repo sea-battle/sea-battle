@@ -43,6 +43,7 @@ function checkUsername() {
 
         xhr.open('POST', '/check-username-availability', true);
         xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
         xhr.send(JSON.stringify({ username: usernameField.value }));
     }
 }
@@ -74,7 +75,8 @@ function proceedSignup() {
 
     var xhr = new XMLHttpRequest();
 
-    var signupMessage = document.getElementById('signup-message'),
+    var signupForm = document.getElementById('signup'),
+        signupMessage = document.getElementById('signup-message'),
         emailField = document.getElementById('email'),
         usernameField = document.getElementById('username'),
         passwordField = document.getElementById('password'),
@@ -89,9 +91,9 @@ function proceedSignup() {
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            if (this.status === 200) {
-                signupMessage.innerHTML = 'Un e-mail de confirmation vous a été envoyé';
-            } else if (this.status === 401) {
+            if (this.status === 201) {
+                signupForm.innerHTML = '<p id="signup-message">Votre compte a été créé. Un e-mail de confirmation vous a été envoyé</p>';
+            } else if (this.status === 500) {
                 signupMessage.innerHTML = 'Une erreur est survenue lors de l\'inscription';
             }
         }
@@ -99,6 +101,7 @@ function proceedSignup() {
 
     xhr.open('POST', '/signup', true);
     xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
     xhr.send(JSON.stringify(user));
 }
 

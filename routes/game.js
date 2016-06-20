@@ -4,7 +4,8 @@ var jade = require('jade');
 
 router.get('/rooms', function (req, res) {
 	res.render(__dirname + '/../views/rooms', {
-		bodyClass: 'rooms'
+		bodyClass: 'rooms',
+        username: (req.user) ? req.user.username : false
 	});
 });
 
