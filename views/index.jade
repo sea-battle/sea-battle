@@ -15,11 +15,11 @@ block content
                     img(src='images/test2.jpg')
                     p GIF animé montrant les classements et statistiques
 
-            h2 Jouer
-
             if username
                 h3 Bonjour #{username}
+                a.link-effect(href='/rooms', title='Vers les salles de jeu') Jouer !
             else
+                h2 Jouer
                 form#signin
                     p#signin-message.form-main-message
                     input#email(type='text', name='email', placeholder='Adresse e-mail', value='john.doe@mail.com' autofocus)
