@@ -15,7 +15,7 @@ html(lang='fr')
 		block styles
 	body(class='#{bodyClass}')
 		if isAuthenticated
-			button#signout.signout
+			a.signout(href='/signout' title='Se déconnecter')
 				img(src='../images/signout.png')
 		block content
 		
