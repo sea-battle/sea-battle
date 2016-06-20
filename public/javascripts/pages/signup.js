@@ -1,7 +1,7 @@
-function proceedSignup() {
+function proceedSignup(e) {
     'use strict';
 
-    event.preventDefault();
+    e.preventDefault();
 
     var xhr = new XMLHttpRequest();
 

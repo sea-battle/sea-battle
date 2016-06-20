@@ -1,7 +1,7 @@
-function proceedSignin() {
+function proceedSignin(e) {
     'use strict';
 
-    event.preventDefault();
+    e.preventDefault();
 
     var emailField = document.getElementById('email'),
         passwordField = document.getElementById('password');

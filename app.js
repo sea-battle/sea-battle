@@ -22,14 +22,16 @@ app.use(bodyParser.urlencoded({
 // Load stylesheets, JavaScript files, images and fonts
 app.use(express.static(__dirname + '/public'));
 
-// Load all routes and middlewares required for authentication
+// Load all routes required for authentication
 var	routesAuthentication = require('./routes/authentication');
 app.use('/', routesAuthentication);
 
-var	routesGame = require('./routes/game'),
-    routesMain = require('./routes/main');
-
+// Load all routes relative to the game
+var	routesGame = require('./routes/game');
 app.use('/', routesGame);
+
+// Load all other routes
+routesMain = require('./routes/main');
 app.use('/', routesMain);
 
 // Set templating engine
