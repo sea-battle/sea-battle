@@ -190,17 +190,11 @@ router.post('/signin', passport.authenticate('local', {
     failureRedirect: '/'
 }), function (req, res) {
     if (req.user.validated) {
-<<<<<<< HEAD
         res.status(200);
     } else {
         req.session.destroy(function (err) {
             // Handle error
         });
-=======
-        res.send(req.user);
-    } else {
-        req.session.destroy(function (err) {})
->>>>>>> 212f1458ab58e01a99cd3f7bec9a37279c1c58ef
 
         res.status(401);
     }
@@ -329,12 +323,7 @@ router.get('/verify/:tokenId', routesMiddlewares.isNotAuthenticated, function (r
 
 router.get('/', routesMiddlewares.isNotAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/index', {
-<<<<<<< HEAD
 		bodyClass: 'home'
-=======
-        bodyClass: 'home',
-        username: (req.user) ? req.user.username : false
->>>>>>> 212f1458ab58e01a99cd3f7bec9a37279c1c58ef
     });
 });
 
