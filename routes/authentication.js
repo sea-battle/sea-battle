@@ -9,7 +9,7 @@ const session = require('express-session');
 const router = express.Router();
 
 // Load routes middlewares
-var	routesMiddlewares = require('./middlewares');
+var routesMiddlewares = require('./middlewares');
 
 // Load the models
 const User = require('../models/user');
@@ -63,8 +63,8 @@ var transporter = nodemailer.createTransport(smtpConfig);
 
 // Define the e-mail sending function
 function sendVerificationEmail(options) {
-    transporter.sendMail(options, function(err, info){
-        if (err){
+    transporter.sendMail(options, function (err, info) {
+        if (err) {
             return console.log(err);
         }
     });
@@ -90,20 +90,22 @@ function generateToken(userId) {
 function formatVerificationEmail(tokenId) {
     return '<table width="100%" border="0" cellspacing="0" cellpadding="0">' +
         '<tr>' +
-            '<td align="center">' +
-                '<div>' +
-                    '<img src="https://avatars0.githubusercontent.com/u/19774670?v=3&s=200">' +
-                    '<p>Confirmez votre inscription en cliquant sur le lien ci-dessous.</p>' +
-                    '<p><a href="localhost:3000/verify/' + tokenId + '" title="">Confirmez votre inscription</a></p>' +
-                '</div>' +
-            '</td>' +
+        '<td align="center">' +
+        '<div>' +
+        '<img src="https://avatars0.githubusercontent.com/u/19774670?v=3&s=200">' +
+        '<p>Confirmez votre inscription en cliquant sur le lien ci-dessous.</p>' +
+        '<p><a href="localhost:3000/verify/' + tokenId + '" title="">Confirmez votre inscription</a></p>' +
+        '</div>' +
+        '</td>' +
         '</tr>' +
-    '</table>';
+        '</table>';
 }
 
 // Routes: method POST
 router.post('/check-username-availability', function (req, res) {
-    User.findOne({ username: req.body.username }, function (err, user) {
+    User.findOne({
+        username: req.body.username
+    }, function (err, user) {
         if (user) {
             res.status(409).send();
         } else {
@@ -113,20 +115,24 @@ router.post('/check-username-availability', function (req, res) {
 });
 
 router.post('/signup', function (req, res) {
-    var _checkEmailAddress = function(email) {
+    var _checkEmailAddress = function (email) {
         var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
         return (regexEmail.test(email)) ? true : false;
     };
 
-    var _checkPassword = function(password, passwordConfirmation) {
+    var _checkPassword = function (password, passwordConfirmation) {
         return (password === passwordConfirmation) ? true : false;
     }
 
     User.findOne({
         $or: [
-            { username: req.body.username },
-            { email: req.body.email }
+            {
+                username: req.body.username
+            },
+            {
+                email: req.body.email
+            }
         ]
     }, function (err, user) {
         if (err) {
@@ -145,49 +151,51 @@ router.post('/signup', function (req, res) {
             });
         } else {
             User.register(new User({
-                    username: req.body.username,
-                    email: req.body.email,
-                    validated: false
-                }), req.body.password, function (err, user) {
-                    if (err) {
-                        res.status(500);
-                    }
-
-                    // Generate a token and store its identifier
-                    var tokenId = generateToken(user._id);
-
-                    // Send the verification e-mail
-                    sendVerificationEmail({
-                    	from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
-                        to: user.email,
-                    	// to: 'louis.fischer@free.fr',
-                    	subject: 'Sea Battle - confirmation de votre inscription',
-                    	html: formatVerificationEmail(tokenId)
-                    });
-
-                    res.status(201);
-                    res.render(__dirname + '/../views/signup', {
-                        success: true
-                    });
+                username: req.body.username,
+                email: req.body.email,
+                validated: false
+            }), req.body.password, function (err, user) {
+                if (err) {
+                    res.status(500);
                 }
-            );
+
+                // Generate a token and store its identifier
+                var tokenId = generateToken(user._id);
+
+                // Send the verification e-mail
+                sendVerificationEmail({
+                    from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
+                    to: user.email,
+                    // to: 'louis.fischer@free.fr',
+                    subject: 'Sea Battle - confirmation de votre inscription',
+                    html: formatVerificationEmail(tokenId)
+                });
+
+                res.status(201);
+                res.render(__dirname + '/../views/signup', {
+                    success: true
+                });
+            });
         }
     });
 });
 
 router.post('/signin', passport.authenticate('local'), function (req, res) {
     if (req.user.validated) {
-        res.send(req.user)
+        res.send(req.user);
     } else {
-        req.session.destroy(function (err) {
-        })
+        req.session.destroy(function (err) {})
 
         res.status(401).send();
     }
 });
 
 router.post('/edit-email', routesMiddlewares.isAuthenticated, function (req, res) {
-    User.update({ _id: req.user._id }, { email: req.body.email }, function (err, response) {
+    User.update({
+        _id: req.user._id
+    }, {
+        email: req.body.email
+    }, function (err, response) {
         if (err) {
             res.status(500).send();
         }
@@ -197,7 +205,11 @@ router.post('/edit-email', routesMiddlewares.isAuthenticated, function (req, res
 });
 
 router.post('/edit-username', routesMiddlewares.isAuthenticated, function (req, res) {
-    User.update({ _id: req.user._id }, { username: req.body.username }, function (err, response) {
+    User.update({
+        _id: req.user._id
+    }, {
+        username: req.body.username
+    }, function (err, response) {
         if (err) {
             res.status(500).json();
         }
@@ -230,7 +242,9 @@ router.post('/edit-password', routesMiddlewares.isAuthenticated, function (req, 
 });
 
 router.post('/delete-user', routesMiddlewares.isAuthenticated, function (req, res, next) {
-    User.remove({ _id: req.user._id }, function (err, response) {
+    User.remove({
+        _id: req.user._id
+    }, function (err, response) {
         if (err) {
             return next(err);
         }
@@ -247,7 +261,9 @@ router.get('/verify/:tokenId', routesMiddlewares.isNotAuthenticated, function (r
     var _verifyFailed = function (userId) {
         if (userId) {
             // Remove the user from the database if the verification failed
-            User.remove({ _id: userId }, function (err, response) {
+            User.remove({
+                _id: userId
+            }, function (err, response) {
                 if (err) {
                     // Handle error
                 }
@@ -267,14 +283,20 @@ router.get('/verify/:tokenId', routesMiddlewares.isNotAuthenticated, function (r
 
         if (token) {
             // Find a user matching the user identifier from the token and set "validated" to true
-            User.findOneAndUpdate({ _id: token.userId }, { validated: true }, function (err, user) {
+            User.findOneAndUpdate({
+                _id: token.userId
+            }, {
+                validated: true
+            }, function (err, user) {
                 if (err) {
                     _verifyFailed(user._id);
                 }
 
                 if (user) {
                     // Remove the token
-                    EmailVerificationToken.remove({ _id: token._id }, function (err, response) {
+                    EmailVerificationToken.remove({
+                        _id: token._id
+                    }, function (err, response) {
                         if (err) {
                             // Handle error
                         }
@@ -291,24 +313,24 @@ router.get('/verify/:tokenId', routesMiddlewares.isNotAuthenticated, function (r
 
 router.get('/', function (req, res) {
     res.render(__dirname + '/../views/index', {
-		bodyClass: 'home',
+        bodyClass: 'home',
         username: (req.user) ? req.user.username : false
-	});
+    });
 });
 
 router.get('/signup', routesMiddlewares.isNotAuthenticated, function (req, res) {
-	res.render(__dirname + '/../views/signup', {
-		bodyClass: 'signup',
+    res.render(__dirname + '/../views/signup', {
+        bodyClass: 'signup',
         success: null
-	});
+    });
 });
 
 router.get('/profile', routesMiddlewares.isAuthenticated, function (req, res) {
     res.locals.username = (req.user) ? req.user.username : false;
-	res.render(__dirname + '/../views/profile', {
-		bodyClass: 'profile',
+    res.render(__dirname + '/../views/profile', {
+        bodyClass: 'profile',
         username: (req.user) ? req.user.username : false
-	});
+    });
 });
 
 router.get('/signout', function (req, res) {

@@ -16,7 +16,7 @@ function proceedSignin(e) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (this.status === 200) {
-                window.location = '/rooms';
+                window.location.href = '/rooms';
             }
 
             if (this.status === 401) {

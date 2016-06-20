@@ -3,29 +3,24 @@ var utils = require('./utils');
 module.exports = {
     start: function (io, game) {
         io.sockets.on('connection', function (socket) {
-            // Initialize on connection
-            socket.ready = false;
-            socket.room = game.defaultRoom;
-            socket.join(game.defaultRoom);
-            socket.shootInfos = {
-                shootCoords: null,
-                targetId: null
-            };
-            socket.name = socket.id;
-            socket.points = 0;
-            socket.grade = 'Elite';
-            socket.globalPoints = 9999;
-            socket.img = '/images/test1.jpg';
+            socket.on('init-socket', function (player) {
+                socket.ready = false;
+                socket.room = game.defaultRoom;
+                socket.join(game.defaultRoom);
+                socket.shootInfos = {
+                    shootCoords: null,
+                    targetId: null
+                };
+                socket.name = player.name;
+                socket.grade = player.grade;
+                socket.globalPoints = player.globalPoints;
+                socket.img = player.img;
+                socket.points = 0;
+            });
 
             // Stage 1: rooms
-            socket.on('rooms-init-socket-infos', function () {
-                socket.emit('init-socket-infos', {
-                    name: socket.name,
-                    grade: socket.grade,
-                    globalPoints: socket.globalPoints,
-                    img: socket.img,
-                    id: socket.id
-                });
+            socket.on('rooms-init-socket-id', function () {
+                socket.emit('init-socket-id', socket.id);
             });
             socket.on('rooms-create', function (roomName) {
                 socket.points = 0;
@@ -222,29 +217,34 @@ module.exports = {
                         if (game.rooms[socket.room].timerId != null) {
                             clearInterval(game.rooms[socket.room].timerId);
                         }
+
                         delete game.rooms[socket.room];
-                        console.log("DELETED");
                     } else if (game.rooms[socket.room].playerCount == 1) {
                         if (game.rooms[socket.room].timerId != null) {
                             clearInterval(game.rooms[socket.room].timerId);
                         }
+                        socket.broadcast.emit('room-update', {
+                            players: game.getPlayersInfos(io.sockets, socket.room),
+                            room: {
+                                playerCount: game.rooms[socket.room].playerCount,
+                                name: socket.room
+                            }
+                        });
                         //TODO set the only one missing as winner and bring him back to wait room
+                    } else {
+                        socket.broadcast.emit('room-update', {
+                            players: game.getPlayersInfos(io.sockets, socket.room),
+                            room: {
+                                playerCount: game.rooms[socket.room].playerCount,
+                                name: socket.room
+                            }
+                        });
                     }
-                    /*
-                    socket.broadcast.emit('room-update', {
-                        players: game.getPlayersInfos(io.sockets, socket.room),
-                        room: {
-                            playerCount: game.rooms[socket.room].playerCount,
-                            name: socket.room
-                        }
-                    });
-                    */
-
                 } else {
                     socket.leave(game.defaultRoom);
                 }
 
-                //io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
+                io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
             });
         });
     }

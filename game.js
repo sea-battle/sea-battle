@@ -53,7 +53,6 @@ module.exports = {
     },
     getPlayersInfos: function (ioSockets, socketRoom, sort) {
         var roomPlayers = this.getPlayersId(ioSockets, socketRoom);
-        console.log(roomPlayers);
         var players = [];
         for (socketId in roomPlayers.sockets) {
             players.push({
