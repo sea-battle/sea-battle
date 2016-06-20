@@ -81,9 +81,9 @@ button {
 	position: absolute;
 	top: 1em;
 	right: 1em;
-	padding: 0;
-	padding-top: .2em;
+	padding: 5px 5px 0 5px;
 	background-color: transparent;
+	border: 1px solid;
 }
 
 .signout:hover {
@@ -518,7 +518,6 @@ header {
 }
 
 	.wait .chat {
-		margin-top: 3em;
 		max-width: 450px;
 		width: 25%;
 		text-align: center;
@@ -705,7 +704,7 @@ header {
 		}
 
 		.player-username {
-			font-size: 1.5em;
+			font-size: 1.2em;
 		}
 
 		.player-points {
@@ -1110,12 +1109,17 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 	.aside-toggle.opened .open {
 		display: none;
 	}
+
+	.socials,
+	.options {
+		width: 190px;
+	}
 }
 
 @media screen and (max-width: 50em) { /* < 800px */
- 	.socials,
-	.options {
-		width: 190px;
+	.player-info p {
+		display: block;
+		width: 100%;
 	}
 }
 

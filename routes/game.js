@@ -34,12 +34,18 @@ router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
 		bodyClass: 'game',
 		html: html,
 		scriptsSrc: [
-            '/javascripts/grid.js',
             '/javascripts/boat.js',
             '/javascripts/pages/game.js'
         ],
 		title: 'Let\'s shoot'
 	});
+});
+
+router.get('/userInfos', function (req, res) {
+    
+	res.json({
+        blabla: ''
+    });
 });
 
 router.get('/test', function (req, res) {
