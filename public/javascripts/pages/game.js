@@ -1,49 +1,6 @@
+fillPlayersInfos();
 const HORIZONTAL = 'h';
 const VERTICAL = 'v';
-const SPRITE = {
-	tp: {
-		y: 0
-	},
-	sm: {
-		y: 5
-	},
-	dt: {
-		y: 2
-	},
-	cr: {
-		y: 8
-	},
-	ca: {
-		y: 12
-	}
-};
-const DEFAULT_BOATS = {
-	tp: {
-		name: 'Torpedo',
-		size: 2,
-		id: 'tp'
-	},
-	sm: {
-		name: 'Submarine',
-		size: 3,
-		id: 'sm'
-	},
-	dt: {
-		name: 'Destroyer',
-		size: 3,
-		id: 'dt'
-	},
-	cr: {
-		name: 'Cruiser',
-		size: 4,
-		id: 'cr'
-	},
-	ca: {
-		name: 'Carrier',
-		size: 5,
-		id: 'ca'
-	}
-};
 
 var playerCanvas = document.getElementById('player-canvas');
 var boatsContainer = document.getElementById('boats-container');
@@ -53,6 +10,7 @@ var boatSelecters = document.getElementsByClassName('boat-selector');
 var timer = document.getElementById('timer');
 var otherPlayersCanvasContainer = document.getElementById('other-players-canvas');
 var fireCanvasContainer = document.getElementById('fire-canvas');
+var rankList = document.getElementById('rank-list');
 
 var grids = [];
 var shooterGrid;
@@ -63,9 +21,11 @@ var boatsSprite = new Image();
 var grid;
 boatsSprite.src = "/images/sprites.png";
 socket.emit('game-init');
-socket.on('init', function (playerId) {
+socket.on('init', function (playerId, playersInfos) {
 	grid = new Grid(playerCanvas, playerId);
 	grids.push(grid);
+
+	manageRankList(playersInfos);
 });
 
 function findGridByPlayerId(playerId) {
@@ -77,6 +37,32 @@ function findGridByPlayerId(playerId) {
 	return null;
 }
 
+function manageRankList(playersInfos) {
+	rankList.removeChildren();
+	for (var i = playersInfos.length - 1; i >= 0; i--) {
+		var infos = playersInfos[i];
+		var newLi = document.createElement('li');
+		var pPseudo = document.createElement('p');
+		var pPoints = document.createElement('p');
+
+		pPseudo.innerHTML = infos.name;
+		pPoints.id = infos.id + '-points';
+		pPoints.innerHTML = infos.points;
+
+		newLi.appendChild(pPseudo);
+		newLi.appendChild(pPoints);
+		rankList.appendChild(newLi);
+	}
+}
+
+function cloneTargetedGridToShooter(targetId) {
+	var g = findGridByPlayerId(targetId);
+	grid.cells = JSON.parse(JSON.stringify(g.cells));
+	grid.shootedCells = JSON.parse(JSON.stringify(g.shootedCells));
+	grid.clearCanvas();
+	grid.renderGrid();
+	grid.drawShoots();
+}
 var selectedBoat = null;
 var gameHandlers = {
 	placementStage: {
@@ -87,7 +73,7 @@ var gameHandlers = {
 					var boatSelector = document.getElementById(selectedBoat.id);
 					boatSelector.setAttribute('data-placed', 'true');
 					boatSelector.setAttribute('class', 'boat-selector placed');
-					grid.placeBoat(selectedBoat, e.gridInfo.coords, SPRITE[selectedBoat.id].y);
+					grid.placeBoat(selectedBoat, e.gridInfo.coords);
 					selectedBoat = null;
 					grid.clearCanvas();
 					grid.renderGrid();
@@ -99,14 +85,14 @@ var gameHandlers = {
 					var boatOrientation = e.gridInfo.cell.boatOrientation;
 					grid.removePlacedBoat(boatId);
 
-					var removedBoat = JSON.parse(JSON.stringify(DEFAULT_BOATS[boatId]));
+					var removedBoat = grid.getDefaultBoats(boatId);
 					selectedBoat = new Boat(removedBoat.name, removedBoat.size, boatOrientation, removedBoat.id);
 					document.getElementById(boatId).setAttribute('class', 'boat-selector');
 
 					grid.clearCanvas();
 					grid.renderGrid();
 					grid.drawPlacedBoats(boatsSprite);
-					grid.drawPreviewBoat(boatsSprite, selectedBoat, SPRITE[selectedBoat.id].y, e.gridInfo, .5);
+					grid.drawPreviewBoat(boatsSprite, selectedBoat, e.gridInfo, .5);
 				}
 			}
 		},
@@ -129,7 +115,7 @@ var gameHandlers = {
 						grid.clearCanvas();
 						grid.renderGrid();
 						grid.drawPlacedBoats(boatsSprite);
-						grid.drawPreviewBoat(boatsSprite, selectedBoat, SPRITE[selectedBoat.id].y, e.gridInfo, alpha);
+						grid.drawPreviewBoat(boatsSprite, selectedBoat, e.gridInfo, alpha);
 					}
 					previousMouseCoords = grid.getMouseCoord(pos);
 				}
@@ -144,7 +130,7 @@ var gameHandlers = {
 				grid.clearCanvas();
 				grid.renderGrid();
 				grid.drawPlacedBoats(boatsSprite);
-				grid.drawPreviewBoat(boatsSprite, selectedBoat, SPRITE[selectedBoat.id].y, e.gridInfo, alpha);
+				grid.drawPreviewBoat(boatsSprite, selectedBoat, e.gridInfo, alpha);
 			}
 		},
 		selectBoat: function (e) {
@@ -160,7 +146,7 @@ var gameHandlers = {
 			}
 		},
 		random: function (e) {
-			grid.randomBoatsPosition(JSON.parse(JSON.stringify(DEFAULT_BOATS)));
+			grid.randomBoatsPosition();
 			grid.drawPlacedBoats(boatsSprite);
 			selectedBoat = null;
 
@@ -175,14 +161,15 @@ var gameHandlers = {
 	},
 	battleStage: {
 		otherPlayersGrid: {
-			click: function (e) {}
+			click: function (e) {
+				cloneTargetedGridToShooter(this.getAttribute('data-player-id'));
+			}
 		},
 		shooterGrid: {
 			click: function (e) {
 				socket.emit('game-shoot', e.gridInfo.coords);
 			},
-			mousemove: function (e){
-				console.log(e.gridInfo);
+			mousemove: function (e) {
 			}
 		}
 	}
@@ -228,12 +215,15 @@ socket.on('game-init-players-grids', function (players) {
 	document.getElementById('boats-container').addClass('hidden')
 	document.getElementById('other-players-canvas').removeClass('hidden');
 	players.forEach(function (player) {
+		var div = document.createElement('div');
 		var otherPlayerCanvas = document.createElement('canvas');
-		var br = document.createElement('br');
+		//var br = document.createElement('br');
 		otherPlayerCanvas.setAttribute('data-player-id', player.id);
 
-		otherPlayersCanvasContainer.appendChild(otherPlayerCanvas);
-		otherPlayersCanvasContainer.appendChild(br);
+		div.appendChild(otherPlayerCanvas);
+		otherPlayersCanvasContainer.appendChild(div);
+
+		//otherPlayersCanvasContainer.appendChild(br);
 
 		var otherPlayerGrid = new Grid(otherPlayerCanvas, player.id);
 		grids.push(otherPlayerGrid);
@@ -249,11 +239,9 @@ socket.on('game-init-players-grids', function (players) {
 	shooterGrid = new Grid(shooterCanvas, 'shooter');
 	grids.push(shooterGrid);
 	shooterCanvas.addEventListener('click', gameHandlers.battleStage.shooterGrid.click);
-	shooterCanvas.addEventListener('mousemove', gameHandlers.battleStage.shooterGrid.mousemove);
 });
 
-socket.on('update-after-turn', function (touchedPlayers) {
-	var shooter = findGridByPlayerId('shooter');
+socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
 	for (var player in touchedPlayers) {
 		var currentGrid = findGridByPlayerId(player);
 		touchedPlayers[player].touchedAt.forEach(function (data) {
@@ -263,7 +251,7 @@ socket.on('update-after-turn', function (touchedPlayers) {
 				coords: JSON.parse(JSON.stringify(data.coords)),
 				touched: data.touched
 			});
-			shooter.shootedCells.push({
+			shooterGrid.shootedCells.push({
 				coords: JSON.parse(JSON.stringify(data.coords)),
 				touched: data.touched
 			});
@@ -273,4 +261,6 @@ socket.on('update-after-turn', function (touchedPlayers) {
 	grids.forEach(function (g) {
 		g.drawShoots(boatsSprite);
 	});
+	console.log(playersInfos);
+	manageRankList(playersInfos);
 });

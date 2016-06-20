@@ -29,25 +29,7 @@ section.content.game
 		include inc/player-info.jade
 		section#game-ranking.game-ranking
 			h2 Classement
-			ul
-				li
-					p Pseudo
-					p Points
-				li
-					p Pseudo
-					p Points
-				li
-					p Pseudo
-					p Points
-				li
-					p Pseudo
-					p Points
-				li
-					p Pseudo
-					p Points
-				li
-					p Pseudo
-					p Points
+			ul#rank-list
 		include inc/chat.jade
 	aside#switching-aside.switching-aside
 		include inc/boats.jade
@@ -55,8 +37,11 @@ section.content.game
 
 	section#canvas-wrapper.grids-wrapper
 		div.main-canvas-wrapper
+			section.timer
+				i#timer
 			section#fire-canvas.fire-canvas.hidden
 			section#visual-canvas.visual-canvas
-				canvas#player-canvas.player-canvas
+				div.player-canvas-wrapper
+					canvas#player-canvas.player-canvas
 				section.turn-info
-					i#timer
+					

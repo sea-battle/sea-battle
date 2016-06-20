@@ -13,8 +13,20 @@ module.exports = {
 			};
 			socket.name = socket.id;
 			socket.points = 0;
+			socket.grade = 'Elite';
+			socket.globalPoints = 9999;
+			socket.img = '/images/test1.jpg';
 
 			// Stage 1: rooms
+			socket.on('rooms-init-socket-infos', function () {
+				socket.emit('init-socket-infos', {
+					name: socket.name,
+					grade: socket.grade,
+					globalPoints: socket.globalPoints,
+					img: socket.img,
+					id: socket.id
+				});
+			});
 			socket.on('rooms-create', function (roomName) {
 				socket.points = 0;
 				game.rooms[roomName] = {
@@ -56,19 +68,29 @@ module.exports = {
 					time: time
 				});
 				socket.broadcast.emit('receive-message', from, message, time, filter);
-				var playersName = game.getPlayersNames(io.sockets, socket.room);
-				socket.broadcast.emit('room-update-players', playersName);
+				socket.broadcast.emit('room-update', {
+					players: game.getPlayersInfos(io.sockets, socket.room),
+					room: {
+						playerCount: game.rooms[socket.room].playerCount,
+						name: roomName
+					}
+				});
 				io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
 			});
 
 			socket.on('room-update-request', function () {
-				var playersName = game.getPlayersNames(io.sockets, socket.room);
-				socket.emit('room-update-players', playersName);
+				socket.emit('room-update', {
+					players: game.getPlayersInfos(io.sockets, socket.room),
+					room: {
+						playerCount: game.rooms[socket.room].playerCount,
+						name: socket.room
+					}
+				});
 
 				var playersStatus = game.getPlayerStatus(io.sockets, socket.room);
 				playersStatus.forEach(function (status) {
-					if (socket.name != status.name) {
-						socket.emit('update-players-status', status.name, status.ready);
+					if (socket.id != status.id) {
+						socket.emit('update-players-status', status.id, status.ready);
 					}
 				});
 			});
@@ -76,7 +98,7 @@ module.exports = {
 			// Stage 2: wait
 			socket.on('wait-set-ready', function () {
 				socket.ready = true;
-				socket.broadcast.emit('update-players-status', socket.name, 'Prêt');
+				socket.broadcast.emit('update-players-status', socket.id, 'Prêt');
 				if (game.allPlayersAreReady(io.sockets, socket.room) &&
 					game.getPlayersId(io.sockets, socket.room).length > 1) {
 					io.sockets.emit('wait-start-game');
@@ -97,24 +119,24 @@ module.exports = {
 			});
 			socket.on('wait-set-unready', function () {
 				socket.ready = false;
-				socket.broadcast.emit('update-players-status', socket.name, 'Attente');
+				socket.broadcast.emit('update-players-status', socket.id, 'Attente');
 			});
 
 			// Stage 3: game
 			socket.on('game-init', function () {
-				socket.emit('init', socket.id);
+				socket.emit('init', socket.id, game.getPlayersInfos(io.sockets, socket.room));
 			});
 
 			socket.on('game-set-ready', function (cells) {
 				socket.cells = cells;
-				socket.emit('game-init-players-grids', game.getOtherPlayersInfos(io.sockets, socket));
+				socket.emit('game-init-players-grids', game.getPlayersInfos(io.sockets, socket.room));
 
 				function playTurn() {
 					if (game.rooms[socket.room].timer == 0) {
 						game.playShootTurn(io.sockets, socket.room);
 						var currentRoom = game.rooms[socket.room];
 						if (!utils.isEmpty(currentRoom.turns[currentRoom.turnCount].touchedPlayers)) {
-							io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers);
+							io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers, game.getPlayersInfos(io.sockets, socket.room, 'points'));
 						}
 						if (game.rooms[socket.room].gameover) {
 							clearInterval(game.rooms[socket.room].timerId);
@@ -193,11 +215,24 @@ module.exports = {
 					socket.leave(socket.room);
 					game.rooms[socket.room].playerCount--;
 					if (game.rooms[socket.room].playerCount == 0) {
+						if (game.rooms[socket.room].timerId != null) {
+							clearInterval(game.rooms[socket.room].timerId);
+						}
 						delete game.rooms[socket.room];
-					} else {
-						var playersName = game.getPlayersNames(io.sockets, socket.room);
-						socket.broadcast.emit('room-update-players', playersName);
+					} else if (game.rooms[socket.room].playerCount == 1) {
+						if (game.rooms[socket.room].timerId != null) {
+							clearInterval(game.rooms[socket.room].timerId);
+						}
+						//TODO set the only one missing as winner and bring him back to wait room
 					}
+					socket.broadcast.emit('room-update', {
+						players: game.getPlayersInfos(io.sockets, socket.room),
+						room: {
+							playerCount: game.rooms[socket.room].playerCount,
+							name: socket.room
+						}
+					});
+
 				} else {
 					socket.leave(game.defaultRoom);
 				}

@@ -27,16 +27,17 @@ block content
                     else
                         p#signup-message
                     input#email(type='text', name='email' value='john.doe@mail.com', placeholder='Adresse e-mail')
-                    p#email-message
+                    p#email-message.form-message
                     input#username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
-                    p#username-message
+                    p#username-message.form-message
                     input#password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
                     input#password-confirmation(type='password', name='passwordConfirmation' value="johndoe", placeholder='Confirmez le mot de passe')
-                    p#password-message
+                    p#password-message.form-message
                     button#signup-submit.button-effect(type='submit') Créer
 
             div.push
 
     include inc/footer.jade
-
+    
+    script(src='/javascripts/pages/common.js')
     script(src='/javascripts/pages/signup.js')

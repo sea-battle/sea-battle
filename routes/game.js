@@ -1,17 +1,21 @@
 var express = require('express');
-var router = express.Router();
 var jade = require('jade');
 
-router.get('/rooms', function (req, res) {
+var router = express.Router();
+
+// Load routes middlewares
+var	routesMiddlewares = require('./middlewares');
+
+router.get('/rooms', routesMiddlewares.isAuthenticated, function (req, res) {
 	res.render(__dirname + '/../views/rooms', {
 		bodyClass: 'rooms',
         username: (req.user) ? req.user.username : false
 	});
 });
 
-router.post('/wait', function (req, res) {
+router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
 	var fn = jade.compileFile(__dirname + '/../views/wait.jade');
-	var html = fn(req.body);
+	var html = fn();
 	return res.json({
 		bodyClass: 'wait',
 		html: html,
@@ -23,7 +27,7 @@ router.post('/wait', function (req, res) {
 	});
 });
 
-router.get('/game', function (req, res) {
+router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
 	var fn = jade.compileFile(__dirname + '/../views/game.jade');
 	var html = fn();
 	return res.json({

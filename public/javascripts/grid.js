@@ -3,8 +3,8 @@ function Grid(canvas, playerId) {
 	this.playerId = playerId || null;
 	this.canvas = canvas;
 	this.container = this.canvas.parentNode;
-	this.canvas.width = parseInt(getComputedStyle(this.container).width);
-	this.canvas.height = this.canvas.width;
+	this.canvas.height = parseInt(getComputedStyle(this.container).height);
+	this.canvas.width = this.canvas.height;
 	this.ctx = this.canvas.getContext('2d');
 	this.width = this.canvas.width;
 	this.iterations = 10;
@@ -31,8 +31,52 @@ function Grid(canvas, playerId) {
 	this.init();
 	this.renderGrid();
 	this.drawCoords();
-}
 
+	this.DEFAULT_BOATS = {
+		tp: {
+			name: 'Torpedo',
+			size: 2,
+			id: 'tp'
+		},
+		sm: {
+			name: 'Submarine',
+			size: 3,
+			id: 'sm'
+		},
+		dt: {
+			name: 'Destroyer',
+			size: 3,
+			id: 'dt'
+		},
+		cr: {
+			name: 'Cruiser',
+			size: 4,
+			id: 'cr'
+		},
+		ca: {
+			name: 'Carrier',
+			size: 5,
+			id: 'ca'
+		}
+	};
+	this.SPRITE = {
+		tp: {
+			y: 0
+		},
+		sm: {
+			y: 5
+		},
+		dt: {
+			y: 2
+		},
+		cr: {
+			y: 8
+		},
+		ca: {
+			y: 12
+		}
+	};
+}
 Grid.prototype = {
 	init: function () {
 		for (var i = 0; i < this.iterations; i++) {
@@ -46,7 +90,8 @@ Grid.prototype = {
 					boatSize: null,
 					boatOrientation: null,
 					shooted: false,
-					shootedBy: []
+					shootedBy: [],
+					boatPart: null
 				});
 			}
 		}
@@ -152,7 +197,7 @@ Grid.prototype = {
 		//reset
 		this.ctx.globalAlpha = 1;
 	},
-	drawPreviewBoat: function (sprite, boat, spriteY, gridInfo, alpha) {
+	drawPreviewBoat: function (sprite, boat, gridInfo, alpha) {
 		var size = boat.size;
 		if (boat.orientation == HORIZONTAL) {
 			var coordToIncrement = 'x';
@@ -169,7 +214,7 @@ Grid.prototype = {
 			y: gridInfo.coords.y * this.cellWidth,
 			width: this.cellWidth,
 		}
-		var sy = spriteY;
+		var sy = this.SPRITE[boat.id].y;
 
 		var coordToIncrementStartValue = drawCoord[coordToIncrement];
 		for (var i = 0; i < size; i++) {
@@ -231,33 +276,36 @@ Grid.prototype = {
 		this.ctx.fillStyle = "#000";
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = "bottom";
-		for (var n = 1; n < this.iterations; n++) {
+		var px = parseInt(this.cellWidth / 3);
+		this.ctx.font = px + "px Arial";
+		for (var n = 0; n < this.iterations; n++) {
 			var position = this.cellWidth * n;
-			var text = position + '';
+			var text = n + '';
 			var halfTextWidth = this.ctx.measureText(text).width / 2;
 			var halfCellWidth = this.cellWidth / 2;
-			var x = (this.cellWidth * position) + halfCellWidth - halfTextWidth;
-			var y = 0;
-			console.log('x:', x);
-			console.log('y:', y);
-			console.log(text);
+			var x = position + halfCellWidth - halfTextWidth;
+			var y = px;
+			this.ctx.fillText(text, x, y);
+			y = x + px; // font height
+			x = halfTextWidth;
 			this.ctx.fillText(text, x, y);
 		}
 	},
-	placeBoat: function (boat, coords, spriteY) {
+	placeBoat: function (boat, coords) {
 		var coordToChange = boat.orientation == HORIZONTAL ? 'x' : 'y';
 		var placeCoord = {
 			x: coords.x,
 			y: coords.y
 		};
 		for (var i = 0; i < boat.size; i++) {
-			this.cells[placeCoord.x][placeCoord.y].spriteY = spriteY + i;
+			this.cells[placeCoord.x][placeCoord.y].spriteY = this.SPRITE[boat.id].y + i;
 			this.cells[placeCoord.x][placeCoord.y].containBoat = true;
 			this.cells[placeCoord.x][placeCoord.y].boatId = boat.id;
 			this.cells[placeCoord.x][placeCoord.y].boatSize = boat.size;
 			this.cells[placeCoord.x][placeCoord.y].boatOrientation = boat.orientation;
+			this.cells[placeCoord.x][placeCoord.y].boatPart = i;
 			this.cellsContainingBoats.push({
-				spriteY: spriteY + i,
+				spriteY: this.SPRITE[boat.id].y + i,
 				orientation: boat.orientation,
 				coords: JSON.parse(JSON.stringify(coords)),
 				i: i,
@@ -295,8 +343,9 @@ Grid.prototype = {
 		this.renderGrid();
 		this.drawPlacedBoats(sprite);
 	},
-	randomBoatsPosition: function (defaultBoats) {
+	randomBoatsPosition: function () {
 		var self = this;
+		var defaultBoats = self.getDefaultBoats();
 		for (var key in defaultBoats) {
 			if (!defaultBoats.hasOwnProperty(key)) continue;
 			var orientations = [HORIZONTAL, VERTICAL];
@@ -321,7 +370,7 @@ Grid.prototype = {
 					self.placeBoat(randomBoat, {
 						x: x,
 						y: y
-					}, SPRITE[randomBoat.id].y);
+					}, this.SPRITE[randomBoat.id].y);
 				}
 			}
 
@@ -329,6 +378,13 @@ Grid.prototype = {
 	},
 	getRandom: function (min, max, round) {
 		return round ? Math.round(Math.random() * (max - min) + min) : Math.floor(Math.random() * (max - min) + min);
+	},
+	getDefaultBoats: function (boatId) {
+		if (boatId) {
+			return JSON.parse(JSON.stringify(this.DEFAULT_BOATS[boatId]));
+		} else {
+			return JSON.parse(JSON.stringify(this.DEFAULT_BOATS));
+		}
 	},
 	allBoatsArePlaced: function () {
 		return this.cellsContainingBoats.length == 17;

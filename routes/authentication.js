@@ -8,6 +8,9 @@ const session = require('express-session');
 
 const router = express.Router();
 
+// Load routes middlewares
+var	routesMiddlewares = require('./middlewares');
+
 // Load the models
 const User = require('../models/user');
 const EmailVerificationToken = require('../models/emailVerificationToken');
@@ -98,28 +101,6 @@ function formatVerificationEmail(tokenId) {
     '</table>';
 }
 
-// Routes middlewares: make sure the user is authenticated
-var isAuthenticated = function (req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        if (req.xhr) {
-            res.status(401).send();
-        } else {
-            res.redirect('/');
-        }
-    }
-}
-
-// Route middleware: make sure the user is not authenticated
-isNotAuthenticated = function (req, res, next) {
-    if (req.isAuthenticated()) {
-        res.redirect('/rooms');
-    } else {
-        return next();
-    }
-}
-
 // Routes: method POST
 router.post('/check-username-availability', function (req, res) {
     User.findOne({ username: req.body.username }, function (err, user) {
@@ -178,8 +159,8 @@ router.post('/signup', function (req, res) {
                     // Send the verification e-mail
                     sendVerificationEmail({
                     	from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
-                        // to: user.email,
-                    	to: 'louis.fischer@free.fr',
+                        to: user.email,
+                    	// to: 'louis.fischer@free.fr',
                     	subject: 'Sea Battle - confirmation de votre inscription',
                     	html: formatVerificationEmail(tokenId)
                     });
@@ -205,7 +186,7 @@ router.post('/signin', passport.authenticate('local'), function (req, res) {
     }
 });
 
-router.post('/edit-email', isAuthenticated, function (req, res) {
+router.post('/edit-email', routesMiddlewares.isAuthenticated, function (req, res) {
     User.update({ _id: req.user._id }, { email: req.body.email }, function (err, response) {
         if (err) {
             res.status(500).send();
@@ -215,7 +196,7 @@ router.post('/edit-email', isAuthenticated, function (req, res) {
     });
 });
 
-router.post('/edit-username', isAuthenticated, function (req, res) {
+router.post('/edit-username', routesMiddlewares.isAuthenticated, function (req, res) {
     User.update({ _id: req.user._id }, { username: req.body.username }, function (err, response) {
         if (err) {
             res.status(500).json();
@@ -225,7 +206,7 @@ router.post('/edit-username', isAuthenticated, function (req, res) {
     });
 });
 
-router.post('/edit-password', isAuthenticated, function (req, res, next) {
+router.post('/edit-password', routesMiddlewares.isAuthenticated, function (req, res, next) {
     // Find a user with an identifier matching the one stored in the session
     User.findById(req.user._id, function (err, user) {
         if (err) {
@@ -248,7 +229,7 @@ router.post('/edit-password', isAuthenticated, function (req, res, next) {
     });
 });
 
-router.post('/delete-user', isAuthenticated, function (req, res, next) {
+router.post('/delete-user', routesMiddlewares.isAuthenticated, function (req, res, next) {
     User.remove({ _id: req.user._id }, function (err, response) {
         if (err) {
             return next(err);
@@ -262,7 +243,7 @@ router.post('/delete-user', isAuthenticated, function (req, res, next) {
 });
 
 // Routes: method GET
-router.get('/verify/:tokenId', isNotAuthenticated, function (req, res) {
+router.get('/verify/:tokenId', routesMiddlewares.isNotAuthenticated, function (req, res) {
     var _verifyFailed = function (userId = false) {
         if (userId) {
             // Remove the user from the database if the verification failed
@@ -315,14 +296,14 @@ router.get('/', function (req, res) {
 	});
 });
 
-router.get('/signup', isNotAuthenticated, function (req, res) {
+router.get('/signup', routesMiddlewares.isNotAuthenticated, function (req, res) {
 	res.render(__dirname + '/../views/signup', {
 		bodyClass: 'signup',
         success: null
 	});
 });
 
-router.get('/profile', isAuthenticated, function (req, res) {
+router.get('/profile', routesMiddlewares.isAuthenticated, function (req, res) {
     res.locals.username = (req.user) ? req.user.username : false;
 	res.render(__dirname + '/../views/profile', {
 		bodyClass: 'profile',

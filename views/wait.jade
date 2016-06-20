@@ -10,13 +10,17 @@ div.wrapper
 				span.close.fa.fa-times.fa-2x(aria-hidden="true")
 				span#new-messages-count.new-messages-count(data-count="0")
 			include inc/player-info.jade
-			h1 Nom de la salle
-			p.players-total x joueur(s)
+			h1#room-name
+			p#room-player-count.players-total
 			ul#players-list.players-list
 				li
 					div
-						p#player-username.player-username #{name}
-						p.player-ranking Image Grade X pts
+						p#room-player-username.player-username
+						p.player-ranking 
+							img#room-player-grade-img(src='', alt='Grade')
+							span.player-ranking-wrapper
+								span#room-player-grade
+								span#room-player-points
 					button#set-ready.button-effect Prêt
 						i#ready-status.ready-status
 
