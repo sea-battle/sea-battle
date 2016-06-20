@@ -77,6 +77,23 @@ button {
 	background-color: transparent;
 }
 
+.signout {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	padding: 0;
+	padding-top: .2em;
+	background-color: transparent;
+}
+
+.signout:hover {
+	background-color: #ff7474;
+}
+
+	.signout img {
+		width: 20px;
+	}
+
 /* Forms */
 
 input {
