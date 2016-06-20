@@ -1,20 +1,20 @@
 button#player-info-toggle.toggle.player-info-toggle
     span.open.fa.fa-user.fa-2x(aria-hidden='true')
     span.close.fa.fa-times.fa-2x(aria-hidden='true')
-    section#player-info.player-info
-        div.player-info-wrapper
-            p.socials
-                a(href='http://www.facebook.com/share.php?u=http://seabattle.io' title='Partager sur Facebook' target='_blank')
-                    span.fa.fa-facebook-official(aria-hidden='true')
-                a(href='https://twitter.com/intent/tweet?text=Sur Sea Battle, je suis #{username}, un #{userRank} avec #{userPoints} points, venez m\'affronter !&amp;url=seabattle.io', title='Partager sur Twitter', target='_blank')
-                    span.fa.fa-twitter(aria-hidden='true')
-            p.player
-                span.player-username #{username}
-                span.player-points #{userRank} - #{userPoints}
-            p.options
-                a#profil-link(href='/profile' title='Modifier vos informations')
-                    span.fa.fa-cog(aria-hidden='true')
-                a#rankings-link(href='' title='Afficher les classements')
-                    span.fa.fa-trophy(aria-hidden='true')
-                a#stats-link(href='' title='Afficher vos statistiques')
-                    span.fa.fa-line-chart(aria-hidden='true')
+section#player-info.player-info
+    div.player-info-wrapper
+        p.socials
+            a(href='http://www.facebook.com/share.php?u=http://seabattle.io' title='Partager sur Facebook' target='_blank')
+                span.fa.fa-facebook-official(aria-hidden='true')
+            a(href='https://twitter.com/intent/tweet?text=Sur Sea Battle, je suis #{username}, un #{userRank} avec #{userPoints} points, venez m\'affronter !&amp;url=seabattle.io', title='Partager sur Twitter', target='_blank')
+                span.fa.fa-twitter(aria-hidden='true')
+        p.player
+            span.player-username #{username}
+            span.player-points #{userRank} - #{userPoints}
+        p.options
+            a#profil-link(href='/profile' title='Modifier vos informations')
+                span.fa.fa-cog(aria-hidden='true')
+            a#rankings-link(href='' title='Afficher les classements')
+                span.fa.fa-trophy(aria-hidden='true')
+            a#stats-link(href='' title='Afficher vos statistiques')
+                span.fa.fa-line-chart(aria-hidden='true')
