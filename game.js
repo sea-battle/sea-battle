@@ -17,6 +17,7 @@ module.exports = {
     defaultShootTime: 3,
     // return players from player room
     getPlayersId: function (ioSockets, roomName) {
+        console.log(ioSockets.adapter.rooms);
         return ioSockets.adapter.rooms[roomName];
     },
     allPlayersAreReady: function (ioSockets, roomName) {

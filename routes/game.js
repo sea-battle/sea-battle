@@ -41,6 +41,13 @@ router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
 	});
 });
 
+router.get('/userInfos', function (req, res) {
+    
+	res.json({
+        blabla: ''
+    });
+});
+
 router.get('/test', function (req, res) {
 	res.render(__dirname + '/../views/test', {
 		bodyClass: 'test'

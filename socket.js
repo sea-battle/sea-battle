@@ -223,12 +223,14 @@ module.exports = {
                             clearInterval(game.rooms[socket.room].timerId);
                         }
                         delete game.rooms[socket.room];
+                        console.log("DELETED");
                     } else if (game.rooms[socket.room].playerCount == 1) {
                         if (game.rooms[socket.room].timerId != null) {
                             clearInterval(game.rooms[socket.room].timerId);
                         }
                         //TODO set the only one missing as winner and bring him back to wait room
                     }
+                    /*
                     socket.broadcast.emit('room-update', {
                         players: game.getPlayersInfos(io.sockets, socket.room),
                         room: {
@@ -236,12 +238,13 @@ module.exports = {
                             name: socket.room
                         }
                     });
+                    */
 
                 } else {
                     socket.leave(game.defaultRoom);
                 }
 
-                io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
+                //io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
             });
         });
     }

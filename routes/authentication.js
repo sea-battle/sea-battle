@@ -244,7 +244,7 @@ router.post('/delete-user', routesMiddlewares.isAuthenticated, function (req, re
 
 // Routes: method GET
 router.get('/verify/:tokenId', routesMiddlewares.isNotAuthenticated, function (req, res) {
-    var _verifyFailed = function (userId = false) {
+    var _verifyFailed = function (userId) {
         if (userId) {
             // Remove the user from the database if the verification failed
             User.remove({ _id: userId }, function (err, response) {
