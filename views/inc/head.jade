@@ -15,6 +15,7 @@ html(lang='fr')
 		block styles
 	body(class='#{bodyClass}')
 		if isAuthenticated
-			button #{username}
+			button#signout.signout
+				img(src='../images/signout.png')
 		block content
 		
