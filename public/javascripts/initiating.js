@@ -7,6 +7,7 @@ function initPlayerInfo() {
     var playerInfo = document.getElementById('player-info');
 
     document.getElementById('rankings-link').addEventListener('click', function(e) {
+        console.log('obj');
         e.preventDefault();
         rankingOverlay.addClass(openedClass);
     });
@@ -103,6 +104,7 @@ function initModals() {
 }
 
 function initWait() {
+    console.log('obj');
     initPlayerInfo();
     initChat();
 }

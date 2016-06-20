@@ -1,5 +1,5 @@
 var ajax = {
-    get: function (url, handlers) {
+    get: function (url, callback) {
         var request = new XMLHttpRequest();
         request.open('GET', url, true);
 

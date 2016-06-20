@@ -37,6 +37,7 @@ function updatePlayerList(players) {
 
 			pUsername.innerHTML = player.name;
 			img.setAttribute('src', player.img);
+            img.setAttribute('alt', 'Grade');
 
 			wrapper.className = 'player-ranking-wrapper';
 			spanGrade.innerHTML = player.grade + ' - ';
@@ -68,7 +69,9 @@ function updateRoomInfos(room) {
 }
 
 socket.on('wait-start-game', function () {
-	ajax.get('/game', handlers);
+	ajax.get('/game', function (data){
+        handlers.onComplete(data);
+    });
 });
 socket.on('room-update', function (infos) {
 	updatePlayerList(infos.players);

@@ -59,7 +59,10 @@ socket.on('init-socket-id', function (id) {
 });
 
 socket.on('rooms-join', function (name) {
-	ajax.get('/wait', handlers);
+    ajax.get('/wait', function (data){
+        handlers.onComplete(data);
+        initWait();
+    });
 });
 
 
