@@ -21,6 +21,7 @@ function updatePlayerList(players) {
 			var pRanking = document.createElement('p');
 
 			var img = document.createElement('img');
+			var wrapper = document.createElement('span');
 			var spanGrade = document.createElement('span');
 			var spanPoints = document.createElement('span');
 
@@ -36,13 +37,16 @@ function updatePlayerList(players) {
 
 			pUsername.innerHTML = player.name;
 			img.setAttribute('src', player.img);
+
+			wrapper.className = 'player-ranking-wrapper';
 			spanGrade.innerHTML = player.grade + ' - ';
 			spanPoints.innerHTML = player.globalPoints + 'pts';
 			iStatus.innerHTML = 'Attente';
 
 			pRanking.appendChild(img);
-			pRanking.appendChild(spanGrade);
-			pRanking.appendChild(spanPoints);
+			wrapper.appendChild(spanGrade);
+			wrapper.appendChild(spanPoints);
+			pRanking.appendChild(wrapper);
 			button.appendChild(iStatus);
 
 			li.appendChild(div);

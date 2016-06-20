@@ -507,8 +507,30 @@ header {
 		margin-bottom: 1.5em;
 	}
 
+	.players-list {
+		text-align: left;
+		padding-left: 4em;
+	}
+
+	.players-list li {
+		margin-bottom: .5em;
+	}
+
 	.players-list .player-username {
 		font-size: 1.5em;
+	}
+
+	.players-list img {
+		width: 100px;
+		padding: .2em;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.player-ranking-wrapper {
+		display: inline-block;
+		vertical-align: middle;
+		padding-left: 1em;
 	}
 
 	.players-list button {
@@ -568,6 +590,7 @@ header {
 	margin: 0;
 	height: 25%;
 	background-color: #e1e1e1;
+	position: relative;
 }
 
 	.game .player-info p {
@@ -650,6 +673,18 @@ header {
 	display: none;
 }
 
+.game .player-info-wrapper {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.game .player-username {
+	font-size: 1.2em;
+}
+
 /* Ranking */
 
 .ranking-toggle,
@@ -679,7 +714,7 @@ header {
 			display: inline-block;
 			vertical-align: middle;
 			width: 50%;
-			font-size: 1.5em;
+			font-size: 1.2em;
 		}
 
 .modal {
@@ -748,7 +783,6 @@ header {
 
 .fire-canvas {
 	height: 53%;
-	padding-bottom: .5em;
 	width: 100%;
 	text-align: center;
 }
@@ -756,6 +790,7 @@ header {
 .visual-canvas {
 	width: 100%;
 	height: 43%;
+	padding-top: .5em;
 }
 
 	.player-canvas-wrapper,
@@ -789,7 +824,7 @@ header {
 	-ms-flex-direction: column;
 	    flex-direction: column;
 	-ms-flex-pack: justify;
-	    justify-content: space-between;
+	    justify-content: space-around;
 	-ms-flex-align: center;
 	    align-items: center;
 }
@@ -797,6 +832,7 @@ header {
 	.players-grids div {
 		width: 90%;
 		margin: .5em auto;
+		text-align: center;
 	}
 
 /* Overlays
@@ -914,6 +950,10 @@ screen and (max-height: 47.90em) { /* > 1400px OR < 768px height */
 		/* position: absolute; */
 		text-align: left;
 	}
+}
+
+@media screen and (max-width: 64em) { /* < 1024px */
+
 }
 
 @media screen and (max-width: 59.95em),
@@ -1111,6 +1151,11 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 	.player-info.opened {
 		display: block;
 	}
+
+	.players-list {
+		text-align: center;
+		padding-left: 0;
+	}
 }
 
 @media screen and (max-width: 40.625em),
@@ -1152,14 +1197,6 @@ screen and (max-height: 47.90em) { /* < 650px width OR < 768px height */
 		z-index: 5;
 		height: 100%;
 		width: 100%;
-	}
-
-	.game .player-info-wrapper {
-		position: absolute;
-		width: 100%;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
 	}
 }
 
