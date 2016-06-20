@@ -9,8 +9,8 @@ section#player-info.player-info
             a(href='https://twitter.com/intent/tweet?text=Sur Sea Battle, je suis #{username}, un #{userRank} avec #{userPoints} points, venez m\'affronter !&amp;url=seabattle.io', title='Partager sur Twitter', target='_blank')
                 span.fa.fa-twitter(aria-hidden='true')
         p.player
-            span.player-username #{username}
-            span.player-points #{userRank} - #{userPoints}
+            span#player-username.player-username
+            span#player-grade.player-points
         p.options
             a#profil-link(href='/profile' title='Modifier vos informations')
                 span.fa.fa-cog(aria-hidden='true')

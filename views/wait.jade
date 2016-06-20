@@ -1,15 +1,13 @@
-
 div.wrapper
 	include inc/header.jade
-
 	section.content.wait
+		button#chat-toggle.toggle.chat-toggle
+			span.open.fa.fa-comments.fa-2x(aria-hidden="true")
+			span.close.fa.fa-times.fa-2x(aria-hidden="true")
+			span#new-messages-count.new-messages-count(data-count="0")
+		include inc/player-info.jade
 		include inc/chat.jade
 		div.wait-wrapper
-			button#chat-toggle.toggle.chat-toggle
-				span.open.fa.fa-comments.fa-2x(aria-hidden="true")
-				span.close.fa.fa-times.fa-2x(aria-hidden="true")
-				span#new-messages-count.new-messages-count(data-count="0")
-			include inc/player-info.jade
 			h1#room-name
 			p#room-player-count.players-total
 			ul#players-list.players-list
