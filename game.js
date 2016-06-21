@@ -4,6 +4,7 @@ module.exports = {
     defaultRoom: '/',
     rooms: {},
     ROOM_MAX_PLAYER: 6,
+    DEFAULT_BOATS_PARTS_COUNT: 17,
     getPlayerReadyCount: function () {
         var count = 0;
         for (var i = 0; i < this.players.length; i++) {
@@ -14,7 +15,7 @@ module.exports = {
         return count;
     },
     defaultPlacementTime: 1,
-    defaultShootTime: 3,
+    defaultShootTime: 1,
     // return players from player room
     getPlayersId: function (ioSockets, roomName) {
         return ioSockets.adapter.rooms[roomName];
@@ -83,7 +84,17 @@ module.exports = {
                 var socketTurn = lastTurn[key];
                 for (var socketId in playersIds.sockets) {
                     if (socketId != key) {
-                        var currentSocketCells = this.getPlayerById(ioSockets, socketId).cells;
+                        var currentSocket = this.getPlayerById(ioSockets, socketId);
+                        var currentSocketCells = currentSocket.cells;
+                        
+                        // Prevent two decrements x times cellsContainingBoatCount if two players shooted the same cell.
+                        if (!currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted) {
+                            currentSocket.cellsContainingBoatCount--;
+                            if (currentSocket.cellsContainingBoatCount == 0){
+                                currentSocket.down = true;
+                            }
+                        }
+                        
                         currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted = true;
                         currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shootedBy.push(key);
 

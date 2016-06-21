@@ -25,7 +25,7 @@ block content
             
                 h2 Rejoignez une salle
 
-                p.rooms-count x salles disponibles (Sinon "Pas de salle disponible")
+                p#rooms-count.rooms-count
                 ul#rooms.rooms-list
 
                 div.push
@@ -41,7 +41,6 @@ block content
             img: "#{user.rankIcon}",
             id: undefined
         }
-        console.log(playerInfos);
     script(src='/javascripts/prototype.js')
     script(src='/javascripts/ajax.js')
     script(src='/javascripts/navigation.js')
