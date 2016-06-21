@@ -589,6 +589,20 @@ header {
 		padding: .4em 1.3em;
 	}
 
+	button.ready {
+		background-color: #525174;
+		color: #fff;
+	}
+
+	.players-list .ready-status {
+		width: auto;
+		margin-left: .3em;
+		margin-bottom: 1em;
+		font-size: 1.2em;
+		color: #525174;
+		vertical-align: top;
+	}
+
 /* Game
 ========================================================================== */
 
