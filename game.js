@@ -123,7 +123,8 @@ module.exports = {
     getRoomsInfos: function () {
         var roomsInfos = [];
         for (var key in this.rooms) {
-            if (!this.rooms[key].gameStarted) {
+            if (!this.rooms[key].gameStarted &&
+                this.rooms[key].playerCount < this.ROOM_MAX_PLAYER) {
                 roomsInfos.push({
                     name: this.rooms[key].name,
                     playerCount: this.rooms[key].playerCount

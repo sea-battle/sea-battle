@@ -191,18 +191,25 @@ var gameHandlers = {
             click: function (e) {
                 if (shooterGrid.highlightedSelected.x != null &&
                     shooterGrid.highlightedSelected.y != null) {
-                    shooterGrid.clearHighlightCell(shooterGrid.highlightedSelected);
+                    grids.forEach(function (g) {
+                        shooterGrid.clearHighlightCell(shooterGrid.highlightedSelected);
+                    });
                 }
 
-                shooterGrid.highlightedSelected = e.gridInfo.coords
-                shooterGrid.highlightCell(e.gridInfo.coords);
+                grids.forEach(function (g) {
+                    g.clearHighlightCell(shooterGrid.highlightedSelected);
+                    g.highlightedSelected = e.gridInfo.coords
+                    g.highlightCell(e.gridInfo.coords);
+                });
                 if (!shooterGrid.cellIsShooted(e.gridInfo.coords)) {
                     socket.emit('game-shoot', e.gridInfo.coords);
                 }
             },
             mousemove: function (e) {
-                shooterGrid.highlightCell(e.gridInfo.coords);
-                shooterGrid.highlightedOver = e.gridInfo.coords;
+                grids.forEach(function (g) {
+                    g.highlightCell(e.gridInfo.coords);
+                    g.highlightedOver = e.gridInfo.coords;
+                });
             }
         }
     }

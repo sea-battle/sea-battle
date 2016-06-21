@@ -23,6 +23,9 @@ module.exports = {
                 socket.emit('init-socket-id', socket.id);
             });
             socket.on('rooms-create', function (roomName) {
+                if (roomName.length > 20){
+                    roomName = roomName.substring(0, 19);
+                }
                 socket.points = 0;
                 game.rooms[roomName] = {
                     timer: game.defaultPlacementTime,
@@ -45,7 +48,8 @@ module.exports = {
                 socket.emit('rooms-update', game.getRoomsInfos());
             });
             socket.on('rooms-join', function (roomName) {
-                if (!game.rooms[roomName].gameStarted) {
+                if (!game.rooms[roomName].gameStarted &&
+                    game.rooms[roomName].playerCount < game.ROOM_MAX_PLAYER) {
                     socket.points = 0;
                     socket.room = roomName;
                     game.rooms[roomName].playerCount++;
