@@ -62,9 +62,24 @@ window.addEventListener('keyup', function (e) {
 socket.emit('chat-is-writing');
 
 function addMessage(from, message, time) {
-    var p = document.createElement('p');
-    p.innerHTML = time + ' ' + from + ' => ' + message;
-    messagesContainer.appendChild(p);
+    var div = document.createElement('div');
+    var pTime = document.createElement('p');
+    var pFrom = document.createElement('p');
+    var pMessage = document.createElement('p');
+
+    div.className = 'message-wrapper';
+    pTime.className = 'message-time';
+    pFrom.className = 'message-from';
+    pMessage.className = 'message-content';
+
+    pTime.innerHTML = time;
+    pFrom.innerHTML = from;
+    pMessage.innerHTML = message;
+
+    div.appendChild(pTime);
+    div.appendChild(pFrom);
+    div.appendChild(pMessage);
+    messagesContainer.appendChild(div);
 }
 
 socket.on('receive-message', function (playerName, message, time, filter) {
