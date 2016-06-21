@@ -18,20 +18,21 @@ section.content.game
 	aside.game-info
 		button#aside-toggle.toggle.aside-toggle
 			span.open.fa.fa-th.fa-2x(aria-hidden="true")
-			span.close.fa.fa-times.fa-2x(aria-hidden="true")
 		button#ranking-toggle.toggle.ranking-toggle
 			span.open.fa.fa-list-ol.fa-2x(aria-hidden="true")
-			span.close.fa.fa-times.fa-2x(aria-hidden="true")
 		button#chat-toggle.toggle.chat-toggle
 			span.open.fa.fa-comments.fa-2x(aria-hidden="true")
-			span.close.fa.fa-times.fa-2x(aria-hidden="true")
 			span#new-messages-count.new-messages-count(data-count="0")
 		include inc/player-info.jade
 		section#game-ranking.game-ranking
+			button#close-ranking.close-ranking
+				span.close.fa.fa-times.fa-2x(aria-hidden="true")
 			h2 Classement
 			ul#rank-list
 		include inc/chat.jade
 	aside#switching-aside.switching-aside
+		button#close-aside.close-aside
+			span.close.fa.fa-times.fa-2x(aria-hidden="true")
 		include inc/boats.jade
 		section#other-players-canvas.players-grids.hidden
 

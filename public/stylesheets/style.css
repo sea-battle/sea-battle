@@ -42,6 +42,10 @@ body {
     background-color: #f3f3f3;
 }
 
+body.overlayed {
+	overflow: hidden;
+}
+
 h1,
 h2,
 h3 {
@@ -261,14 +265,24 @@ a {
 	background-color: #bce784;
 	max-width: 300px;
 	position: relative;
+	z-index: 10;
 }
 
-.toggle-aside {
+.toggle-aside,
+.close-aside {
 	display: none;
 	position: absolute;
 	top: 8%;
 	right: 2%;
 	z-index: 10;
+}
+
+.close-aside {
+	top: 2%;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background-color: transparent;
 }
 
 /* Header
@@ -336,17 +350,14 @@ header {
 /* Chat
 ========================================================================== */
 
-.chat {
+.chat,
+.send-container {
 	background-color: #E1E1E1;
 }
 
 	.chat-toggle {
 		display: none;
 		z-index: 10;
-	}
-
-	.chat-toggle .close {
-		display: none;
 	}
 
 	.chat li {
@@ -391,6 +402,17 @@ header {
 		100% {
 			background-color: #5DD39E;
 		}
+	}
+
+	.close-chat {
+		display: none;
+		position: absolute;
+		top: 5.2em;
+		right: 2%;
+		margin: 0;
+		padding: 0;
+		border: none;
+		background-color: transparent;
 	}
 
 /* Rooms & wait pages
@@ -567,6 +589,20 @@ header {
 		padding: .4em 1.3em;
 	}
 
+	button.ready {
+		background-color: #525174;
+		color: #fff;
+	}
+
+	.players-list .ready-status {
+		width: auto;
+		margin-left: .3em;
+		margin-bottom: 1em;
+		font-size: 1.2em;
+		color: #525174;
+		vertical-align: top;
+	}
+
 /* Game
 ========================================================================== */
 
@@ -676,10 +712,10 @@ header {
 
 /* Player info */
 
-.player-info-toggle,
-.player-info-toggle .close {
+.player-info-toggle{
 	display: none;
 }
+
 .player-info {
 	height: 25%;
 	padding: 1em .5em;
@@ -713,6 +749,17 @@ header {
 			font-style: italic;
 		}
 
+	.close-player-info {
+		display: none;
+		position: absolute;
+		top: 2%;
+		right: 2%;
+		margin: 0;
+		padding: 0;
+		border: none;
+		background-color: transparent;
+	}
+
 .aside-toggle,
 .aside-toggle .close {
 	display: none;
@@ -728,10 +775,20 @@ header {
 
 /* Ranking */
 
-.ranking-toggle,
-.ranking-toggle .close {
+.ranking-toggle {
 	display: none;
 	position: absolute;
+}
+
+.close-ranking {
+	display: none;
+	position: absolute;
+	top: 2%;
+	right: 2%;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background-color: transparent;
 }
 
 .game-ranking {
@@ -1000,13 +1057,8 @@ footer {
 @media screen and (min-width: 87.5em),
 screen and (max-height: 47.90em) { /* > 1400px OR < 768px height */
 	.game .content {
-		/* position: absolute; */
 		text-align: left;
 	}
-}
-
-@media screen and (max-width: 64em) { /* < 1024px */
-
 }
 
 @media screen and (max-width: 59.95em),
@@ -1018,15 +1070,17 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 		position: absolute;
 		top: 0;
 		left: 0;
+		z-index: 10;
+	}
+
+	.switching-aside.opened,
+	.close-aside {
+		display: block;
 	}
 
 	.grids-wrapper {
 		padding: 4em .5em .5em .5em;
 	}
-}
-
-@media screen and (max-height: 47.90em) { /* < 768px height */
-
 }
 
 @media screen and (max-width: 59.95em) { /* < 960px */
@@ -1067,7 +1121,7 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 
 	.wait .chat {
 		display: none;
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -1081,19 +1135,12 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 		display: inline-block;
 	}
 
-	.chat-toggle.opened {
-		top: 5.4em;
+	.wait .messages {
+		max-height: 80%;
 	}
 
-		.chat-toggle.opened .open {
-			display: none;
-		}
-
-		.chat-toggle.opened .close {
-			display: block;
-		}
-
-	.chat.opened {
+	.chat.opened,
+	.wait .close-chat {
 		display: block;
 	}
 
@@ -1109,14 +1156,6 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 		top: 1.5em;
 		right: 1.5em;
 		z-index: 10;
-	}
-
-	.aside-toggle.opened .close {
-		display: block;
-	}
-
-	.aside-toggle.opened .open {
-		display: none;
 	}
 
 	.socials,
@@ -1158,7 +1197,7 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 
    .player-info {
 		display: none;
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -1166,6 +1205,10 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 		z-index: 5;
 		background: rgba(255, 255, 255, 0.9);
 	}
+
+		.close-player-info {
+			display: block;
+		}
 
 		.player-info-wrapper {
 			width: 100%;
@@ -1190,21 +1233,6 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 					display: table-cell;
 					margin: 0;
 				}
-
-	.player-info-toggle.opened {
-		position: absolute;
-		top: 1.4em;
-		right: 1.4em;
-		z-index: 10;
-	}
-
-		.player-info-toggle.opened .open {
-			display: none;
-		}
-
-		.player-info-toggle.opened .close {
-			display: block;
-		}
 
 	.player-info.opened {
 		display: block;
@@ -1255,6 +1283,23 @@ screen and (max-height: 47.90em) { /* < 650px width OR < 768px height */
 		z-index: 5;
 		height: 100%;
 		width: 100%;
+	}
+
+	.game .chat.opened,
+	.game .game-ranking.opened,
+	.game .player-info.opened,
+	.game .close-chat,
+	.game .close-ranking,
+	.game .close-player-info {
+		display: block;
+	}
+
+	.game .game-ranking {
+		background-color: #bce784; 
+	}
+
+	.game .messages {
+		max-height: 80%;
 	}
 }
 
