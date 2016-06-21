@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         passwordConfirmationField = document.getElementById('password-confirmation'),
         signupSubmit = document.getElementById('signup-submit');
 
-    emailField.addEventListener('blur', checkEmailAddress, false);
+    emailField.addEventListener('keyup', checkEmailAddress, false);
     usernameField.addEventListener('keyup', checkUsername, false);
     passwordField.addEventListener('keyup', checkPassword, false);
     passwordConfirmationField.addEventListener('keyup', checkPassword, false);
