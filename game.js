@@ -86,15 +86,15 @@ module.exports = {
                     if (socketId != key) {
                         var currentSocket = this.getPlayerById(ioSockets, socketId);
                         var currentSocketCells = currentSocket.cells;
-                        
+
                         // Prevent two decrements x times cellsContainingBoatCount if two players shooted the same cell.
                         if (!currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted) {
                             currentSocket.cellsContainingBoatCount--;
-                            if (currentSocket.cellsContainingBoatCount == 0){
+                            if (currentSocket.cellsContainingBoatCount == 0) {
                                 currentSocket.down = true;
                             }
                         }
-                        
+
                         currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted = true;
                         currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shootedBy.push(key);
 
@@ -173,5 +173,22 @@ module.exports = {
             });
         }
         return players;
+    },
+    checkDownGrids: function (ioSockets, roomName) {
+        var roomPlayers = this.getPlayers(ioSockets, roomName);
+        var alivePlayer = 0;
+        roomPlayers.forEach(function (player) {
+            if (!player.down) {
+                alivePlayer++;
+            }
+        });
+
+        /*
+        if (alivePlayer == 1) {
+
+        } else {
+
+        }
+        */
     }
 };

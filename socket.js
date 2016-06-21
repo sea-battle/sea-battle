@@ -138,10 +138,13 @@ module.exports = {
 
                 function playTurn() {
                     if (game.rooms[socket.room].timer == 0) {
+                        //TODO check if end
+                        
+                        
+                        
                         game.playShootTurn(io.sockets, socket.room);
                         var currentRoom = game.rooms[socket.room];
                         if (!utils.isEmpty(currentRoom.turns[currentRoom.turnCount].touchedPlayers)) {
-                            console.log(socket.id + ':', socket.cellsContainingBoatCount);
                             io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers, game.getPlayersInfos(io.sockets, socket.room, 'points'));
                         }
                         if (game.rooms[socket.room].gameover) {
