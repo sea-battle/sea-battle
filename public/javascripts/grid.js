@@ -1,4 +1,4 @@
-function Grid(canvas, playerId) {
+function Grid(canvas, playerId, type) {
     var self = this;
     this.playerId = playerId || null;
     this.canvas = canvas;
@@ -117,7 +117,9 @@ Grid.prototype = {
             positions: {
                 t: this.cellWidth * y,
                 l: this.cellWidth * x,
-            }
+            },
+            shootedCells: this.shootedCells,
+            cells: this.cells // TOREMOVE
         }
     },
     getMouseCoord: function (pos) {
@@ -186,15 +188,16 @@ Grid.prototype = {
         return canPlace;
 
     },
-    highlightCell: function (coords, color) {
-        this.ctx.strokeStyle = color == undefined ? "#FFA500" : color;
+    highlightCell: function (coords) {
+        var color = this.cellIsShooted(coords) ? "#F00" : "#FFA500";
+        this.ctx.strokeStyle = color;
         if (this.highlightedOver.x != coords.x ||
             this.highlightedOver.y != coords.y) {
             if (this.highlightedOver.x != null &&
                 this.highlightedOver.y != null) {
                 this.clearHighlightCell(this.highlightedOver);
             }
-            this.ctx.strokeStyle = color == undefined ? "#FFA500" : color;
+            this.ctx.strokeStyle = color;
             for (var i = 1; i <= 3; i++) {
                 this.renderCell(coords);
             }
@@ -202,6 +205,8 @@ Grid.prototype = {
 
         if (this.highlightedSelected.x != null &&
             this.highlightedSelected.y != null) {
+            color = this.cellIsShooted(this.highlightedSelected) ? "#F00" : "#FFA500";
+            this.ctx.strokeStyle = color;
             for (var i = 1; i <= 3; i++) {
                 this.renderCell(this.highlightedSelected);
             }
@@ -305,12 +310,24 @@ Grid.prototype = {
                 }
                 self.drawImg(sprite, drawCoord, deg, 1);
             } else if (cell.touched) {
-                self.ctx.fillStyle = '#F00';
-                self.ctx.fillRect(self.cellWidth * coords.x + 1, self.cellWidth * coords.y + 1, self.cellWidth - 1, self.cellWidth - 1);
+                self.ctx.strokeStyle = "#000";
+                self.ctx.lineWidth = 1;
+
+                var x = self.cellWidth * coords.x;
+                var y = self.cellWidth * coords.y;
+
+                self.ctx.moveTo(x, y);
+                self.ctx.lineTo(x + self.cellWidth, y + self.cellWidth);
+
+                self.ctx.moveTo(x + self.cellWidth, y);
+                self.ctx.lineTo(x, y + self.cellWidth);
+                self.ctx.stroke()
             } else {
                 self.ctx.fillStyle = '#000';
                 self.ctx.fillRect(self.cellWidth * coords.x + 1, self.cellWidth * coords.y + 1, self.cellWidth - 1, self.cellWidth - 1);
             }
+            
+            self.ctx.strokeStyle = "#000";
         });
     },
     drawCoords: function () {
@@ -431,5 +448,17 @@ Grid.prototype = {
     },
     allBoatsArePlaced: function () {
         return this.cellsContainingBoats.length == 17;
+    },
+    cellIsShooted: function (coords) {
+        var i = 0;
+        var found = false;
+        while (i < this.shootedCells.length && !found) {
+            if (coords.x == this.shootedCells[i].coords.x &&
+                coords.y == this.shootedCells[i].coords.y) {
+                found = true;
+            }
+            i++;
+        }
+        return found;
     }
 };
