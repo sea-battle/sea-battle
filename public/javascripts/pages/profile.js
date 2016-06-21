@@ -1,7 +1,7 @@
-function editEmail() {
+function editEmail(e) {
     'use strict';
 
-    event.preventDefault();
+    e.preventDefault();
 
     var emailField = document.getElementById('email'),
         emailMessage = document.getElementById('email-message');
@@ -40,10 +40,10 @@ function editEmail() {
     }
 }
 
-function editUsername() {
+function editUsername(e) {
     'use strict';
 
-    event.preventDefault();
+    e.preventDefault();
 
     var usernameField = document.getElementById('username'),
         usernameMessage = document.getElementById('username-message');
@@ -72,10 +72,10 @@ function editUsername() {
     xhr.send(JSON.stringify({ username: usernameField.value }));
 }
 
-function editPassword() {
+function editPassword(e) {
     'use strict';
 
-    event.preventDefault();
+    e.preventDefault();
 
     var oldPasswordField = document.getElementById('old-password'),
         passwordField = document.getElementById('password'),
@@ -112,10 +112,10 @@ function editPassword() {
     }));
 }
 
-function deleteUser() {
+function deleteUser(e) {
     'use strict';
 
-    event.preventDefault();
+    e.preventDefault();
 
     var xhr = new XMLHttpRequest();
 
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
         passwordSubmit = document.getElementById('password-submit'),
         deleteUserSubmit = document.getElementById('delete-user');
 
-    emailField.addEventListener('blur', checkEmailAddress, false);
+    emailField.addEventListener('keyup', checkEmailAddress, false);
     emailSubmit.addEventListener('click', editEmail, false);
     usernameField.addEventListener('keyup', checkUsername, false);
     usernameSubmit.addEventListener('click', editUsername, false);

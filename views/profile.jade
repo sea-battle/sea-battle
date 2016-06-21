@@ -18,19 +18,19 @@ block content
                 h1 Paramètres du compte
 
                 h2 Modifiez votre email
-                form
+                form(method='post', action='/edit-email')
                     input#email(type='text', name='email', placeholder='Adresse e-mail')
                     p#email-message.form-message
                     button#email-submit.button-effect(type='submit') Modifier
 
                 h2 Modifiez votre pseudonyme
-                form
+                form(method='post', action='/edit-username')
                     input#username(type='text', name='username', placeholder='Pseudonyme')
                     p#username-message.form-message
                     button#username-submit.button-effect(type='submit') Modifier
 
                 h2 Modifiez votre mot de passe
-                form
+                form(method='post', action='/edit-password')
                     input#old-password(type='password', name='old_password', placeholder='Mot de passe actuel')
                     input#password(type='password', name='password', placeholder='Nouveau mot de passe')
                     input#password-confirmation(type='password', name='password_confirmation', placeholder='Confirmez le nouveau mot de passe')

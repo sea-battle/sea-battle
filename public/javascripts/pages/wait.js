@@ -25,15 +25,15 @@ function updatePlayerList(players) {
 			var spanGrade = document.createElement('span');
 			var spanPoints = document.createElement('span');
 
-			var button = document.createElement('button');
+			var p = document.createElement('p');
 			var iStatus = document.createElement('i');
 			li.id = player.id + '-row';
 			li.className = 'other-player';
 			pUsername.className = 'player-username';
 			pRanking.className = 'player-ranking';
 			iStatus.id = 'status-' + player.id;
-			button.id = 'set-ready';
-			button.className = 'button-effect';
+			p.id = 'set-ready';
+			p.className = 'ready-status';
 
 			pUsername.innerHTML = player.name;
 			img.setAttribute('src', player.img);
@@ -48,12 +48,12 @@ function updatePlayerList(players) {
 			wrapper.appendChild(spanGrade);
 			wrapper.appendChild(spanPoints);
 			pRanking.appendChild(wrapper);
-			button.appendChild(iStatus);
+			p.appendChild(iStatus);
 
 			li.appendChild(div);
 			div.appendChild(pUsername);
 			div.appendChild(pRanking);
-			li.appendChild(button);
+			li.appendChild(p);
 			playersList.appendChild(li);
 		}
 	});
@@ -89,10 +89,12 @@ socket.emit('room-update-request');
 setReadyButton.addEventListener('click', function (e) {
 	playerIsReady = !playerIsReady;
 	if (playerIsReady) {
-		readyStatus.innerHTML = 'Ready';
+		setReadyButton.innerHTML = 'Prêt !';
+		setReadyButton.addClass('ready');
 		socket.emit('wait-set-ready');
 	} else {
-		readyStatus.innerHTML = '';
+		setReadyButton.innerHTML = 'Prêt ?';
+		setReadyButton.removeClass('ready');
 		socket.emit('wait-set-unready');
 	}
 });
