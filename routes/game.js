@@ -31,7 +31,9 @@ router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
 
 router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
     var fn = jade.compileFile(__dirname + '/../views/game.jade');
-    var html = fn();
+    var html = fn({
+        user: (req.user) ? req.user : false
+    });
     return res.json({
         bodyClass: 'game',
         html: html,

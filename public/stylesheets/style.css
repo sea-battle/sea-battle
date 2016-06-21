@@ -90,6 +90,10 @@ button {
 	border: 1px solid;
 }
 
+.game .signout {
+	display: none;
+}
+
 .signout:hover {
 	background-color: #ff7474;
 }
@@ -622,7 +626,7 @@ header {
 	}
 
 	.players-list img {
-		width: 100px;
+		width: 50px;
 		padding: .2em;
 		display: inline-block;
 		vertical-align: middle;
@@ -676,6 +680,7 @@ header {
 
 .game .content {
 	max-width: 100%;
+	overflow: hidden;
 }
 
 .game-info,
@@ -727,6 +732,7 @@ header {
 
 	.game .chat-header {
 		height: 10%;
+		position: relative;
 	}
 
 	.game .chat-header li {
@@ -735,11 +741,11 @@ header {
 	}
 
 	.game .messages {
-		height: 65%;
+		height: 60%;
 	}
 
 	.game .send-container {
-		height: 25%;
+		height: 32%;
 		position: absolute;
 		bottom: 0;
 		width: 100%;
@@ -763,6 +769,7 @@ header {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 100%;
+	overflow-y: scroll;
 }
 
 .boat-wrapper {
@@ -956,19 +963,19 @@ header {
 }
 
 .timer {
-	height: 4%;
+	height: 10%;
 	font-size: 1.5em;
 }
 
 .fire-canvas {
-	height: 53%;
+	height: 45%;
 	width: 100%;
-	text-align: center;
+	padding-bottom: .5em;
 }
 
 .visual-canvas {
 	width: 100%;
-	height: 43%;
+	height: 45%;
 	padding-top: .5em;
 }
 
@@ -1109,7 +1116,7 @@ footer {
 ========================================================================== */
 
 @media screen and (min-width: 87.5em),
-screen and (max-height: 47.90em) { /* > 1400px OR < 768px height */
+screen and (max-height: 37.4em) { /* > 1400px OR < 768px height */
 	.game .content {
 		text-align: left;
 	}
@@ -1135,7 +1142,7 @@ screen and (max-height: 47.90em) { /* > 1400px OR < 768px height */
 }
 
 @media screen and (max-width: 59.95em),
-screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
+screen and (max-height: 37.4em) { /* < 960px width OR < 768px height */
 	.switching-aside {
 		display: none;
 		width: 100%;
@@ -1318,7 +1325,7 @@ screen and (max-height: 47.90em) { /* < 960px width OR < 768px height */
 }
 
 @media screen and (max-width: 40.625em),
-screen and (max-height: 47.90em) { /* < 650px width OR < 768px height */
+screen and (max-height: 37.4em) { /* < 650px width OR < 768px height */
 	.game .chat-toggle,
 	.game .player-info-toggle,
 	.ranking-toggle {
