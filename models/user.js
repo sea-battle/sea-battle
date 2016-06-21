@@ -29,7 +29,7 @@ var User = new Schema({
     pointsCount: {
         type: Number,
         default: 0
-    }
+    },
     skins: Skin,
     ip: String,
     games: [Game]

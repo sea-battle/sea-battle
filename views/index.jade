@@ -15,17 +15,13 @@ block content
                     img(src='images/test2.jpg')
                     p GIF animé montrant les classements et statistiques
 
-            if username
-                h3 Bonjour #{username}
-                a.link-effect(href='/rooms', title='Vers les salles de jeu') Jouer !
-            else
-                form#signin(method='post' action='/signin')
-                    p#signin-message.form-main-message #{message}
-                    input#email(type='text', name='username', placeholder='Adresse e-mail', autofocus)
-                    input#password(type='password', name='password', placeholder='Mot de passe')
-                    button#signin-submit.button-effect(type='submit') Connexion
+            form#signin(method='post' action='/signin')
+                p#signin-message.form-main-message #{message}
+                input#email(type='text', name='username', placeholder='Adresse e-mail', autofocus)
+                input#password(type='password', name='password', placeholder='Mot de passe')
+                button#signin-submit.button-effect(type='submit') Connexion
 
-                a.link-effect(href='/signup', title='Vers la page de création de compte') Pas de compte ?
+            a.link-effect(href='/signup', title='Vers la page de création de compte') Pas de compte ?
 
             div.push
 

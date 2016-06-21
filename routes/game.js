@@ -8,7 +8,7 @@ var routesMiddlewares = require('./middlewares');
 router.get('/rooms', routesMiddlewares.isAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/rooms', {
         bodyClass: 'rooms',
-        userInfos: (req.user) ? req.user : false
+        user: (req.user) ? req.user : false,
     });
 });
 
@@ -23,6 +23,7 @@ router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
             '/javascripts/chat.js'
         ],
         title: 'Prepare to fight',
+        user: (req.user) ? req.user : false,
     });
 });
 
@@ -37,7 +38,8 @@ router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
             '/javascripts/pages/game.js',
             '/javascripts/chat.js'
         ],
-        title: 'Let\'s shoot'
+        title: 'Let\'s shoot',
+        user: (req.user) ? req.user : false
     });
 });
 
