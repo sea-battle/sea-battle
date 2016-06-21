@@ -71,6 +71,7 @@ function updateRoomInfos(room) {
 socket.on('wait-start-game', function () {
 	ajax.get('/game', function (data){
         handlers.onComplete(data);
+        initGame();
     });
 });
 socket.on('room-update', function (infos) {

@@ -5,9 +5,8 @@ function initPlayerInfo() {
     var statsOverlay = document.getElementById('stats-overlay');
     var playerInfoToggle = document.getElementById('player-info-toggle');
     var playerInfo = document.getElementById('player-info');
-
+    
     document.getElementById('rankings-link').addEventListener('click', function(e) {
-        console.log('obj');
         e.preventDefault();
         rankingOverlay.addClass(openedClass);
     });
@@ -27,7 +26,6 @@ function initPlayerInfo() {
 
     document.getElementById('profil-link').addEventListener('click', function(e) {
         e.preventDefault();
-        console.log("coucou");
         if (
             (document.body.hasClass('wait') || document.body.hasClass('game'))
             && confirm('Il vous faut quitter la partie pour accéder à votre profil, voulez-vous continuer ?')
@@ -104,7 +102,6 @@ function initModals() {
 }
 
 function initWait() {
-    console.log('obj');
     initPlayerInfo();
     initChat();
 }
