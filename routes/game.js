@@ -5,6 +5,7 @@ var router = express.Router();
 
 // Load routes middlewares
 var routesMiddlewares = require('./middlewares');
+
 router.get('/rooms', routesMiddlewares.isAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/rooms', {
         bodyClass: 'rooms',
@@ -14,7 +15,9 @@ router.get('/rooms', routesMiddlewares.isAuthenticated, function (req, res) {
 
 router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
     var fn = jade.compileFile(__dirname + '/../views/wait.jade');
-    var html = fn();
+    var html = fn({
+        user: (req.user) ? req.user : false
+    });
     return res.json({
         bodyClass: 'wait',
         html: html,
@@ -22,8 +25,7 @@ router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
             '/javascripts/pages/wait.js',
             '/javascripts/chat.js'
         ],
-        title: 'Prepare to fight',
-        user: (req.user) ? req.user : false,
+        title: 'Prepare to fight'
     });
 });
 
