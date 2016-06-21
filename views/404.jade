@@ -1,9 +1,17 @@
 extends inc/head.jade
 
 block title
-	title Erreur 404
+    title Erreur 404
 
 block content
-	include inc/header.jade
+    div.wrapper
+        include inc/header.jade
 
-	h1 404
+        section.content.home
+            p La page à laquelle vous essayez d'accédez est introuvable.
+
+            div.push
+
+    include inc/footer.jade
+
+    script(src='/javascripts/pages/index.js')
