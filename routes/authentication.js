@@ -326,7 +326,6 @@ router.get('/', routesMiddlewares.isNotAuthenticated, function (req, res) {
 router.get('/signup', routesMiddlewares.isNotAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/signup', {
         bodyClass: 'signup',
-        success: null
     });
 });
 
@@ -334,7 +333,7 @@ router.get('/profile', routesMiddlewares.isAuthenticated, function (req, res) {
     res.locals.username = (req.user) ? req.user.username : false;
     res.render(__dirname + '/../views/profile', {
         bodyClass: 'profile',
-        username: (req.user) ? req.user.username : false
+        user: (req.user) ? req.user : false
     });
 });
 
