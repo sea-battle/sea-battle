@@ -24,9 +24,12 @@ var User = new Schema({
     },
     rankIcon: {
         type: String,
-        default: 'matelot.png'
+        default: '/images/test1.jpg'
     },
-    pointsCount: Number,
+    pointsCount: {
+        type: Number,
+        default: 0
+    }
     skins: Skin,
     ip: String,
     games: [Game]
