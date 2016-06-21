@@ -22,7 +22,7 @@ router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
             '/javascripts/pages/wait.js',
             '/javascripts/chat.js'
         ],
-        title: 'Prepare to fight',
+        title: 'Prepare to fight'
     });
 });
 

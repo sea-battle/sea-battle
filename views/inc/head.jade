@@ -3,18 +3,18 @@ html(lang='fr')
 	head
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width, initial-scale=1')
-		if isAuthenticated
+		if user
 			meta(property='og:url' content='http://seabattle.io')
 			meta(property='og:type' content='website')
 			meta(property='og:title' content='Sea Battle')
-			meta(property='og:description' content='Sur Sea Battle, je suis #{username}, un #{userRank} avec #{userPoints} points, venez m\'affronter !')
+			meta(property='og:description' content='Sur Sea Battle, je suis #{user.username}, un #{user.rank} avec #{user.pointsCount} points, venez m\'affronter !')
 			meta(property='og:image' content='http://localhost:3000/images/logo.png')
 		block title
 			title Sea Battle
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		block styles
 	body(class='#{bodyClass}')
-		if isAuthenticated
+		if user
 			a.signout(href='/signout' title='Se déconnecter')
 				img(src='../images/signout.png')
 		block content
