@@ -302,9 +302,6 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
                 coords: JSON.parse(JSON.stringify(data.coords)),
                 touched: data.touched
             });
-
-            console.log(playerInfos);
-            console.log(data);
             if (data.byId == playerInfos.id) {
                 shooterGrid.shootedCells.push({
                     coords: JSON.parse(JSON.stringify(data.coords)),

@@ -16,6 +16,8 @@ module.exports = {
                 socket.globalPoints = player.globalPoints;
                 socket.img = player.img;
                 socket.points = 0;
+                socket.cellsContainingBoatCount = game.DEFAULT_BOATS_PARTS_COUNT;
+                socket.down = false;
             });
 
             // Stage 1: rooms
@@ -23,7 +25,7 @@ module.exports = {
                 socket.emit('init-socket-id', socket.id);
             });
             socket.on('rooms-create', function (roomName) {
-                if (roomName.length > 20){
+                if (roomName.length > 20) {
                     roomName = roomName.substring(0, 19);
                 }
                 socket.points = 0;
@@ -136,6 +138,10 @@ module.exports = {
 
                 function playTurn() {
                     if (game.rooms[socket.room].timer == 0) {
+                        //TODO check if end
+                        
+                        
+                        
                         game.playShootTurn(io.sockets, socket.room);
                         var currentRoom = game.rooms[socket.room];
                         if (!utils.isEmpty(currentRoom.turns[currentRoom.turnCount].touchedPlayers)) {
@@ -167,19 +173,21 @@ module.exports = {
                 }
             });
             socket.on('game-shoot', function (shootCoords) {
-                var currentRoom = game.rooms[socket.room];
-                var turnCount = currentRoom.turnCount;
-                if (currentRoom.turns[turnCount] == undefined) {
-                    currentRoom.turns[turnCount] = {
-                        playersShoots: {},
-                        touchedPlayers: {}
+                if (!socket.down) {
+                    var currentRoom = game.rooms[socket.room];
+                    var turnCount = currentRoom.turnCount;
+                    if (currentRoom.turns[turnCount] == undefined) {
+                        currentRoom.turns[turnCount] = {
+                            playersShoots: {},
+                            touchedPlayers: {}
+                        };
+                    }
+
+                    currentRoom.turns[turnCount]['playersShoots'][socket.id] = {
+                        shootCoords: shootCoords,
+                        shooterName: socket.name
                     };
                 }
-
-                currentRoom.turns[turnCount]['playersShoots'][socket.id] = {
-                    shootCoords: shootCoords,
-                    shooterName: socket.name
-                };
             });
 
             // Chat
