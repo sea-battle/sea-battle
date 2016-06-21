@@ -141,14 +141,8 @@ var checkCredentials = function (req, res, next) {
 
         if (user) {
             res.status(409);
-            res.render(__dirname + '/../views/signup', {
-                error: 'user_exists'
-            });
         } else if (!_checkEmailAddress(req.body.email) || !_checkPassword(req.body.password, req.body.passwordConfirmation)) {
             res.status(400);
-            res.render(__dirname + '/../views/signup', {
-                error: 'bad_format'
-            });
         } else {
             next();
         }
@@ -172,7 +166,6 @@ router.post('/signup', checkCredentials, function (req, res) {
             sendVerificationEmail({
             	from: '"Sea Battle" <louis.fischer@etu.upmc.fr>',
                 to: user.email,
-            	// to: 'louis.fischer@free.fr',
             	subject: 'Sea Battle - confirmation de votre inscription',
             	html: formatVerificationEmail(tokenId)
             });
@@ -200,7 +193,10 @@ router.post('/signin', passport.authenticate('local', {
     }
 });
 
-router.post('/edit-email', routesMiddlewares.isAuthenticated, function (req, res) {
+router.post('/edit-email', [
+    routesMiddlewares.isAuthenticated,
+    checkCredentials
+], function (req, res) {
     User.update({
         _id: req.user._id
     }, {

@@ -17,27 +17,35 @@ block content
                 li Et surtout de jouer !
 
             form#signup(method='post', action='/signup')
-                if success == true
-                    p#signup-message Votre compte a été créé. Un e-mail de confirmation vous a été envoyé.
-                else
-                    if error == 'user_exists'
-                        p#signup-message.form-main-message L'adresse e-mail ou le nom d'utilisateur que vous avez entré est déjà pris.
-                    else if error == 'bad_format'
-                        p#signup-message.form-main-message Vérifiez que l'adresse e-mail est une adresse e-mail valide et que les deux mots de passe correspondent.
-                    else
-                        p#signup-message.form-main-message
-                    input#email(type='text', name='email' value='john.doe@mail.com', placeholder='Adresse e-mail')
-                    p#email-message.form-message
-                    input#username(type='text', name='username' value='johndoe', placeholder='Pseudonyme')
-                    p#username-message.form-message
-                    input#password(type='password', name='password' value='johndoe', placeholder='Mot de passe')
-                    input#password-confirmation(type='password', name='passwordConfirmation' value="johndoe", placeholder='Confirmez le mot de passe')
-                    p#password-message.form-message
-                    button#signup-submit.button-effect(type='submit') Créer
+                p#signup-message.form-main-message
+                input#email(type='text', name='email', placeholder='Adresse e-mail')
+                p#email-message.form-message
+                input#username(type='text', name='username', placeholder='Pseudonyme')
+                p#username-message.form-message
+                input#password(type='password', name='password', placeholder='Mot de passe')
+                input#password-confirmation(type='password', name='passwordConfirmation', placeholder='Confirmez le mot de passe')
+                p#password-message.form-message
+                button#signup-submit.button-effect(type='submit') Créer
 
             div.push
 
     include inc/footer.jade
-    
+
+    script.
+        var emailIsValid = false,
+            usernameIsValid = false,
+            passwordIsValid = false,
+            formIsValid = new Worker('/javascripts/pages/worker.js');
+            
+        var signupSubmit = document.getElementById('signup-submit');
+
+        formIsValid.addEventListener('message', function (e) {
+            console.log(e.data);
+            if (e.data) {
+                signupSubmit.classList.add('form-validated');
+            } else {
+                signupSubmit.classList.remove('form-validated');
+            }
+        }, false);
     script(src='/javascripts/pages/common.js')
     script(src='/javascripts/pages/signup.js')
