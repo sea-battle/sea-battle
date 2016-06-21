@@ -5,16 +5,19 @@ var router = express.Router();
 
 // Load routes middlewares
 var routesMiddlewares = require('./middlewares');
+
 router.get('/rooms', routesMiddlewares.isAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/rooms', {
         bodyClass: 'rooms',
-        user: req.user
+        user: (req.user) ? req.user : false,
     });
 });
 
 router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
     var fn = jade.compileFile(__dirname + '/../views/wait.jade');
-    var html = fn();
+    var html = fn({
+        user: (req.user) ? req.user : false
+    });
     return res.json({
         bodyClass: 'wait',
         html: html,
@@ -22,7 +25,7 @@ router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
             '/javascripts/pages/wait.js',
             '/javascripts/chat.js'
         ],
-        title: 'Prepare to fight',
+        title: 'Prepare to fight'
     });
 });
 
@@ -37,7 +40,8 @@ router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
             '/javascripts/pages/game.js',
             '/javascripts/chat.js'
         ],
-        title: 'Let\'s shoot'
+        title: 'Let\'s shoot',
+        user: (req.user) ? req.user : false
     });
 });
 
