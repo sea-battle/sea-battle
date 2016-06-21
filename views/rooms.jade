@@ -35,12 +35,13 @@ block content
     script(src='/socket.io/socket.io.js')
     script.
         var playerInfos = {
-            name: "#{userInfos.username}",
-            grade: "#{userInfos.grade}",
-            globalPoints: parseInt("#{userInfos.grade}" + 5/*TOREMOVE*/),
-            img: "#{userInfos.img}",
+            name: "#{user.username}",
+            grade: "#{user.rank}",
+            globalPoints: parseInt("#{user.pointsCount}"),
+            img: "#{user.rankIcon}",
             id: undefined
         }
+        console.log(playerInfos);
     script(src='/javascripts/prototype.js')
     script(src='/javascripts/ajax.js')
     script(src='/javascripts/navigation.js')

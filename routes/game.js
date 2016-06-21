@@ -8,7 +8,7 @@ var routesMiddlewares = require('./middlewares');
 router.get('/rooms', routesMiddlewares.isAuthenticated, function (req, res) {
     res.render(__dirname + '/../views/rooms', {
         bodyClass: 'rooms',
-        userInfos: (req.user) ? req.user : false
+        user: req.user
     });
 });
 
