@@ -34,7 +34,8 @@ router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
         html: html,
         scriptsSrc: [
             '/javascripts/boat.js',
-            '/javascripts/pages/game.js'
+            '/javascripts/pages/game.js',
+            '/javascripts/chat.js'
         ],
         title: 'Let\'s shoot'
     });

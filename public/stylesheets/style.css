@@ -125,6 +125,14 @@ button {
 	margin-bottom: 1em;
 }
 
+/* button[type=submit] {
+	display: none;
+}
+
+button[type=submit].form-validated {
+	display: inline;
+} */
+
 .form-main-message {
 	font-size: 1.5em;
 	color: #513b56;
@@ -415,6 +423,32 @@ header {
 		background-color: transparent;
 	}
 
+	.message-wrapper {
+		margin-bottom: .5em;
+	}
+
+	.message-wrapper:nth-child(even) {
+		background: lightgrey;
+	}
+
+		.message-wrapper p {
+			display: inline-block;
+			vertical-align: middle;
+			word-wrap: break-word;
+		}
+
+		.message-time {
+			width: 15%;
+		}
+
+		.message-from {
+			width: 25%;
+		}
+
+		.message-content {
+			width: 50%;
+		}
+
 /* Rooms & wait pages
 ========================================================================== */
 
@@ -676,17 +710,36 @@ header {
 	position: relative;
 }
 
-	.game .chat li {
-		height: 2.125em;
-		line-height: 2.125em;
+	.game .chat-header {
+		height: 10%;
+	}
+
+	.game .chat-header li {
+		line-height: normal;
+		height: auto;
+	}
+
+	.game .messages {
+		height: 65%;
 	}
 
 	.game .send-container {
+		height: 25%;
 		position: absolute;
 		bottom: 0;
 		width: 100%;
 		text-align: center;
+		padding: .5em;
 	}
+
+		.game .send-container input {
+			margin-bottom: 1em;
+			height: 2em;
+		}
+
+		.game .send-container button {
+			padding: 0;
+		}
 
 .boats-container {
 	text-align: center;
@@ -977,8 +1030,7 @@ header {
 		background-image: linear-gradient(0deg, #5dd39e, #bce784);
 	}
 
-	.rankings-tabs li ,
-	.stats-tabs li {
+	.rankings-tabs li {
 		display: inline-block;
 		background-color: #348aa7;
 		font-size: 1.5em;
@@ -988,15 +1040,13 @@ header {
 		transition: background-color .5s;
 	}
 
-	.rankings-tabs li:hover,
-	.stats-tabs li:hover {
+	.rankings-tabs li:hover {
 		background-color: #513b56;
 		transition: background-color .5s;
 	}
 
-	.rankings-tabs li.active,
-	.stats-tabs li.active {
-
+	.rankings-tabs li.active {
+		background-color: #513b56;
 	}
 
 .rankings-overlay.opened,
@@ -1026,17 +1076,6 @@ header {
 		word-wrap: break-word;
 	}
 
-	.player-rank {
-
-	}
-
-/* Stats overlay
-========================================================================== */
-
-.stats-tabs li {
-	width: 33.3%;
-}
-
 /* Footer
 ========================================================================== */
 
@@ -1059,6 +1098,25 @@ screen and (max-height: 47.90em) { /* > 1400px OR < 768px height */
 	.game .content {
 		text-align: left;
 	}
+}
+
+@media screen and (max-width: 71.8em) {/* < 1150px */
+	.message-time {
+		width: 50%;
+		text-align: right;
+		padding-right: .5em;
+	}
+
+	.message-from {
+		width: 50%;
+		text-align: left;
+		padding-left: .5em;
+	}
+
+	.message-content {
+   		width: 100%;
+   		padding: 0 .5em;
+   	}
 }
 
 @media screen and (max-width: 59.95em),
