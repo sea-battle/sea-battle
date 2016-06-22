@@ -255,6 +255,8 @@ socket.on('game-check-grid', function () {
 socket.on('game-init-players-grids', function (players) {
     document.getElementById('boats-container').addClass('hidden')
     document.getElementById('other-players-canvas').removeClass('hidden');
+/*    canvasWrapper.removeClass('placement-phase');
+    canvasWrapper.addClass('fire-phase');*/
     phaseTitle.innerHTML = 'Phases de tir';
     players.forEach(function (player) {
         var div = document.createElement('div');

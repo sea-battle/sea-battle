@@ -379,6 +379,28 @@ header {
 	margin: auto;
 }
 
+/* Tutorial
+========================================================================== */
+
+.tutorial nav {
+	margin: 1em;
+}
+
+	.tutorial nav a {
+		display: block;
+		margin: .5em;
+	}
+
+.first p,
+.second p {
+	text-align: left;
+}
+
+	.tutorial img {
+		margin: 1em;
+		display: inline-block;
+	}
+
 /* Chat
 ========================================================================== */
 
@@ -769,12 +791,8 @@ header {
 
 .boats-container {
 	text-align: center;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 100%;
 	overflow-y: scroll;
+	height: 100%;
 }
 
 .boat-wrapper {
@@ -983,6 +1001,8 @@ header {
 }
 
 .helper-modal {
+	height: 97%;
+	overflow-y: scroll;
 	top: 15px;
 	transform: translateX(-50%);
 	background-color: rgba(255, 255, 255, 0.95);
@@ -1003,8 +1023,7 @@ header {
 }
 
 .switching-aside h2 {
-	margin: 0;
-	margin-top: .5em; 
+	margin: .5em 0;
 }
 
 .timer {
@@ -1015,6 +1034,10 @@ header {
 	height: 45%;
 	width: 100%;
 	padding-bottom: .5em;
+}
+
+.placement-phase .visual-canvas {
+	height: 90%;
 }
 
 .visual-canvas {
