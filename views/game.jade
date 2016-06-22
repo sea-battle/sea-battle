@@ -42,6 +42,17 @@ section.content.game
 			section.timer
 				h1#phase-title.phase-title Placement des bateaux
 				span#helper.helper(class="fa fa-info" aria-hidden="true")
+				section#helper-modal.modal.helper-modal
+					div.link-wrapper
+						a.tutorial-link.link-effect(href='/tutorial' title='Vers l\'aide de jeu' target='_blank') Guide complet
+					h2 Première étape : Le placement des bateaux
+					img(src='' alt='Le placement et la rotation d\'un bateau')
+					img(src='' alt='Le bouton Aléatoire et son effet')
+					h2 Seconde étape : Les phases de tir
+					img(src='' alt='La croix signifiant un coup réussi')
+					img(src='' alt='Le carré noir signifiant un coup manqué')
+					img(src='' alt='La grille de tir')
+					img(src='' alt='La grille de visualisation')
 				p#timer-message.timer-message Reste : 
 					i#timer
 			section#fire-canvas.fire-canvas.hidden
