@@ -35,14 +35,20 @@ section.content.game
 			span.close.fa.fa-times.fa-2x(aria-hidden="true")
 		include inc/boats.jade
 		section#other-players-canvas.players-grids.hidden
+			h2 Miniatures
 
 	section#canvas-wrapper.grids-wrapper
 		div.main-canvas-wrapper
 			section.timer
-				i#timer
+				h1#phase-title.phase-title Placement des bateaux
+				span#helper.helper(class="fa fa-info" aria-hidden="true")
+				p#timer-message.timer-message Reste : 
+					i#timer
 			section#fire-canvas.fire-canvas.hidden
-				//- div.fire-canvas-wrapper
+				h2 Grille de tir
+				div#fire-canvas-wrapper.fire-canvas-wrapper
 			section#visual-canvas.visual-canvas
+				h2 Grille de visualisation
 				div.player-canvas-wrapper
 					canvas#player-canvas.player-canvas
 				section.turn-info

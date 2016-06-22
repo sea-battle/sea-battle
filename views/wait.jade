@@ -1,10 +1,15 @@
 div.wrapper
 	include inc/header.jade
+
 	section.content.wait
 		button#chat-toggle.toggle.chat-toggle
 			span.open.fa.fa-comments.fa-2x(aria-hidden="true")
 			span#new-messages-count.new-messages-count(data-count="0")
 		include inc/player-info.jade
+
+		div.link-wrapper
+			a.tutorial-link.link-effect(href='/tutorial' title='Vers l\'aide de jeu' target='_blank') Guide du jeu
+
 		include inc/chat.jade
 		div.wait-wrapper
 			h1#room-name

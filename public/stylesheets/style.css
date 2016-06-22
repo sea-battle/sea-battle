@@ -297,6 +297,11 @@ a {
 	background-color: transparent;
 }
 
+.tutorial-link {
+	margin-bottom: 2em;
+	font-size: 1.3em;
+}
+
 /* Header
 ========================================================================== */
 
@@ -482,7 +487,7 @@ header {
 	height: auto;
 	display: block;
 	text-align: center;
-	margin-bottom: 3em;
+	margin-bottom: 1em;
 }
 
 	.socials,
@@ -962,9 +967,32 @@ header {
 	text-align: center;
 }
 
+.main-canvas-wrapper h1,
+.main-canvas-wrapper h2 {
+	margin: 0;
+}
+
+.main-canvas-wrapper h1,
+.helper {
+	display: inline-block;
+}
+
+.helper {
+	margin-left: .5em;
+}
+
+.main-canvas-wrapper h2 {
+	font-size: .6em;
+	height: 6%;
+}
+
+.switching-aside h2 {
+	margin: 0;
+	margin-top: .5em; 
+}
+
 .timer {
 	height: 10%;
-	font-size: 1.5em;
 }
 
 .fire-canvas {
@@ -985,8 +1013,9 @@ header {
 		vertical-align: middle;
 	}
 
-	.player-canvas-wrapper {
-		height: 100%;
+	.player-canvas-wrapper,
+	.fire-canvas-wrapper {
+		height: 94%;
 		width: 100%;
 	}
 
@@ -1157,10 +1186,6 @@ screen and (max-height: 37.4em) { /* < 960px width OR < 768px height */
 	.close-aside {
 		display: block;
 	}
-
-	.grids-wrapper {
-		padding: 4em .5em .5em .5em;
-	}
 }
 
 @media screen and (max-width: 59.95em) { /* < 960px */
@@ -1241,6 +1266,12 @@ screen and (max-height: 37.4em) { /* < 960px width OR < 768px height */
 	.socials,
 	.options {
 		width: 190px;
+	}
+}
+
+@media screen and (min-height:56.25em) {
+	.timer {
+		font-size: 1.3em;
 	}
 }
 
