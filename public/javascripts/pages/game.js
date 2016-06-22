@@ -94,6 +94,7 @@ var gameHandlers = {
                     selectedBoat = null;
                     grid.clearCanvas();
                     grid.drawPlacedBoats(boatsSprite);
+                    grid.drawCoords();
                     grid.renderGrid();
                 }
             } else {
@@ -114,6 +115,7 @@ var gameHandlers = {
             }
         },
         mousemove: function (e) {
+            console.log(e.gridInfo);
             var pos = {
                 x: e.offsetX || e.layerX,
                 y: e.offsetY || e.layerY
@@ -132,6 +134,7 @@ var gameHandlers = {
                         grid.clearCanvas();
                         grid.drawPlacedBoats(boatsSprite);
                         grid.drawPreviewBoat(boatsSprite, selectedBoat, e.gridInfo, alpha);
+                        grid.drawCoords();
                         grid.renderGrid();
                     }
                     previousMouseCoords = grid.getMouseCoord(pos);
@@ -147,6 +150,7 @@ var gameHandlers = {
                 grid.clearCanvas();
                 grid.drawPlacedBoats(boatsSprite);
                 grid.drawPreviewBoat(boatsSprite, selectedBoat, e.gridInfo, alpha);
+                grid.drawCoords();
                 grid.renderGrid();
             }
         },
@@ -230,6 +234,7 @@ var gameHandlers = {
 };
 
 boatsSprite.onload = function () {
+    console.log('obj');
     // PLACEMENT STAGE
     playerCanvas.addEventListener('mousemove', gameHandlers.placementStage.mousemove);
     playerCanvas.addEventListener('click', gameHandlers.placementStage.click);
@@ -308,6 +313,8 @@ socket.on('game-init-players-grids', function (players) {
 });
 
 socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
+    // TEST to implement (almost right)
+    /*
     var playerHasTouched = false;
     var playerShootCoord = null;
     for (var player in touchedPlayers) {
@@ -335,6 +342,35 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
         shooterGrid.shootedCells.push({
             coords: playerShootCoord,
             touched: playerHasTouched
+        });
+
+        if (player == playerInfos.id) {
+            cloneGrid(currentGrid, grid);
+            grid.clearCanvas();
+            grid.renderGrid();
+            grid.drawPlacedBoats(boatsSprite);
+            grid.drawShoots(boatsSprite);
+        }
+    }
+    */
+
+    // OLD VERSION (bugged but needed for demo...)
+    for (var player in touchedPlayers) {
+        var currentGrid = findGridByPlayerId(player);
+        touchedPlayers[player].touchedAt.forEach(function (data) {
+            currentGrid.cells[data.coords.x][data.coords.x].shooted = true;
+            currentGrid.cells[data.coords.x][data.coords.x].shootedBy = data.by;
+            currentGrid.shootedCells.push({
+                coords: JSON.parse(JSON.stringify(data.coords)),
+                touched: data.touched
+            });
+            if (data.byId == playerInfos.id) {
+                shooterGrid.shootedCells.push({
+                    coords: JSON.parse(JSON.stringify(data.coords)),
+                    touched: data.touched
+                });
+            }
+
         });
 
         if (player == playerInfos.id) {
