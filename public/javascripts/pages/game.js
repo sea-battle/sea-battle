@@ -326,3 +326,7 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
     //shooterGrid.highlightCell(shooterGrid.shootedCells[shooterGrid.shootedCells.length - 1]);
     manageRankList(playersInfos);
 });
+
+socket.on('gameover', function (winners) {
+    console.log(winners);
+});

@@ -37,8 +37,7 @@ module.exports = {
                     name: roomName,
                     gameStarted: false,
                     turnCount: 0,
-                    turns: [],
-                    gameover: false
+                    turns: []
                 };
                 socket.room = roomName;
                 socket.leave(game.defaultRoom);
@@ -138,21 +137,22 @@ module.exports = {
 
                 function playTurn() {
                     if (game.rooms[socket.room].timer == 0) {
-                        //TODO check if end
-                        
-                        
-                        
                         game.playShootTurn(io.sockets, socket.room);
                         var currentRoom = game.rooms[socket.room];
                         if (!utils.isEmpty(currentRoom.turns[currentRoom.turnCount].touchedPlayers)) {
                             io.sockets.emit('update-after-turn', currentRoom.turns[currentRoom.turnCount].touchedPlayers, game.getPlayersInfos(io.sockets, socket.room, 'points'));
                         }
-                        if (game.rooms[socket.room].gameover) {
-                            clearInterval(game.rooms[socket.room].timerId);
-                        }
 
-                        currentRoom.turnCount++;
-                        game.rooms[socket.room].timer = game.defaultShootTime;
+                        var gameState = game.checkDownGrids(io.sockets, socket.room);
+                        console.log(gameState.gameover);
+                        if (gameState.gameover) {
+                            console.log(gameState.winners);
+                            io.sockets./*in(socket.room).*/emit('gameover', gameState.winners);
+                            clearInterval(game.rooms[socket.room].timerId);
+                        } else {
+                            currentRoom.turnCount++;
+                            game.rooms[socket.room].timer = game.defaultShootTime;
+                        }
                     } else {
                         var currentRoom = game.rooms[socket.room];
                         var turnCount = currentRoom.turnCount;
