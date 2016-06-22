@@ -5,8 +5,8 @@ module.exports = {
         io.sockets.on('connection', function (socket) {
             socket.on('init-socket', function (player) {
                 socket.ready = false;
-                socket.room = game.defaultRoom;
-                socket.join(game.defaultRoom);
+                socket.room = game.DEFAULT_ROOM;
+                socket.join(game.DEFAULT_ROOM);
                 socket.shootInfos = {
                     shootCoords: null,
                     targetId: null
@@ -41,7 +41,7 @@ module.exports = {
                     turns: []
                 };
                 socket.room = roomName;
-                socket.leave(game.defaultRoom);
+                socket.leave(game.DEFAULT_ROOM);
                 socket.join(roomName);
                 socket.broadcast.emit('rooms-update', game.getRoomsInfos());
                 socket.emit('rooms-join', socket.name);
@@ -55,7 +55,7 @@ module.exports = {
                     socket.points = 0;
                     socket.room = roomName;
                     game.rooms[roomName].playerCount++;
-                    socket.leave(game.defaultRoom);
+                    socket.leave(game.DEFAULT_ROOM);
                     socket.join(roomName);
                     socket.emit('rooms-join', socket.name);
 
@@ -77,7 +77,7 @@ module.exports = {
                             name: roomName
                         }
                     });
-                    io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
+                    io.sockets.in(game.DEFAULT_ROOM).emit('rooms-update', game.getRoomsInfos());
                 }
             });
 
@@ -106,7 +106,7 @@ module.exports = {
                     game.getPlayersId(io.sockets, socket.room).length > 1) {
                     io.sockets.emit('wait-start-game');
                     game.rooms[socket.room].gameStarted = true;
-                    io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
+                    io.sockets.in(game.DEFAULT_ROOM).emit('rooms-update', game.getRoomsInfos());
                     game.rooms[socket.room].timerId = setInterval(function () {
                         if (game.rooms[socket.room].timer == 0) {
                             game.rooms[socket.room].timer = game.defaultShootTime;
@@ -227,7 +227,7 @@ module.exports = {
             });
 
             socket.on('disconnect', function () {
-                if (socket.room != game.defaultRoom) {
+                if (socket.room != game.DEFAULT_ROOM) {
                     var from = 'System';
                     var message = socket.name + ' left the game.';
                     var time = game.getMessageTime();
@@ -269,10 +269,10 @@ module.exports = {
                         });
                     }
                 } else {
-                    socket.leave(game.defaultRoom);
+                    socket.leave(game.DEFAULT_ROOM);
                 }
 
-                io.sockets.in(game.defaultRoom).emit('rooms-update', game.getRoomsInfos());
+                io.sockets.in(game.DEFAULT_ROOM).emit('rooms-update', game.getRoomsInfos());
             });
         });
     }

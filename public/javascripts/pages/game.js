@@ -261,15 +261,12 @@ socket.on('game-check-grid', function () {
     playerCanvas.removeEventListener('contextmenu', gameHandlers.placementStage.contextmenu);
 
     socket.emit('game-set-ready', grid.cells);
-
-    //TODO add new canvas gameHandlers
-    //playerCanvas.addEventListener('click', gameHandlers.battleStage.click);
 });
 socket.on('game-init-players-grids', function (players) {
     document.getElementById('boats-container').addClass('hidden')
     document.getElementById('other-players-canvas').removeClass('hidden');
-/*    canvasWrapper.removeClass('placement-phase');
-    canvasWrapper.addClass('fire-phase');*/
+    /*    canvasWrapper.removeClass('placement-phase');
+        canvasWrapper.addClass('fire-phase');*/
     phaseTitle.innerHTML = 'Phases de tir';
     players.forEach(function (player) {
         var div = document.createElement('div');
@@ -311,6 +308,8 @@ socket.on('game-init-players-grids', function (players) {
 });
 
 socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
+    var playerHasTouched = false;
+    var playerShootCoord = null;
     for (var player in touchedPlayers) {
         var currentGrid = findGridByPlayerId(player);
         touchedPlayers[player].touchedAt.forEach(function (data) {
@@ -320,13 +319,22 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
                 coords: JSON.parse(JSON.stringify(data.coords)),
                 touched: data.touched
             });
-            if (data.byId == playerInfos.id) {
-                shooterGrid.shootedCells.push({
-                    coords: JSON.parse(JSON.stringify(data.coords)),
-                    touched: data.touched
-                });
-            }
 
+            // can enter here many times if player shooted many other players
+            if (data.byId == playerInfos.id) {
+                if (playerShootCoord == null) {
+                    playerShootCoord = JSON.parse(JSON.stringify(data.coords));
+                }
+
+                if (data.touched) {
+                    playerHasTouched = true;
+                }
+            }
+        });
+
+        shooterGrid.shootedCells.push({
+            coords: playerShootCoord,
+            touched: playerHasTouched
         });
 
         if (player == playerInfos.id) {
@@ -341,7 +349,6 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
     grids.forEach(function (g) {
         g.drawShoots(boatsSprite);
     });
-    //shooterGrid.highlightCell(shooterGrid.shootedCells[shooterGrid.shootedCells.length - 1]);
     manageRankList(playersInfos);
 });
 

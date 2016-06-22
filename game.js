@@ -1,22 +1,12 @@
 var utils = require('./utils');
 
 module.exports = {
-    defaultRoom: '/',
-    rooms: {},
+    DEFAULT_ROOM: '/',
     ROOM_MAX_PLAYER: 6,
     DEFAULT_BOATS_PARTS_COUNT: 17,
-    getPlayerReadyCount: function () {
-        var count = 0;
-        for (var i = 0; i < this.players.length; i++) {
-            if (this.players[i].player.ready) {
-                count++;
-            }
-        }
-        return count;
-    },
+    rooms: {},
     defaultPlacementTime: 1,
-    defaultShootTime: 1,
-    // return players from player room
+    defaultShootTime: 5,
     getPlayersId: function (ioSockets, roomName) {
         return ioSockets.adapter.rooms[roomName];
     },
@@ -31,17 +21,6 @@ module.exports = {
         }
 
         return allReady;
-    },
-    getPlayersNames: function (ioSockets, roomName) {
-        var roomPlayers = this.getPlayersId(ioSockets, roomName);
-        var names = [];
-        for (socketId in roomPlayers.sockets) {
-            names.push(ioSockets.sockets[socketId].name);
-        }
-        return names;
-    },
-    getPlayerCellsById(ioSockets, id) {
-        return this.getPlayerById(ioSockets, id).cells;
     },
     getPlayers: function (ioSockets, roomName) {
         var roomPlayers = this.getPlayersId(ioSockets, roomName);

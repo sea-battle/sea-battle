@@ -118,8 +118,7 @@ Grid.prototype = {
                 t: this.cellWidth * y,
                 l: this.cellWidth * x,
             },
-            shootedCells: this.shootedCells,
-            cells: this.cells // TOREMOVE
+            shootedCells: this.shootedCells
         }
     },
     getMouseCoord: function (pos) {
@@ -297,7 +296,6 @@ Grid.prototype = {
         var self = this;
         self.shootedCells.forEach(function (cell) {
             var coords = cell.coords;
-            //self.clearCell(coords);
             if (self.cells[coords.x][coords.y].containBoat) {
                 var deg = self.cells[coords.x][coords.y].boatOrientation == HORIZONTAL ? -90 : 0;
                 var drawCoord = {
