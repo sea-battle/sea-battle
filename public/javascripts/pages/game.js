@@ -10,8 +10,9 @@ var randomGenerator = document.getElementById('random');
 var boatSelecters = document.getElementsByClassName('boat-selector');
 var timer = document.getElementById('timer');
 var otherPlayersCanvasContainer = document.getElementById('other-players-canvas');
-var fireCanvasContainer = document.getElementById('fire-canvas');
+var fireCanvasContainer = document.getElementById('fire-canvas-wrapper');
 var rankList = document.getElementById('rank-list');
+var phaseTitle = document.getElementById('phase-title');
 
 var grids = [];
 var shooterGrid;
@@ -235,7 +236,7 @@ window.addEventListener('resize', function (e) {
 });
 
 socket.on('game-timer-update', function (timeRemaining) {
-    timer.innerHTML = timeRemaining;
+    timer.innerHTML = timeRemaining + 's';
 });
 socket.on('game-check-grid', function () {
     if (!grid.allBoatsArePlaced()) {
@@ -254,6 +255,7 @@ socket.on('game-check-grid', function () {
 socket.on('game-init-players-grids', function (players) {
     document.getElementById('boats-container').addClass('hidden')
     document.getElementById('other-players-canvas').removeClass('hidden');
+    phaseTitle.innerHTML = 'Phases de tir';
     players.forEach(function (player) {
         var div = document.createElement('div');
         var playerName = document.createElement('p');
@@ -285,7 +287,7 @@ socket.on('game-init-players-grids', function (players) {
     // grid shooter
     var shooterCanvas = document.createElement('canvas');
     fireCanvasContainer.appendChild(shooterCanvas);
-    fireCanvasContainer.removeClass('hidden');
+    document.getElementById('fire-canvas').removeClass('hidden');
     shooterGrid = new Grid(shooterCanvas, 'shooter');
     grids.push(shooterGrid);
     shooterCanvas.addEventListener('click', gameHandlers.battleStage.shooterGrid.click);
