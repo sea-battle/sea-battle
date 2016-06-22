@@ -907,7 +907,7 @@ header {
 		    justify-content: space-around;
 	}
 
-		.game-ranking li:nth-child(odd) {
+		.game-ranking li {
 			background-color: lightgrey;
 		}
 
