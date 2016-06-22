@@ -221,7 +221,6 @@ function cloneGrid(from, to) {
 
 socket.emit('game-init');
 socket.on('init', function (playerId, playersInfos) {
-	console.log(1);
 	grid = new Grid(playerCanvas, "viewer");
 	grids.push(grid);
 	manageRankList(playersInfos);
@@ -229,7 +228,6 @@ socket.on('init', function (playerId, playersInfos) {
 	
 	boatsSprite.src = "/images/sprites.png";
 	boatsSprite.onload = function () {
-		console.log(2);
 		// PLACEMENT STAGE
 		playerCanvas.addEventListener('mousemove', gameHandlers.placementStage.mousemove);
 		playerCanvas.addEventListener('click', gameHandlers.placementStage.click);

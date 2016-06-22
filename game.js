@@ -5,7 +5,7 @@ module.exports = {
     ROOM_MAX_PLAYER: 6,
     DEFAULT_BOATS_PARTS_COUNT: 17,
     rooms: {},
-    defaultPlacementTime: 60,
+    defaultPlacementTime: 15,
     defaultShootTime: 5,
     getPlayersId: function (ioSockets, roomName) {
         return ioSockets.adapter.rooms[roomName];
