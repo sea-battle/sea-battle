@@ -20,7 +20,7 @@ var ajax = {
         request.send();
         request = null;
     },
-    post: function (url, handlers, data) {
+    post: function (url, data, callback) {
         var request = new XMLHttpRequest();
         request.open('POST', url, true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
@@ -28,14 +28,12 @@ var ajax = {
             if (this.readyState === 4) {
                 if (this.status >= 200 && this.status < 400) {
                     var data = JSON.parse(this.responseText);
-                    handlers.onComplete(data);
+                    callback(data);
                 } else {
-                    //TODO
-                    //handlers.onError();
+                    callback('Fail');
                 }
             } else {
-                //TODO
-                //handlers.onFail();
+                callback('Error');
             }
         };
         request.send(data);

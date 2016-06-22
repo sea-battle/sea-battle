@@ -206,7 +206,8 @@ module.exports = {
             if (!player.down) {
                 alivePlayers.push({
                     name: player.name,
-                    id: player.id
+                    id: player.id,
+                    points: player.points
                 });
             }
         });

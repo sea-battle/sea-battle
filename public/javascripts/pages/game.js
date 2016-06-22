@@ -1,6 +1,6 @@
 fillPlayersInfos();
-const HORIZONTAL = 'h';
-const VERTICAL = 'v';
+var HORIZONTAL = 'h';
+var VERTICAL = 'v';
 
 
 var playerCanvas = document.getElementById('player-canvas');
@@ -213,6 +213,19 @@ var gameHandlers = {
                 });
             }
         }
+    },
+    gameover: {
+        replay: function (e) {
+            ajax.get('/wait', function (data) {
+                socket.emit('game-replay');
+                socket.on('replay-init-done', function () {
+                    handlers.onComplete(data);
+                });
+            });
+        },
+        quit: function (e) {
+            window.location.href = '/rooms';
+        }
     }
 };
 
@@ -337,10 +350,10 @@ socket.on('gameover', function (winners) {
             if (i == 0) {
                 text += winner.name;
             } else {
-                text =+ ', ' + winner.name;
+                text = +', ' + winner.name;
             }
         });
-    }else{
+    } else {
         var text = 'The winner is ' + winners[0].name;
     }
     var shooterCan = document.getElementById('shooter-canvas');
@@ -348,4 +361,7 @@ socket.on('gameover', function (winners) {
     shooterCan.removeEventListener('mousemove', gameHandlers.battleStage.shooterGrid.mousemove);
     document.getElementById('replay-modal').style.display = 'block';
     document.getElementById('winner').innerHTML = text;
+
+    document.getElementById('button-replay').addEventListener('click', gameHandlers.gameover.replay);
+    document.getElementById('button-quit').addEventListener('click', gameHandlers.gameover.quit);
 });

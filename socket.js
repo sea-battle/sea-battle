@@ -18,6 +18,7 @@ module.exports = {
                 socket.points = 0;
                 socket.cellsContainingBoatCount = game.DEFAULT_BOATS_PARTS_COUNT;
                 socket.down = false;
+                socket.cells = null;
             });
 
             // Stage 1: rooms
@@ -144,11 +145,11 @@ module.exports = {
                         }
 
                         var gameState = game.checkDownGrids(io.sockets, socket.room);
-                        console.log(gameState.gameover);
                         if (gameState.gameover) {
-                            console.log(gameState.winners);
-                            io.sockets. /*in(socket.room).*/ emit('gameover', gameState.winners);
                             clearInterval(game.rooms[socket.room].timerId);
+                            
+                            io.sockets.in(socket.room).emit('gameover', gameState.winners);
+                            
                         } else {
                             currentRoom.turnCount++;
                             game.rooms[socket.room].timer = game.defaultShootTime;
@@ -197,12 +198,10 @@ module.exports = {
                     targetId: null
                 };
                 socket.cells = null;
-                /*
-                socket.img = player.img;
                 socket.points = 0;
                 socket.cellsContainingBoatCount = game.DEFAULT_BOATS_PARTS_COUNT;
                 socket.down = false;
-                */
+                socket.emit('replay-init-done');
             });
 
             // Chat
