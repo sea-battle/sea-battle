@@ -1,6 +1,6 @@
 fillPlayersInfos();
-const HORIZONTAL = 'h';
-const VERTICAL = 'v';
+var HORIZONTAL = 'h';
+var VERTICAL = 'v';
 
 
 var playerCanvas = document.getElementById('player-canvas');
@@ -213,6 +213,19 @@ var gameHandlers = {
                 });
             }
         }
+    },
+    gameover: {
+        replay: function (e) {
+            ajax.get('/wait', function (data) {
+                socket.emit('game-replay');
+                socket.on('replay-init-done', function () {
+                    handlers.onComplete(data);
+                });
+            });
+        },
+        quit: function (e) {
+            window.location.href = '/rooms';
+        }
     }
 };
 
@@ -288,6 +301,7 @@ socket.on('game-init-players-grids', function (players) {
 
     // grid shooter
     var shooterCanvas = document.createElement('canvas');
+    shooterCanvas.id = 'shooter-canvas';
     fireCanvasContainer.appendChild(shooterCanvas);
     document.getElementById('fire-canvas').removeClass('hidden');
     shooterGrid = new Grid(shooterCanvas, 'shooter');
@@ -332,5 +346,24 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
 });
 
 socket.on('gameover', function (winners) {
-    console.log(winners);
+    if (winners.length > 1) {
+        var text = 'Winners are ';
+        winners.forEach(function (winner, i) {
+            if (i == 0) {
+                text += winner.name;
+            } else {
+                text = +', ' + winner.name;
+            }
+        });
+    } else {
+        var text = 'The winner is ' + winners[0].name;
+    }
+    var shooterCan = document.getElementById('shooter-canvas');
+    shooterCan.removeEventListener('click', gameHandlers.battleStage.shooterGrid.click);
+    shooterCan.removeEventListener('mousemove', gameHandlers.battleStage.shooterGrid.mousemove);
+    document.getElementById('replay-modal').style.display = 'block';
+    document.getElementById('winner').innerHTML = text;
+
+    document.getElementById('button-replay').addEventListener('click', gameHandlers.gameover.replay);
+    document.getElementById('button-quit').addEventListener('click', gameHandlers.gameover.quit);
 });

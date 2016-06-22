@@ -180,7 +180,7 @@ module.exports = {
         var alivePlayers = this.getAlivePlayers(ioSockets, roomName);
         if (alivePlayers.length == 1) {
             return {
-                winners: alivePlayers[0],
+                winners: alivePlayers,
                 gameover: true,
             };
         } else {
@@ -206,7 +206,8 @@ module.exports = {
             if (!player.down) {
                 alivePlayers.push({
                     name: player.name,
-                    id: player.id
+                    id: player.id,
+                    points: player.points
                 });
             }
         });

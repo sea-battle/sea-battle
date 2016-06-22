@@ -18,6 +18,7 @@ module.exports = {
                 socket.points = 0;
                 socket.cellsContainingBoatCount = game.DEFAULT_BOATS_PARTS_COUNT;
                 socket.down = false;
+                socket.cells = null;
             });
 
             // Stage 1: rooms
@@ -144,11 +145,11 @@ module.exports = {
                         }
 
                         var gameState = game.checkDownGrids(io.sockets, socket.room);
-                        console.log(gameState.gameover);
                         if (gameState.gameover) {
-                            console.log(gameState.winners);
-                            io.sockets./*in(socket.room).*/emit('gameover', gameState.winners);
                             clearInterval(game.rooms[socket.room].timerId);
+                            
+                            io.sockets.in(socket.room).emit('gameover', gameState.winners);
+                            
                         } else {
                             currentRoom.turnCount++;
                             game.rooms[socket.room].timer = game.defaultShootTime;
@@ -189,21 +190,36 @@ module.exports = {
                     };
                 }
             });
+            
+            socket.on('game-replay', function (){
+                socket.ready = false;
+                socket.shootInfos = {
+                    shootCoords: null,
+                    targetId: null
+                };
+                socket.cells = null;
+                socket.points = 0;
+                socket.cellsContainingBoatCount = game.DEFAULT_BOATS_PARTS_COUNT;
+                socket.down = false;
+                socket.emit('replay-init-done');
+            });
 
             // Chat
             socket.on('chat-is-writing', function () {
                 socket.broadcast.emit('is-writing', socket.name);
             });
             socket.on('chat-player-message', function (message) {
-                var time = game.getMessageTime();
-                var filter = 'players-messages';
-                game.rooms[socket.room].chat.push({
-                    filter: filter,
-                    sender: socket.name,
-                    message: message,
-                    time: time
-                });
-                io.sockets.emit('receive-message', socket.name, message, time, filter);
+                if (game.rooms[socket.room] != undefined) {
+                    var time = game.getMessageTime();
+                    var filter = 'players-messages';
+                    game.rooms[socket.room].chat.push({
+                        filter: filter,
+                        sender: socket.name,
+                        message: message,
+                        time: time
+                    });
+                    io.sockets.emit('receive-message', socket.name, message, time, filter);
+                }
             });
             socket.on('chat-filter', function (filter) {
                 var messages = game.getMessagesFrom(socket.room, filter);
