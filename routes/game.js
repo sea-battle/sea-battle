@@ -47,6 +47,24 @@ router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
     });
 });
 
+router.post('/update-player', routesMiddlewares.isAuthenticated, function (req, res) {
+    var fn = jade.compileFile(__dirname + '/../views/game.jade');
+    var html = fn({
+        user: (req.user) ? req.user : false
+    });
+    return res.json({
+        bodyClass: 'game',
+        html: html,
+        scriptsSrc: [
+            '/javascripts/boat.js',
+            '/javascripts/pages/game.js',
+            '/javascripts/chat.js'
+        ],
+        title: 'Let\'s shoot',
+        user: (req.user) ? req.user : false
+    });
+});
+
 router.get('/test', function (req, res) {
     res.render(__dirname + '/../views/test', {
         bodyClass: 'test'
