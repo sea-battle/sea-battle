@@ -1,47 +1,17 @@
 var express = require('express');
 var jade = require('jade');
-var User = require('../models/user');
-var Game = require('../models/game');
-
 var router = express.Router();
 
 // Load the models
-const User = require('../models/user');
+var User = require('../models/user');
 
 // Load routes middlewares
 var routesMiddlewares = require('./middlewares');
 
-router.get('/blabla', function (req, res) {
-    res.json({
-        blabla: 'blabla'
-    });
-});
-
-router.get('/user', function (req, res) {
-    User.findById();
-});
-
 router.post('/update-player', function (req, res) {
     var data = JSON.parse(req.body.data);
-    console.log(data);
-    /*
-    var finisehdGame = new Game({
-        score: data.gamePoints,
-        date: Date.now()
-    });
-
-    var currentsGame = data.games;
-    if (currentsGame == '') {
-        currentsGame = [];
-    } else {
-        currentsGame = JSON.parse(currentsGame);
-    }
-
-    currentsGame.push(finisehdGame);
-    */
     User.findByIdAndUpdate(data._id, {
             pointsCount: data.globalPoints + data.gamePoints,
-            //games: currentsGame
         },
         function (err, user) {
             if (err) {
@@ -52,13 +22,6 @@ router.post('/update-player', function (req, res) {
             });
         });
 });
-
-router.get('/test', function (req, res) {
-    res.render(__dirname + '/../views/test', {
-        bodyClass: 'test'
-    });
-});
-
 
 router.use(function (req, res, next) {
     if (req.user) {

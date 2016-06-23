@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 
 passportLocalMongoose = require('passport-local-mongoose');
 var Skin = require('./skin').schema;
-var Game = require('./game').schema;
 
 var User = new Schema({
     email: {
@@ -44,7 +43,7 @@ var User = new Schema({
     validated:  {
         type: Boolean,
         required: true,
-        default: true
+        default: false
     }
 });
 

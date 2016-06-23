@@ -129,11 +129,13 @@ button {
 	margin-bottom: 1em;
 }
 
-button[type=submit] {
+.signup button[type=submit],
+.profile button[type=submit] {
 	display: none;
 }
 
-button[type=submit].form-validated {
+.signup button[type=submit].form-validated,
+.profile button[type=submit].form-validated {
 	display: inline;
 }
 
