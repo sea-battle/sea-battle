@@ -6,17 +6,27 @@ var Skin = require('./skin').schema;
 var Game = require('./game').schema;
 
 var User = new Schema({
-    username: {
-        type: String,
-        required: true,
-    },
     email: {
         type: String,
         required: true,
     },
-    validated:  {
-        type: Boolean,
-        required: true
+    games: [{
+        score: {
+            type: Number,
+            default: 0
+        },
+        date: {
+            type: Date,
+            default: Date.now
+        }
+    }],
+    ip: {
+        type: String,
+        default: '127.0.0.1'
+    },
+    pointsCount: {
+        type: Number,
+        default: 0
     },
     rank: {
         type: String,
@@ -26,13 +36,16 @@ var User = new Schema({
         type: String,
         default: '/images/test1.jpg'
     },
-    pointsCount: {
-        type: Number,
-        default: 0
+    username: {
+        type: String,
+        required: true,
     },
     skins: Skin,
-    ip: String,
-    games: [Game]
+    validated:  {
+        type: Boolean,
+        required: true,
+        default: true
+    }
 });
 
 User.plugin(passportLocalMongoose, {

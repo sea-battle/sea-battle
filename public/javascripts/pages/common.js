@@ -14,11 +14,31 @@ function checkEmailAddress() {
         emailIsValid = false;
         formIsValid.postMessage([emailIsValid, usernameIsValid, passwordIsValid]);
     } else {
-        emailField.classList.remove('error');
-        emailMessage.innerHTML = '';
-        if (emailSubmit) emailSubmit.style.display = 'block';
-        emailIsValid = true;
-        formIsValid.postMessage([emailIsValid, usernameIsValid, passwordIsValid]);
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (this.status === 200) {
+                    emailField.classList.remove('error');
+                    emailMessage.innerHTML = '';
+                    if (emailSubmit) emailSubmit.style.display = 'block';
+                    emailIsValid = true;
+                }
+
+                if (this.status === 409) {
+                    emailField.classList.add('error');
+                    emailMessage.innerHTML = 'Cette adresse e-mail est déjà enregistrée';
+                    if (emailSubmit) emailSubmit.style.display = 'none';
+                    emailIsValid = false;
+                }
+                formIsValid.postMessage([emailIsValid, usernameIsValid, passwordIsValid]);
+            }
+        };
+
+        xhr.open('POST', '/check-email-availability', true);
+        xhr.setRequestHeader('content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+        xhr.send(JSON.stringify({ email: emailField.value.toLowerCase() }));
     }
 }
 

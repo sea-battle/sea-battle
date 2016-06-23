@@ -52,6 +52,16 @@ Array.prototype.remove = function (value) {
     }
 };
 
+Array.prototype.sortDesc = function () {
+    function _sortDescFunction(a, b) {
+        return a - b;
+    }
+
+    this.sort(_sortDescFunction);
+
+    return this.join(',');
+}
+
 Element.prototype.insertAfter = function (newNode) {
     this.parentNode.insertBefore(newNode, this.nextSibling);
 }

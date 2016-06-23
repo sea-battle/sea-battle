@@ -17,7 +17,7 @@ var grids = [];
 var shooterGrid;
 
 var previousMouseCoords = undefined;
-// images 
+// images
 var boatsSprite = new Image();
 var grid;
 boatsSprite.src = "/images/sprites.png";
@@ -303,8 +303,6 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
                 touched: data.touched
             });
 
-            console.log(playerInfos);
-            console.log(data);
             if (data.byId == playerInfos.id) {
                 shooterGrid.shootedCells.push({
                     coords: JSON.parse(JSON.stringify(data.coords)),

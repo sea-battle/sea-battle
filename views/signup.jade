@@ -40,7 +40,6 @@ block content
         var signupSubmit = document.getElementById('signup-submit');
 
         formIsValid.addEventListener('message', function (e) {
-            console.log(e.data);
             if (e.data) {
                 signupSubmit.classList.add('form-validated');
             } else {

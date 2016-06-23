@@ -125,13 +125,13 @@ button {
 	margin-bottom: 1em;
 }
 
-/* button[type=submit] {
+button[type=submit] {
 	display: none;
 }
 
 button[type=submit].form-validated {
 	display: inline;
-} */
+}
 
 .form-main-message {
 	font-size: 1.5em;
@@ -1368,7 +1368,7 @@ screen and (max-height: 47.90em) { /* < 650px width OR < 768px height */
 	}
 
 	.game .game-ranking {
-		background-color: #bce784; 
+		background-color: #bce784;
 	}
 
 	.game .messages {

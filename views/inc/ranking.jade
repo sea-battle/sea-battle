@@ -1,23 +1,17 @@
 section#ranking.ranking
-	table
-		thead
-			th Grade
-			th Joueur
-			th Points
-		tbody
-			tr#player-rank.player-rank
-				td Dieu
-				td Jean-Pierre
-				td 9999
-			tr
-				td Matelot
-				td Champe
-				td 168
-			tr
-				td Matelot
-				td Champe
-				td 168
-			tr
-				td Matelot
-				td Champe
-				td 168
+    table
+        thead
+            th Grade
+            th Joueur
+            th Points
+        tbody
+            if user
+                tr
+                    td= user.rank
+                    td= user.username
+                    td= user.pointsCount
+            each user in users
+                tr
+                    td= user.rank
+                    td= user.username
+                    td= user.pointsCount

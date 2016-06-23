@@ -4,7 +4,7 @@ function initPlayerInfo() {
     var rankingOverlay = document.getElementById('rankings-overlay');
     var statsOverlay = document.getElementById('stats-overlay');
     var playerInfo = document.getElementById('player-info');
-    
+
     document.getElementById('rankings-link').addEventListener('click', function(e) {
         e.preventDefault();
         rankingOverlay.addClass(openedClass);
@@ -74,7 +74,7 @@ function initRanking() {
 
 function initAside() {
     var switchingAside = document.getElementById('switching-aside');
-    
+
     document.getElementById('close-aside').addEventListener('click', function() {
         switchingAside.removeClass(openedClass);
         bodyScroll(true);

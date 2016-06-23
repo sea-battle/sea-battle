@@ -99,10 +99,8 @@ var gameHandlers = {
         },
         shooterGrid: {
             click: function (e) {
-                console.log(e.gridInfo);
             },
             mousemove: function (e) {
-                console.log(e);
             }
         }
     },

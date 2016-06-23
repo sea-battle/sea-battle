@@ -65,7 +65,7 @@ var transporter = nodemailer.createTransport(smtpConfig);
 function sendVerificationEmail(options) {
     transporter.sendMail(options, function (err, info) {
         if (err) {
-            return console.log(err);
+            // Handle error
         }
     });
 }
@@ -114,6 +114,18 @@ router.post('/check-username-availability', function (req, res) {
     });
 });
 
+router.post('/check-email-availability', function (req, res) {
+    User.findOne({
+        email: req.body.email
+    }, function (err, user) {
+        if (user) {
+            res.status(409).send();
+        } else {
+            res.status(200).send();
+        }
+    });
+});
+
 var _checkEmailAddress = function(email) {
     var regexEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
@@ -140,9 +152,9 @@ var checkCredentials = function (req, res, next) {
         }
 
         if (user) {
-            res.status(409);
+            res.sendStatus(409);
         } else if (!_checkEmailAddress(req.body.email) || !_checkPassword(req.body.password, req.body.passwordConfirmation)) {
-            res.status(400);
+            res.sendStatus(400);
         } else {
             next();
         }
@@ -151,9 +163,8 @@ var checkCredentials = function (req, res, next) {
 
 router.post('/signup', checkCredentials, function (req, res) {
     User.register(new User({
-            username: req.body.username,
-            email: req.body.email,
-            validated: false
+            username: req.body.username.toLowerCase(),
+            email: req.body.email.toLowerCase()
         }), req.body.password, function (err, user) {
             if (err) {
                 res.status(500);
@@ -178,18 +189,15 @@ router.post('/signup', checkCredentials, function (req, res) {
     );
 });
 
-router.post('/signin', passport.authenticate('local', {
-    successRedirect: '/rooms',
-    failureRedirect: '/'
-}), function (req, res) {
+router.post('/signin', passport.authenticate('local'), function (req, res) {
     if (req.user.validated) {
-        res.status(200);
+        res.sendStatus(200);
     } else {
         req.session.destroy(function (err) {
             // Handle error
         });
 
-        res.status(401);
+        res.sendStatus(401);
     }
 });
 
@@ -333,7 +341,8 @@ router.get('/profile', routesMiddlewares.isAuthenticated, function (req, res) {
     res.locals.username = (req.user) ? req.user.username : false;
     res.render(__dirname + '/../views/profile', {
         bodyClass: 'profile',
-        user: (req.user) ? req.user : false
+        user: (req.user) ? req.user : false,
+        users: new Array()
     });
 });
 

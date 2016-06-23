@@ -19,7 +19,7 @@ function proceedSignin(e) {
                 window.location.href = '/rooms';
             }
 
-            if (this.status === 401) {
+            if (this.status >= 400) {
                 document.getElementById('signin-message').innerHTML = 'Le mot de passe ou le pseudonyme est incorrect. <br /> Avez-vous confirmé votre inscription ?';
             }
         }
