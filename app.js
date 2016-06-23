@@ -4,20 +4,42 @@ var app = require('express')(),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
+    passport = require('passport'),
+    io = require('socket.io').listen(server),
+    expressSession = require('express-session');
 
 var config = require('./config'),
     game = require('./game'),
     socket = require('./socket');
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 // Log everything to the console
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 
 // Get informations from HTML forms. Needs to be loaded before routesAuthentication
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+var sessionMiddleware = expressSession({
+    secret: 'Blabla',
+    resave: false,
+    saveUninitialized: false
+});
+
+app.use(sessionMiddleware);
+app.use(passport.initialize());
+app.use(passport.session());
+
+io.use(function (socket, next) {
+    sessionMiddleware(socket.request, {}, next);
+});
 
 // Load stylesheets, JavaScript files, images and fonts
 app.use(express.static(__dirname + '/public'));

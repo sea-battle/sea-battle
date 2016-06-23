@@ -305,8 +305,8 @@ socket.on('game-init-players-grids', function (players) {
 	shooterCanvas.addEventListener('mousemove', gameHandlers.battleStage.shooterGrid.mousemove);
 });
 socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
+    /*
 	// TEST to implement (almost right)
-	/*
 	var playerHasTouched = false;
 	var playerShootCoord = null;
 	for (var player in touchedPlayers) {
@@ -344,8 +344,9 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
 	        grid.drawShoots(boatsSprite);
 	    }
 	}
-	*/
+    */
 
+    
 	// OLD VERSION (bugged but needed for demo...)
 	for (var player in touchedPlayers) {
 		var currentGrid = findGridByPlayerId(player);

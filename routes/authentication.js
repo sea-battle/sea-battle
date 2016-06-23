@@ -183,6 +183,7 @@ router.post('/signin', passport.authenticate('local', {
     failureRedirect: '/'
 }), function (req, res) {
     if (req.user.validated) {
+        req.session.user = req.user;
         res.status(200);
     } else {
         req.session.destroy(function (err) {

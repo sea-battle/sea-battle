@@ -8,59 +8,26 @@ var router = express.Router();
 // Load routes middlewares
 var routesMiddlewares = require('./middlewares');
 
-router.get('/rooms', routesMiddlewares.isAuthenticated, function (req, res) {
-    res.render(__dirname + '/../views/rooms', {
-        bodyClass: 'rooms',
-        user: (req.user) ? req.user : false,
-    });
-});
-
-router.get('/wait', routesMiddlewares.isAuthenticated, function (req, res) {
-    var fn = jade.compileFile(__dirname + '/../views/wait.jade');
-    var html = fn({
-        user: (req.user) ? req.user : false
-    });
-    return res.json({
-        bodyClass: 'wait',
-        html: html,
-        scriptsSrc: [
-            '/javascripts/pages/wait.js',
-            '/javascripts/chat.js'
-        ],
-        title: 'Prepare to fight'
-    });
-});
-
-router.get('/game', routesMiddlewares.isAuthenticated, function (req, res) {
-    var fn = jade.compileFile(__dirname + '/../views/game.jade');
-    var html = fn({
-        user: (req.user) ? req.user : false
-    });
-    return res.json({
-        bodyClass: 'game',
-        html: html,
-        scriptsSrc: [
-            '/javascripts/boat.js',
-            '/javascripts/pages/game.js',
-            '/javascripts/chat.js'
-        ],
-        title: 'Let\'s shoot',
-        user: (req.user) ? req.user : false
-    });
-});
-
-router.post('/update-player', routesMiddlewares.isAuthenticated, function (req, res) {
+router.post('/update-player', function (req, res) {
+    var data = JSON.parse(req.body.data);
+    console.log(data);
+    /*
     var finisehdGame = new Game({
-        score: req.body.pointsCount,
+        score: data.gamePoints,
         date: Date.now()
     });
-    var currentsGame = req.user.games;
+    
+    var currentsGame = data.games;
+    if (currentsGame == ''){
+        currentsGame = [];
+    }else{
+        currentsGame = JSON.parse(currentsGame);
+    }
     currentsGame.push(finisehdGame);
-    User.findByIdAndUpdate(req.user._id, {
-            $set: {
-                pointsCount: req.user.pointsCount + req.body.gamePoints,
-                games: currentsGame
-            }
+    */
+    User.findByIdAndUpdate(data._id, {
+            pointsCount: data.globalPoints + data.gamePoints,
+            //games: currentsGame
         }, {
             new: true
         },
@@ -78,6 +45,57 @@ router.post('/update-player', routesMiddlewares.isAuthenticated, function (req, 
 router.get('/test', function (req, res) {
     res.render(__dirname + '/../views/test', {
         bodyClass: 'test'
+    });
+});
+
+
+router.use(function (req, res, next) {
+    if (req.user) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+});
+
+
+router.get('/rooms', function (req, res) {
+    res.render(__dirname + '/../views/rooms', {
+        bodyClass: 'rooms',
+        user: (req.user) ? req.user : false,
+    });
+});
+
+router.get('/wait', function (req, res) {
+    var fn = jade.compileFile(__dirname + '/../views/wait.jade');
+    var html = fn({
+        user: (req.user) ? req.user : false
+    });
+    return res.json({
+        bodyClass: 'wait',
+        html: html,
+        scriptsSrc: [
+            '/javascripts/pages/wait.js',
+            '/javascripts/chat.js'
+        ],
+        title: 'Prepare to fight'
+    });
+});
+
+router.get('/game', function (req, res) {
+    var fn = jade.compileFile(__dirname + '/../views/game.jade');
+    var html = fn({
+        user: (req.user) ? req.user : false
+    });
+    return res.json({
+        bodyClass: 'game',
+        html: html,
+        scriptsSrc: [
+            '/javascripts/boat.js',
+            '/javascripts/pages/game.js',
+            '/javascripts/chat.js'
+        ],
+        title: 'Let\'s shoot',
+        user: (req.user) ? req.user : false
     });
 });
 
