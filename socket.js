@@ -57,8 +57,9 @@ module.exports = {
                 socket.cellsContainingBoatCount = game.DEFAULT_BOATS_PARTS_COUNT;
                 socket.down = false;
                 socket.cells = null;
-                socket._id = player._id;
+                socket._id = socket.request.session.passport.user;
                 //socket.games = player.games;
+                
             });
 
             // Stage 1: rooms

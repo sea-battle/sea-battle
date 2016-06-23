@@ -28,14 +28,11 @@ router.post('/update-player', function (req, res) {
     User.findByIdAndUpdate(data._id, {
             pointsCount: data.globalPoints + data.gamePoints,
             //games: currentsGame
-        }, {
-            new: true
         },
         function (err, user) {
             if (err) {
                 throw err;
             }
-            req.user = user;
             res.json({
                 success: true
             });
@@ -61,14 +58,24 @@ router.use(function (req, res, next) {
 router.get('/rooms', function (req, res) {
     res.render(__dirname + '/../views/rooms', {
         bodyClass: 'rooms',
-        user: (req.user) ? req.user : false,
+        user: (req.user) ? {
+            username: req.user.username,
+            rank: req.user.rank,
+            rankIcon: req.user.rankIcon,
+            pointsCount: req.user.pointsCount
+        } : false,
     });
 });
 
 router.get('/wait', function (req, res) {
     var fn = jade.compileFile(__dirname + '/../views/wait.jade');
     var html = fn({
-        user: (req.user) ? req.user : false
+        user: (req.user) ? {
+            username: req.user.username,
+            rank: req.user.rank,
+            rankIcon: req.user.rankIcon,
+            pointsCount: req.user.pointsCount
+        } : false
     });
     return res.json({
         bodyClass: 'wait',
@@ -84,7 +91,12 @@ router.get('/wait', function (req, res) {
 router.get('/game', function (req, res) {
     var fn = jade.compileFile(__dirname + '/../views/game.jade');
     var html = fn({
-        user: (req.user) ? req.user : false
+        user: (req.user) ? {
+            username: req.user.username,
+            rank: req.user.rank,
+            rankIcon: req.user.rankIcon,
+            pointsCount: req.user.pointsCount
+        } : false
     });
     return res.json({
         bodyClass: 'game',
@@ -95,7 +107,12 @@ router.get('/game', function (req, res) {
             '/javascripts/chat.js'
         ],
         title: 'Let\'s shoot',
-        user: (req.user) ? req.user : false
+        user: (req.user) ? {
+            username: req.user.username,
+            rank: req.user.rank,
+            rankIcon: req.user.rankIcon,
+            pointsCount: req.user.pointsCount
+        } : false
     });
 });
 
