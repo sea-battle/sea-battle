@@ -8,6 +8,16 @@ var router = express.Router();
 // Load routes middlewares
 var routesMiddlewares = require('./middlewares');
 
+router.get('/blabla', function (req, res) {
+    res.json({
+        blabla: 'blabla'
+    });
+});
+
+router.get('/user', function (req, res) {
+    User.findById();
+});
+
 router.post('/update-player', function (req, res) {
     var data = JSON.parse(req.body.data);
     console.log(data);

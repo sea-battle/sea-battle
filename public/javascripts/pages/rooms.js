@@ -96,6 +96,9 @@ socket.on('rooms-update', function (rooms) {
         roomsCount.innerHTML = rooms.length + " salles disponibles";
     }
 });
+socket.on('already-in-room', function (rooms) {
+    alert('Vous êtes déjà dans la room.');
+});
 window.addEventListener('hashchange', function (e) {
     e.preventDefault();
 });

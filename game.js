@@ -7,6 +7,7 @@ module.exports = {
     rooms: {},
     defaultPlacementTime: 1,
     defaultShootTime: 1,
+    inGameIps: [],
     getPlayersId: function (ioSockets, roomName) {
         return ioSockets.adapter.rooms[roomName];
     },

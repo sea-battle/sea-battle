@@ -2,8 +2,7 @@ var utils = require('./utils');
 var querystring = require('querystring');
 var http = require('http');
 
-function post(url, codestring) {
-    // Build the post string from an object
+function post(url, codestring, callback) {
     var post_data = querystring.stringify({
         'compilation_level': 'ADVANCED_OPTIMIZATIONS',
         'output_format': 'json',
@@ -11,8 +10,6 @@ function post(url, codestring) {
         'warning_level': 'QUIET',
         'data': JSON.stringify(codestring)
     });
-
-    // An object of options to indicate where to post to
     var post_options = {
         host: 'localhost',
         port: '3000',
@@ -24,23 +21,54 @@ function post(url, codestring) {
         }
     };
 
+    var post_req = http.request(post_options, function (res) {
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+            callback(chunk);
+        });
+    });
+    post_req.write(post_data);
+    post_req.end();
+}
+
+function get(url, callback) {
+    // Build the post string from an object
+    var post_data = querystring.stringify({
+        'compilation_level': 'ADVANCED_OPTIMIZATIONS',
+        'output_format': 'json',
+        'output_info': 'compiled_code',
+        'warning_level': 'QUIET'
+    });
+
+    // An object of options to indicate where to post to
+    var post_options = {
+        host: 'localhost',
+        port: '3000',
+        path: url,
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    };
+
     // Set up the request
     var post_req = http.request(post_options, function (res) {
         res.setEncoding('utf8');
         res.on('data', function (chunk) {
-            //console.log('Response: ' + chunk);
+            callback(chunk);
         });
     });
-
-    // post the data
-    post_req.write(post_data);
     post_req.end();
-
 }
 
 module.exports = {
     start: function (io, game) {
         io.sockets.on('connection', function (socket) {
+            //if (socket.handshake.address)
+
+            /*get('/blabla', function (data) {
+                console.log(data);
+            });*/
             socket.on('init-socket', function (player) {
                 socket.ready = false;
                 socket.room = game.DEFAULT_ROOM;
@@ -59,7 +87,7 @@ module.exports = {
                 socket.cells = null;
                 socket._id = socket.request.session.passport.user;
                 //socket.games = player.games;
-                
+
             });
 
             // Stage 1: rooms
@@ -84,6 +112,7 @@ module.exports = {
                 socket.room = roomName;
                 socket.leave(game.DEFAULT_ROOM);
                 socket.join(roomName);
+                game.inGameIps.push(socket.handshake.address);
                 socket.broadcast.emit('rooms-update', game.getRoomsInfos());
                 socket.emit('rooms-join', socket.name);
             });
@@ -91,34 +120,40 @@ module.exports = {
                 socket.emit('rooms-update', game.getRoomsInfos());
             });
             socket.on('rooms-join', function (roomName) {
-                if (!game.rooms[roomName].gameStarted &&
-                    game.rooms[roomName].playerCount < game.ROOM_MAX_PLAYER) {
-                    socket.points = 0;
-                    socket.room = roomName;
-                    game.rooms[roomName].playerCount++;
-                    socket.leave(game.DEFAULT_ROOM);
-                    socket.join(roomName);
-                    socket.emit('rooms-join', socket.name);
+                if (game.inGameIps.indexOf(socket.handshake.address) == -1) {
+                    if (!game.rooms[roomName].gameStarted &&
+                        game.rooms[roomName].playerCount < game.ROOM_MAX_PLAYER) {
+                        socket.points = 0;
+                        socket.room = roomName;
+                        game.rooms[roomName].playerCount++;
+                        socket.leave(game.DEFAULT_ROOM);
+                        socket.join(roomName);
+                        game.inGameIps.push(socket.handshake.address);
+                        socket.emit('rooms-join', socket.name);
 
-                    var from = 'System';
-                    var message = socket.name + ' join the game.';
-                    var time = game.getMessageTime();
-                    var filter = 'game-messages';
-                    game.rooms[socket.room].chat.push({
-                        filter: filter,
-                        sender: from,
-                        message: message,
-                        time: time
-                    });
-                    socket.broadcast.emit('receive-message', from, message, time, filter);
-                    socket.broadcast.emit('room-update', {
-                        players: game.getPlayersInfos(io.sockets, socket.room),
-                        room: {
-                            playerCount: game.rooms[socket.room].playerCount,
-                            name: roomName
-                        }
-                    });
-                    io.sockets.in(game.DEFAULT_ROOM).emit('rooms-update', game.getRoomsInfos());
+                        var from = 'System';
+                        var message = socket.name + ' join the game.';
+                        var time = game.getMessageTime();
+                        var filter = 'game-messages';
+                        game.rooms[socket.room].chat.push({
+                            filter: filter,
+                            sender: from,
+                            message: message,
+                            time: time
+                        });
+                        socket.broadcast.emit('receive-message', from, message, time, filter);
+                        socket.broadcast.emit('room-update', {
+                            players: game.getPlayersInfos(io.sockets, socket.room),
+                            room: {
+                                playerCount: game.rooms[socket.room].playerCount,
+                                name: roomName
+                            }
+                        });
+                        io.sockets.in(game.DEFAULT_ROOM).emit('rooms-update', game.getRoomsInfos());
+                    }
+                }else{
+                    //TODO return message
+                    socket.emit('already-in-room');
                 }
             });
 
@@ -195,7 +230,7 @@ module.exports = {
                                     gamePoints: p.points,
                                     globalPoints: p.globalPoints,
                                     //games: p.games
-                                });
+                                }, function () {});
                             });
                             io.sockets.in(socket.room).emit('gameover', gameState.winners);
 
