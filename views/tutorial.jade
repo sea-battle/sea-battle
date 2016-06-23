@@ -1,0 +1,64 @@
+extends inc/head.jade
+
+block title
+	title Tutorial
+
+block content
+	div.wrapper
+		include inc/header.jade
+
+		section.content
+			h1 Tutorial
+			p Sea Battle, c'est presque comme une bataille navale classique entre amis.
+			p Presque, car c'est encore plus fun, alors suivez le guide !
+
+			nav
+				a(href='#first' title='Vers le placement des bateaux') 1 - Placement des bateaux
+				a(href='#second' title='Vers les phases de tir') 2 - Phases de tir
+
+			section#first.first
+				h2 Première étape : Le placement des bateaux
+				p Vous avez une minute pour placer vos bateaux sur votre grille de jeu.
+				p Pour ce faire, cliquez sur le bateau souhaité et survolez votre grille pour apercevoir l'emplacement du bateau.
+				p Il est possible de tourner le bateau avec un clique droit.
+				p Si l'emplacement vous convient, un clique droit permet de le placer sur la grille. Il est alors possible de la même manière de le reprendre et de le replacer.
+				figure
+					img(src='images/test2.jpg' alt='Le placement et la rotation d\'un bateau')
+					figcaption Le placement et la rotation d'un bateau
+				p Un bouton "Aléatoire" permet un placement automatique des bateaux sur la grille. A l'issue du temps imparti, si un bateau n'a pas été placé, il sera placé de manière aléatoirement sur la grille.
+				figure
+					img(src='images/test2.jpg' alt='Le bouton Aléatoire et son effet')
+					figcaption Le bouton Aléatoire et son effet
+
+			section#second.second
+				h2 Seconde étape : Les phases de tir
+				p Deux grilles principales sont désormais affichées. Au-dessus, la grille de tir vous permet de viser une case et de voir vos coups précédents et leur résultat.
+
+				figure
+					img(src='images/aim.PNG' alt='La bordure orange signifiant la visée')
+					figcaption La bordure orange vous indique ou le tir sera effectué
+				figure 
+					img(src='images/miss.PNG' alt='Le carré noir signifiant un coup manqué')
+					figcaption Le carré noir indique que le coup a manqué
+				figure 
+					img(src='images/shoot.PNG' alt='La croix signifiant un coup réussi')
+					figcaption La croix indique un coup réussi
+
+				p Vous avez dix secondes par phase de tir pour choisir la case à viser.
+				p A la fin d'une phase, la case visée est alors touchée sur l'ensemble des grilles adverses.
+				p Vous recevez alors un point par bateau touché.
+				p Si tous vos bateaux sont détruis, vous ne pourrez plus tirer et serez spectateur de la partie.
+				figure
+					img(src='images/test2.jpg' alt='La grille de tir')
+					figcaption La grille de tir
+				p La grille du dessous est la grille de visualisation. Elle affiche une version zoomée d'une grille miniature.
+				p Les grilles miniatures représentent les grilles de tous les joueurs présents. Il vous suffit de cliquer sur la grille souhaitée pour l'agrandir.
+				figure
+					img(src='images/test2.jpg' alt='La grille de visualisation')
+					figcaption La grille de visualisation
+				p La partie s'arrête lorsque tous les bateaux des joueurs sont détruits.
+				
+
+	div.push
+
+	include inc/footer.jade

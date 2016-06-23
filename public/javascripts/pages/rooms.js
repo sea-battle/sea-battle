@@ -86,6 +86,18 @@ socket.on('rooms-update', function (rooms) {
     rooms.forEach(function (room) {
         addRoom(room.name, room.playerCount);
     });
+
+    var roomsCount = document.getElementById('rooms-count');
+    if (rooms.length == 0) {
+        roomsCount.innerHTML = "Pas de salle disponible.";
+    } else if (rooms.length == 1) {
+        roomsCount.innerHTML = rooms.length + " salle disponible";
+    } else {
+        roomsCount.innerHTML = rooms.length + " salles disponibles";
+    }
+});
+socket.on('already-in-room', function (rooms) {
+    alert('Vous êtes déjà dans la room.');
 });
 window.addEventListener('hashchange', function (e) {
     e.preventDefault();

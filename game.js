@@ -1,21 +1,13 @@
 var utils = require('./utils');
 
 module.exports = {
-    defaultRoom: '/',
-    rooms: {},
+    DEFAULT_ROOM: '/',
     ROOM_MAX_PLAYER: 6,
-    getPlayerReadyCount: function () {
-        var count = 0;
-        for (var i = 0; i < this.players.length; i++) {
-            if (this.players[i].player.ready) {
-                count++;
-            }
-        }
-        return count;
-    },
+    DEFAULT_BOATS_PARTS_COUNT: 17,
+    rooms: {},
     defaultPlacementTime: 1,
-    defaultShootTime: 3,
-    // return players from player room
+    defaultShootTime: 1,
+    inGameIps: [],
     getPlayersId: function (ioSockets, roomName) {
         return ioSockets.adapter.rooms[roomName];
     },
@@ -30,17 +22,6 @@ module.exports = {
         }
 
         return allReady;
-    },
-    getPlayersNames: function (ioSockets, roomName) {
-        var roomPlayers = this.getPlayersId(ioSockets, roomName);
-        var names = [];
-        for (socketId in roomPlayers.sockets) {
-            names.push(ioSockets.sockets[socketId].name);
-        }
-        return names;
-    },
-    getPlayerCellsById(ioSockets, id) {
-        return this.getPlayerById(ioSockets, id).cells;
     },
     getPlayers: function (ioSockets, roomName) {
         var roomPlayers = this.getPlayersId(ioSockets, roomName);
@@ -83,7 +64,18 @@ module.exports = {
                 var socketTurn = lastTurn[key];
                 for (var socketId in playersIds.sockets) {
                     if (socketId != key) {
-                        var currentSocketCells = this.getPlayerById(ioSockets, socketId).cells;
+                        var currentSocket = this.getPlayerById(ioSockets, socketId);
+                        var currentSocketCells = currentSocket.cells;
+
+                        var touched = currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].containBoat;
+                        // Prevent two decrements x times cellsContainingBoatCount if two players shooted the same cell.
+                        if (!currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted && touched) {
+                            currentSocket.cellsContainingBoatCount--;
+                            if (currentSocket.cellsContainingBoatCount == 0) {
+                                currentSocket.down = true;
+                            }
+                        }
+
                         currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shooted = true;
                         currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].shootedBy.push(key);
 
@@ -92,7 +84,7 @@ module.exports = {
                                 touchedAt: []
                             };
                         }
-                        var touched = currentSocketCells[socketTurn.shootCoords.x][socketTurn.shootCoords.y].containBoat;
+
                         if (touched) {
                             var shooterPlayer = self.getPlayerById(ioSockets, key);
                             shooterPlayer.points++;
@@ -109,6 +101,7 @@ module.exports = {
             }
 
             this.rooms[roomName].turns[lastTurnIndex].touchedPlayers = touchedPlayers;
+            this.rooms[roomName].turns[lastTurnIndex].alivePlayers = JSON.parse(JSON.stringify(this.getAlivePlayers(ioSockets, roomName)));
         }
     },
     getMessageTime: function () {
@@ -162,5 +155,42 @@ module.exports = {
             });
         }
         return players;
+    },
+    checkDownGrids: function (ioSockets, roomName) {
+        var alivePlayers = this.getAlivePlayers(ioSockets, roomName);
+        if (alivePlayers.length == 1) {
+            return {
+                winners: alivePlayers,
+                gameover: true,
+            };
+        } else {
+            if (alivePlayers == 0) {
+                //You must ckeck in last turn the members that was still playing and say that they are the winners
+                var roomTurns = game.rooms[roomName].turns;
+                return {
+                    winners: roomTurns[roomTurns.length - 2].alivePlayers,
+                    gameover: true
+                }
+            }
+
+            return {
+                playersAlive: alivePlayers,
+                gameover: false
+            };
+        }
+    },
+    getAlivePlayers: function (ioSockets, roomName) {
+        var roomPlayers = this.getPlayers(ioSockets, roomName);
+        var alivePlayers = [];
+        roomPlayers.forEach(function (player) {
+            if (!player.down) {
+                alivePlayers.push({
+                    name: player.name,
+                    id: player.id,
+                    points: player.points
+                });
+            }
+        });
+        return alivePlayers;
     }
 };

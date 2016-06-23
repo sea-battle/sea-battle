@@ -10,7 +10,6 @@ section.content.game
 				a(href='https://twitter.com/intent/tweet?text=Sur Sea Battle, je suis #{user.username}, un #{user.rank} avec #{user.pointsCount} points, venez m\'affronter !&amp;url=seabattle.io', title='Partager sur Twitter', target='_blank')
 					span.fa.fa-twitter(aria-hidden='true')
 	section#replay-modal.modal.replay-modal
-		span#close-replay.closer.close-replay.fa.fa-times.fa-2x(aria-hidden="true")
 		div.modal-content
 			h2 Voulez-vous rejouer ?
 			button.button-effect Rejouer
@@ -35,14 +34,46 @@ section.content.game
 			span.close.fa.fa-times.fa-2x(aria-hidden="true")
 		include inc/boats.jade
 		section#other-players-canvas.players-grids.hidden
+			h2 Miniatures
 
 	section#canvas-wrapper.grids-wrapper
 		div.main-canvas-wrapper
 			section.timer
-				i#timer
+				h1#phase-title.phase-title Placement des bateaux
+				span#helper.helper(class="fa fa-info" aria-hidden="true")
+				section#helper-modal.modal.helper-modal
+					div.link-wrapper
+						a.tutorial-link.link-effect(href='/tutorial' title='Vers l\'aide de jeu' target='_blank') Guide complet
+					h2 Première étape : Le placement des bateaux
+					figure
+						img(src='images/test2.jpg' alt='Le placement et la rotation d\'un bateau')
+						figcaption Le placement et la rotation d'un bateau
+					figure
+						img(src='images/test2.jpg' alt='Le bouton Aléatoire et son effet')
+						figcaption Le bouton Aléatoire et son effet
+					h2 Seconde étape : Les phases de tir
+					figure
+						img(src='images/aim.PNG' alt='La bordure orange signifiant la visée')
+						figcaption La bordure orange vous indique ou le tir sera effectué
+					figure 
+						img(src='images/miss.PNG' alt='Le carré noir signifiant un coup manqué')
+						figcaption Le carré noir indique que le coup a manqué
+					figure 
+						img(src='images/shoot.PNG' alt='La croix signifiant un coup réussi')
+						figcaption La croix indique un coup réussi
+					figure
+						img(src='images/test2.jpg' alt='La grille de tir')
+						figcaption La grille de tir
+					figure
+						img(src='images/test2.jpg' alt='La grille de visualisation')
+						figcaption La grille de visualisation
+				p#timer-message.timer-message Reste : 
+					i#timer
 			section#fire-canvas.fire-canvas.hidden
+				h2 Grille de tir
+				div#fire-canvas-wrapper.fire-canvas-wrapper
 			section#visual-canvas.visual-canvas
+				h2 Grille de visualisation
 				div.player-canvas-wrapper
 					canvas#player-canvas.player-canvas
 				section.turn-info
-					

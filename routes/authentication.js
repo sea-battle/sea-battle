@@ -191,6 +191,7 @@ router.post('/signup', checkCredentials, function (req, res) {
 
 router.post('/signin', passport.authenticate('local'), function (req, res) {
     if (req.user.validated) {
+        req.session.user = req.user;
         res.sendStatus(200);
     } else {
         req.session.destroy(function (err) {
@@ -211,10 +212,10 @@ router.post('/edit-email', [
         email: req.body.email
     }, function (err, response) {
         if (err) {
-            res.status(500).send();
+            res.sendStatus(500);
         }
 
-        res.status(200).send();
+        res.sendStatus(200);
     });
 });
 
@@ -228,7 +229,7 @@ router.post('/edit-username', routesMiddlewares.isAuthenticated, function (req, 
             res.status(500).json();
         }
 
-        res.status(200).send();
+        res.sendStatus(200);
     });
 });
 
@@ -241,14 +242,14 @@ router.post('/edit-password', routesMiddlewares.isAuthenticated, function (req, 
         // Test authentication with found user and password from form
         user.authenticate(req.body.oldPassword, function (err, user, passwordErr) {
             if (err) {
-                res.status(500).send();
+                res.sendStatus(500);
             } else if (passwordErr) {
-                res.status(403).send();
+                res.sendStatus(403);
             } else {
                 // Replace current password with new password
                 user.setPassword(req.body.password, function () {
                     user.save();
-                    res.status(200).send();
+                    res.sendStatus(200);
                 });
             }
         });

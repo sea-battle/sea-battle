@@ -16,6 +16,9 @@ block content
             section.content
                 include inc/player-info.jade
 
+                div.link-wrapper
+                    a.tutorial-link.link-effect(href='/tutorial' title='Vers l\'aide de jeu' target='_blank') Guide du jeu
+
                 h1 Salles de jeu
 
                 h2 Créez votre propre salle
@@ -25,7 +28,7 @@ block content
             
                 h2 Rejoignez une salle
 
-                p.rooms-count x salles disponibles (Sinon "Pas de salle disponible")
+                p#rooms-count.rooms-count
                 ul#rooms.rooms-list
 
                 div.push
@@ -39,6 +42,7 @@ block content
             grade: "#{user.rank}",
             globalPoints: parseInt("#{user.pointsCount}"),
             img: "#{user.rankIcon}",
+            //games: "#{user.games}",
             id: undefined
         }
     script(src='/javascripts/prototype.js')

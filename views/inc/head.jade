@@ -14,7 +14,7 @@ html(lang='fr')
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		block styles
 	body(class='#{bodyClass}')
-		if user
+		if user && bodyClass != 'game'
 			a.signout(href='/signout' title='Se déconnecter')
 				img(src='../images/signout.png')
 		block content
