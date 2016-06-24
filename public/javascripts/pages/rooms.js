@@ -49,12 +49,7 @@ function fillPlayersInfos(page) {
         }
     }
 }
-
-socket.on('connect', function () {
-    socket.emit('init-socket', playerInfos);
-});
 socket.emit('rooms-init-socket-id');
-
 socket.on('init-socket-id', function (id) {
     playerInfos.id = id;
 });
