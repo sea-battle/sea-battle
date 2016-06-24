@@ -9,7 +9,6 @@ var app = require('express')(),
     expressSession = require('express-session');
 
 var config = require('./config'),
-    game = require('./game'),
     socket = require('./socket');
 
 app.use(function (req, res, next) {
@@ -60,6 +59,6 @@ app.use('/', routesMain);
 app.set('view engine', 'jade');
 
 mongoose.connect(config.database.location, config.database.options);
-socket.start(io, game);
+socket.start(io);
 
 server.listen(3000, '0.0.0.0');
