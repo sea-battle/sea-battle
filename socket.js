@@ -82,20 +82,7 @@ var socket = {
 				self.joinRoom(io, socket, roomName);
 			});
 			socket.on('room-update-request', function () {
-				socket.emit('room-update', {
-					players: game.getPlayersInfos(io.sockets, socket.room),
-					room: {
-						playerCount: game.rooms[socket.room].playerCount,
-						name: socket.room
-					}
-				});
-
-				var playersStatus = game.getPlayerStatus(io.sockets, socket.room);
-				playersStatus.forEach(function (status) {
-					if (socket.id != status.id) {
-						socket.emit('update-players-status', status.id, status.ready);
-					}
-				});
+				self.roomUpdate(io, socket);
 			});
 
 			// Stage 2: wait
@@ -136,17 +123,7 @@ var socket = {
 			});
 			*/
 			socket.on('chat-player-message', function (message) {
-				if (game.rooms[socket.room] != undefined) {
-					var time = game.getMessageTime();
-					var filter = 'players-messages';
-					game.rooms[socket.room].chat.push({
-						filter: filter,
-						sender: socket.name,
-						message: message,
-						time: time
-					});
-					io.sockets.emit('receive-message', socket.name, message, time, filter);
-				}
+				self.sendPlayerMessage(io, socket, message);
 			});
 			socket.on('chat-filter', function (filter) {
 				socket.emit('chat-filter', game.getMessagesFrom(socket.room, filter));
@@ -154,6 +131,15 @@ var socket = {
 			socket.on('disconnect', function () {
 				self.disconnect(io, socket);
 			});
+
+			// Errors
+			socket.on('connect_error', function (err) {
+				console.log(err);
+			});
+			
+			socket.on("connect_failed", function (fail){
+				console.log(fail);
+			})
 		});
 	},
 	init: function (socket) {
@@ -238,6 +224,22 @@ var socket = {
 			//TODO return message
 			socket.emit('already-in-room');
 		}*/
+	},
+	roomUpdate: function (io, socket) {
+		socket.emit('room-update', {
+			players: game.getPlayersInfos(io.sockets, socket.room),
+			room: {
+				playerCount: game.rooms[socket.room].playerCount,
+				name: socket.room
+			}
+		});
+
+		var playersStatus = game.getPlayerStatus(io.sockets, socket.room);
+		playersStatus.forEach(function (status) {
+			if (socket.id != status.id) {
+				socket.emit('update-players-status', status.id, status.ready);
+			}
+		});
 	},
 	waitSetReady: function (io, socket) {
 		socket.ready = true;
@@ -332,6 +334,19 @@ var socket = {
 			};
 		}
 	},
+	sendPlayerMessage: function (io, socket, message) {
+		if (game.rooms[socket.room] != undefined) {
+			var time = game.getMessageTime();
+			var filter = 'players-messages';
+			game.rooms[socket.room].chat.push({
+				filter: filter,
+				sender: socket.name,
+				message: message,
+				time: time
+			});
+			io.sockets.emit('receive-message', socket.name, message, time, filter);
+		}
+	},
 	disconnect: function (io, socket) {
 		if (socket.room != game.DEFAULT_ROOM) {
 			var from = 'System';
@@ -377,7 +392,6 @@ var socket = {
 		} else {
 			socket.leave(game.DEFAULT_ROOM);
 		}
-
 		io.sockets.in(game.DEFAULT_ROOM).emit('rooms-update', game.getRoomsInfos());
 	}
 };
