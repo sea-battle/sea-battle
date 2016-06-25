@@ -136,8 +136,8 @@ var socket = {
 			socket.on('connect_error', function (err) {
 				console.log(err);
 			});
-			
-			socket.on("connect_failed", function (fail){
+
+			socket.on("connect_failed", function (fail) {
 				console.log(fail);
 			})
 		});
@@ -349,6 +349,7 @@ var socket = {
 	},
 	disconnect: function (io, socket) {
 		if (socket.room != game.DEFAULT_ROOM) {
+
 			var from = 'System';
 			var message = socket.name + ' left the game.';
 			var time = game.getMessageTime();
@@ -359,27 +360,34 @@ var socket = {
 				message: message,
 				time: time
 			});
+
 			socket.broadcast.emit('receive-message', from, message, time, filter);
 			socket.leave(socket.room);
 			game.rooms[socket.room].playerCount--;
 			if (game.rooms[socket.room].playerCount == 0) {
+				console.log('player count == 0');
 				if (game.rooms[socket.room].timerId != null) {
 					clearInterval(game.rooms[socket.room].timerId);
 				}
-
 				delete game.rooms[socket.room];
 			} else if (game.rooms[socket.room].playerCount == 1) {
 				if (game.rooms[socket.room].timerId != null) {
 					clearInterval(game.rooms[socket.room].timerId);
 				}
-				socket.broadcast.emit('room-update', {
-					players: game.getPlayersInfos(io.sockets, socket.room),
-					room: {
-						playerCount: game.rooms[socket.room].playerCount,
-						name: socket.room
-					}
-				});
-				//TODO set the only one missing as winner and bring him back to wait room
+
+				var winner = game.getPlayers(io.sockets, socket.room)[0];
+				post('/update-player', {
+					_id: winner._id,
+					gamePoints: winner.points,
+					globalPoints: winner.globalPoints,
+					games: winner.games
+				}, function () {});
+
+				io.sockets.in(socket.room).emit('gameover', [{
+					name: winner.name,
+					id: winner.id,
+					points: winner.points
+				}]);
 			} else {
 				socket.broadcast.emit('room-update', {
 					players: game.getPlayersInfos(io.sockets, socket.room),
