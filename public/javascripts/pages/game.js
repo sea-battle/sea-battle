@@ -178,6 +178,7 @@ function findGridByPlayerId(playerId) {
 	}
 	return null;
 }
+
 function manageRankList(playersInfos) {
 	rankList.removeChildren();
 	var position = 1;
@@ -202,6 +203,7 @@ function manageRankList(playersInfos) {
 		rankList.appendChild(newLi);
 	}
 }
+
 function cloneGrid(from, to) {
 	var g;
 	if (typeof from == 'string') {
@@ -305,48 +307,8 @@ socket.on('game-init-players-grids', function (players) {
 	shooterCanvas.addEventListener('mousemove', gameHandlers.battleStage.shooterGrid.mousemove);
 });
 socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
-    /*
-	// TEST to implement (almost right)
 	var playerHasTouched = false;
 	var playerShootCoord = null;
-	for (var player in touchedPlayers) {
-	    var currentGrid = findGridByPlayerId(player);
-	    touchedPlayers[player].touchedAt.forEach(function (data) {
-	        currentGrid.cells[data.coords.x][data.coords.x].shooted = true;
-	        currentGrid.cells[data.coords.x][data.coords.x].shootedBy = data.by;
-	        currentGrid.shootedCells.push({
-	            coords: JSON.parse(JSON.stringify(data.coords)),
-	            touched: data.touched
-	        });
-
-	        // can enter here many times if player shooted many other players
-	        if (data.byId == playerInfos.id) {
-	            if (playerShootCoord == null) {
-	                playerShootCoord = JSON.parse(JSON.stringify(data.coords));
-	            }
-
-	            if (data.touched) {
-	                playerHasTouched = true;
-	            }
-	        }
-	    });
-
-	    shooterGrid.shootedCells.push({
-	        coords: playerShootCoord,
-	        touched: playerHasTouched
-	    });
-
-	    if (player == playerInfos.id) {
-	        cloneGrid(currentGrid, grid);
-	        grid.clearCanvas();
-	        grid.renderGrid();
-	        grid.drawPlacedBoats(boatsSprite);
-	        grid.drawShoots(boatsSprite);
-	    }
-	}
-    */
-
-	// OLD VERSION (bugged but needed for demo...)
 	for (var player in touchedPlayers) {
 		var currentGrid = findGridByPlayerId(player);
 		touchedPlayers[player].touchedAt.forEach(function (data) {
@@ -356,14 +318,25 @@ socket.on('update-after-turn', function (touchedPlayers, playersInfos) {
 				coords: JSON.parse(JSON.stringify(data.coords)),
 				touched: data.touched
 			});
-			if (data.byId == playerInfos.id) {
-				shooterGrid.shootedCells.push({
-					coords: JSON.parse(JSON.stringify(data.coords)),
-					touched: data.touched
-				});
-			}
 
+			// can enter here many times if player shooted many other players
+			if (data.byId == playerInfos.id) {
+				if (playerShootCoord == null) {
+					playerShootCoord = JSON.parse(JSON.stringify(data.coords));
+				}
+
+				if (data.touched) {
+					playerHasTouched = true;
+				}
+			}
 		});
+
+		if (playerShootCoord != null) {
+			shooterGrid.shootedCells.push({
+				coords: playerShootCoord,
+				touched: playerHasTouched
+			});
+		}
 
 		if (player == playerInfos.id) {
 			cloneGrid(currentGrid, grid);
