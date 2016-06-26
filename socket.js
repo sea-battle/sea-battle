@@ -373,6 +373,7 @@ var socket = {
 			} else if (game.rooms[socket.room].playerCount == 1) {
 				if (game.rooms[socket.room].timerId != null) {
 					clearInterval(game.rooms[socket.room].timerId);
+					game.rooms[socket.room].gameStarted = false;
 				}
 
 				var winner = game.getPlayers(io.sockets, socket.room)[0];
@@ -383,11 +384,20 @@ var socket = {
 					games: winner.games
 				}, function () {});
 
+				winner.ready = false;
 				io.sockets.in(socket.room).emit('gameover', [{
 					name: winner.name,
 					id: winner.id,
 					points: winner.points
 				}]);
+
+				socket.broadcast.emit('room-update', {
+					players: game.getPlayersInfos(io.sockets, socket.room),
+					room: {
+						playerCount: game.rooms[socket.room].playerCount,
+						name: socket.room
+					}
+				});
 			} else {
 				socket.broadcast.emit('room-update', {
 					players: game.getPlayersInfos(io.sockets, socket.room),
